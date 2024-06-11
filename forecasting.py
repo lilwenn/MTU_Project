@@ -2,25 +2,32 @@ import os
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PolynomialFeatures
+import seaborn as sns
+from tqdm import tqdm  # Progress bar for training loops
+
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler
+from sklearn.model_selection import train_test_split, TimeSeriesSplit, GridSearchCV
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.svm import SVR
+
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense, LSTM
+from tensorflow.keras.callbacks import EarlyStopping
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.preprocessing import StandardScaler
-import numpy as np
-import tensorflow as tf
+
 import warnings
-from sklearn.ensemble import RandomForestRegressor
-import seaborn as sns
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tools.eval_measures import rmse
+
+
 
 class NeuralNetwork(nn.Module):
     def __init__(self, input_dim):
@@ -37,7 +44,6 @@ class NeuralNetwork(nn.Module):
         return x
 
 def visualization_sorted_tab():
-    # Suppressing warnings for better clarity
     warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
     # Read milk prices data
@@ -51,7 +57,7 @@ def visualization_sorted_tab():
     price_data.replace('c', np.nan, inplace=True)
     price_data = price_data[:-641]
 
-    # Convert index to datetime using correct format
+    # Convert to datetime 
     price_data.index = pd.to_datetime(price_data.index, format='%Ym%m')
 
     # Visualize milk price evolution by country
@@ -101,7 +107,7 @@ def visualization_sorted_tab():
     file_path = '4 Data Grass Growth Yearly & Monthly 2013-2024.xlsx'
     grass_data = pd.read_excel(file_path)
 
-    # Remove last 17 rows
+
     grass_data = grass_data.iloc[:-17]
 
     # Plotting grass growth
@@ -167,35 +173,34 @@ def visualization_sorted_tab():
 
 
 def verifier_tableau_excel(data, colonne_cible):
-    # Vérifier si le tableau contient des données
+
     if data.empty:
         print("Le tableau est vide.")
         return False
 
-    # Vérifier les en-têtes
     if not all(isinstance(col, str) for col in data.columns):
         print("Le tableau doit avoir des en-têtes de colonnes valides.")
         return False
 
-    # Vérifier les types de données
+    # types de données
     types_colonnes = data.dtypes
     for col, dtype in types_colonnes.items():
         if dtype == 'object' and not data[col].apply(lambda x: isinstance(x, (str, type(None)))).all():
             print(f"La colonne '{col}' contient des types de données hétérogènes.")
             return False
 
-    # Vérifier la présence de valeurs manquantes
+    # présence de valeurs manquantes
     valeurs_manquantes = data.isnull().sum().sum()
     if valeurs_manquantes > 0:
         print(f"Le tableau contient {valeurs_manquantes} valeurs manquantes.")
         return False
 
-    # Vérifier la taille du tableau
+    # taille du tableau
     if len(data) < 10:  # Ce seuil peut être ajusté selon les besoins
         print("Le tableau contient trop peu de données pour un traitement IA efficace.")
         return False
 
-    # Vérifier si la colonne cible est présente
+    # colonne cible présente
     if colonne_cible not in data.columns:
         print(f"La colonne cible '{colonne_cible}' n'est pas présente dans le tableau.")
         return False
@@ -209,21 +214,17 @@ def correlation_matrix(data, colonne_cible, seuil_corr):
 
     corr_matrix = data.corr()
 
-    # Afficher la matrice de corrélation
     print("Matrice de corrélation :")
     print(corr_matrix)
 
-    # Enregistrer la matrice de corrélation en tant qu'image PNG
+    # Enregistrer la matrice de corrélation
     plt.figure(figsize=(10, 8))
     sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
     plt.title('Matrice de Corrélation')
     plt.savefig('correlation_matrix.png')
     plt.close()
 
-    # Sélectionner les features à conserver
     features_importantes = corr_matrix[colonne_cible][abs(corr_matrix[colonne_cible]) >= seuil_corr].index.tolist()
-
-    # Retirer la colonne cible de la liste des features importantes
     if colonne_cible in features_importantes:
         features_importantes.remove(colonne_cible)
 
@@ -249,29 +250,26 @@ def correlation_matrix(data, colonne_cible, seuil_corr):
     return sorted_data
 
 
-def normaliser_standardiser_data(df, method='standardisation'):
-    """
-    Normalise ou standardise les données du DataFrame.
+def scale_data(df, method='standardisation'):
 
-    :param df: DataFrame contenant les données
-    :param method: 'standardisation' ou 'normalisation' pour choisir la méthode
-    :return: DataFrame avec les données normalisées ou standardisées
-    """
-    # Vérifier que la méthode est correcte
     if method not in ['standardisation', 'normalisation']:
         raise ValueError("La méthode doit être 'standardisation' ou 'normalisation'")
 
-    # Sélectionner uniquement les colonnes numériques
+    # Sélectionner les colonnes numériques
     colonnes_numeriques = df.select_dtypes(include=['float64', 'int64']).columns
 
     # Appliquer la normalisation ou standardisation
     if method == 'standardisation':
         scaler = StandardScaler()
+    elif method == 'minmax':
+        scaler = MinMaxScaler()
+    elif method == 'robust':
+        scaler = RobustScaler()
     elif method == 'normalisation':
         scaler = MinMaxScaler()
 
-    # Utiliser .loc pour éviter l'avertissement SettingWithCopyWarning
-    df_copy = df.copy()  # Faire une copie explicite du DataFrame
+
+    df_copy = df.copy()  
     df_copy.loc[:, colonnes_numeriques] = scaler.fit_transform(df_copy[colonnes_numeriques])
 
     return df_copy
@@ -298,20 +296,26 @@ def PolynomialRegression(X_train, X_test, y_train, degree):
 
     return predictions
 
-
-def ANN_model(input_dim, epochs, batch_size, validation_split):
-
+def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
+    input_dim = X_train.shape[1]
     model = Sequential([
         Dense(64, activation='relu', input_dim=input_dim),
         Dense(32, activation='relu'),
-        Dense(1, activation='linear')  # For regression. For binary classification, use 'sigmoid'
+        Dense(1, activation='linear')  
     ])
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_absolute_error'])
     history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=validation_split)
     predictions = model.predict(X_test)
 
-    return predictions
+    predictions = predictions.tolist()
+    lst= []
+    for elem in predictions:
+        lst.append(elem[0])
 
+    tensor = torch.tensor(lst, dtype=torch.float32)
+    np_array = tensor.numpy()
+    lst = np_array.astype(np.float64)
+    return lst
 
 def random_forest(X_train, X_test, y_train, n_estimators, random_state):
     rf_model = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state)
@@ -330,23 +334,8 @@ def gradient_boosting_regressor(X_train, y_train, X_test, n_estimators=100, lear
     return predictions
 
 def Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learning_rate=0.001):
-    """
-    Trains and evaluates a PyTorch neural network for regression.
 
-    Args:
-        X_train: Training features.
-        X_test: Test features.
-        y_train: Training target values.
-        y_test: Test target values.
-        epochs: Number of training epochs.
-        learning_rate: Learning rate for the optimizer.
-
-    Returns:
-        predictions: Predicted values for the test set.
-        y_test: Actual target values for the test set (inverse transformed).
-    """
-
-    # Convert data to NumPy arrays (if not already)
+    # Convert data to NumPy arrays
     X_train = X_train.to_numpy()
     X_test = X_test.to_numpy()
     y_train = y_train.to_numpy()
@@ -358,7 +347,7 @@ def Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learnin
     y_train_tensor = torch.tensor(y_train, dtype=torch.float32).view(-1, 1)
     y_test_tensor = torch.tensor(y_test, dtype=torch.float32).view(-1, 1)
 
-    # Initialize model, loss, and optimizer
+    # Initialize model
     input_dim = X_train.shape[1]
     model = NeuralNetwork(input_dim)
     criterion = nn.MSELoss()
@@ -375,107 +364,123 @@ def Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learnin
 
         if (epoch + 1) % 10 == 0:
             print(f'Epoch [{epoch + 1}/{epochs}], Loss: {loss.item():.4f}')
-
-    # Make predictions
     model.eval()
     with torch.no_grad():
-        predictions = model(X_test_tensor).numpy()  # No need for flatten() here
+        predictions = model(X_test_tensor).numpy()
+
+    predictions = [round(float(pred[0]), 2) for pred in predictions]
 
     return predictions, y_test
 
 
-def Performance(y_test, predictions, name, metrics_data):
+
+def Performance(y_test, predictions, name, metrics_data, predictions_data):
 
     r2 = r2_score(y_test, predictions)
     mse = mean_squared_error(y_test, predictions)
     mae = mean_absolute_error(y_test, predictions)
 
     metrics_data.append({'Model': name,
-                         'R^2': r2,
-                         'MSE': mse,
-                         'MAE': mae})
+                         'R^2': round(r2,3),
+                         'MSE': round(mse,3),
+                         'MAE': round(mae,3)})
 
+    predictions_data[name] = predictions
 
+def main():
 
-if __name__ == '__main__':
-    #visualization_sorted_tab()
+    # visualization_sorted_tab()  # Uncomment this if you need to visualize and prepare the data again
 
     data = pd.read_excel('Data.xlsx')
     colonne_cible = 'Ireland_Milk_Price'
     seuil_corr = 0.9
+    data = data.iloc[:, 1:]  
+    data['Mois de l\'année'] = data['Date'].dt.month
 
     # Le tableau est-il exploitable
     exploitable = verifier_tableau_excel(data, colonne_cible)
     print("Le fichier est exploitable :", exploitable)
 
     # Corrélation
-    df_reduit = correlation_matrix(data, colonne_cible, seuil_corr)
-    print(df_reduit.head())
+    # data = correlation_matrix(data, colonne_cible, seuil_corr)
 
     # Normalisation / standardisation
-    #df_normalise = normaliser_standardiser_data(df_reduit, method='normalisation')
-    #df_normalise = normaliser_standardiser_data(df_reduit, method='standardisation')
+    # data = scale_data(data, method='normalisation')
+    # data = scale_data(data, method='standardisation')
 
-    df_normalise = df_reduit
+    print("Tableau final :")
+    print(data.head())
 
-    print("Tableau réduit après normalisation :")
-    print(df_normalise.head())
+    # Split data based on time series
+    date_split_index = int(0.8 * len(data))
+    train = data.iloc[:date_split_index]
+    test = data.iloc[date_split_index:]
 
-    # Split the data into training and test sets
-    features = data.drop(columns=['Date', 'Ireland_Milk_Price'])
-    target = data['Ireland_Milk_Price']
-    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+    X_train = train.drop(columns=[colonne_cible, 'Date'])
+    y_train = train[colonne_cible]
+    X_test = test.drop(columns=[colonne_cible, 'Date'])
+    y_test = test[colonne_cible]
 
-    # Create a list to store the performance metrics
+    # Vérification des tailles des ensembles
+    print(f"Training set size: {len(X_train)}, Test set size: {len(X_test)}")
+    print(X_test.head(), X_train.head())
+
+    # List to store the performance metrics
     metrics_data = []
+    predictions_data = {}
 
-    #Linear Regression with sklearn
+    # Linear Regression w/ sklearn
     predictions = linear_regression_sklearn(X_train, X_test, y_train)
-    Performance(y_test, predictions, 'LinearRegression', metrics_data)
+    Performance(y_test, predictions, 'LinearRegression', metrics_data, predictions_data)
 
-    ## Polynomial regression
+    # Polynomial regression
     degree = 2
     predictions = PolynomialRegression(X_train, X_test, y_train, degree)
-    Performance(y_test, predictions, 'PolynomialRegression', metrics_data)
+    Performance(y_test, predictions, 'PolynomialRegression', metrics_data, predictions_data)
 
-    #ANN model w/ tensorflow.keras
-    epochs=100
-    batch_size=10
-    validation_split=0.2
-    input_dim = X_train.shape[1]
-    predictions = ANN_model(input_dim, epochs, batch_size, validation_split)
-    Performance(y_test, predictions, 'ANN_Model', metrics_data)
+    # ANN model w/ tensorflow.keras
+    epochs = 100
+    batch_size = 10
+    validation_split = 0.2
+    predictions = ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split)
+    Performance(y_test, predictions, 'ANN_Model', metrics_data, predictions_data)
 
     # Random Forest model
-    n_estimators=100
-    random_state=42
-
+    n_estimators = 100
+    random_state = 42
     predictions = random_forest(X_train, X_test, y_train, n_estimators, random_state)
-    Performance(y_test, predictions, 'Random Forest', metrics_data)
+    Performance(y_test, predictions, 'Random Forest', metrics_data, predictions_data)
 
     # Gradient Boosting Model
-    n_estimators=100
-    learning_rate=0.1
-    max_depth=3
-    random_state=42
+    n_estimators = 100
+    learning_rate = 0.1
+    max_depth = 3
+    random_state = 42
     predictions = gradient_boosting_regressor(X_train, y_train, X_test, n_estimators, learning_rate, max_depth, random_state)
-    Performance(y_test, predictions, 'Gradient Boosting Model', metrics_data)
+    Performance(y_test, predictions, 'Gradient Boosting Model', metrics_data, predictions_data)
 
-
-    ## Neural Network with PyTorch
-    predictions, y_test = Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learning_rate=0.01)
-    Performance(y_test, predictions, 'Neural Network PyTorch', metrics_data)
-
-
-    # Afficher les résultats
-    print("Predictions:", predictions)
-    print("Actual:", y_test)
+    # Neural Network with PyTorch
+    predictions, y_test = Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=50, learning_rate=0.01)
+    Performance(y_test, predictions, 'Neural Network PyTorch', metrics_data, predictions_data)
 
     # Create the DataFrame from the list of dictionaries
     metrics_df = pd.DataFrame(metrics_data)
     print(metrics_df)
 
-    # Sauvegarder les métriques dans un fichier Excel
     metrics_df.to_excel('Model_Performance_Metrics.xlsx', index=False)
 
+    for model, values in predictions_data.items():
+        if isinstance(values, np.ndarray):
+            predictions_data[model] = np.round(values, 2)
+        elif isinstance(values[0], (int, float)):
+            predictions_data[model] = [round(value, 2) for value in values]
 
+    df = pd.DataFrame(predictions_data)
+    df.insert(0, 'Actual', y_test)
+
+    print(df)
+    df.to_excel('predictions.xlsx', index=False)
+    print("Les prédictions ont été écrites dans 'Predictions.xlsx'")
+
+if __name__ == '__main__':
+    main()
