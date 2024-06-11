@@ -1,267 +1,167 @@
-# Iterate over the models
-for model in models:
-  model_name = model.__class__.__name__
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from tqdm import tqdm  # Progress bar for training loops
+
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler
+from sklearn.model_selection import train_test_split, TimeSeriesSplit, GridSearchCV
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+from sklearn.svm import SVR
+
+
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, LSTM
+from tensorflow.keras.callbacks import EarlyStopping
+from sklearn.impute import SimpleImputer
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+import warnings
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tools.eval_measures import rmse
+
+def Performance(y_test, predictions, name, metrics_data, predictions_data):
+
+    r2 = r2_score(y_test, predictions)
+    mse = mean_squared_error(y_test, predictions)
+    mae = mean_absolute_error(y_test, predictions)
+
+    metrics_data.append({'Model': name,
+                         'R^2': round(r2,3),
+                         'MSE': round(mse,3),
+                         'MAE': round(mae,3)})
+
+    predictions_data[name] = predictions
+
+
+def time_series_to_tabular(data):
+    target_col = 'Ireland_Milk_Price'  # The column in data we want to forecast
+    loopback = 6  # This is how far back we want to look for features
+    horizon = 3  # This is how far forward we want to forecast
+
+    # Separate datetime columns from others
+    datetime_cols = data.select_dtypes(include=[np.datetime64]).columns
+    other_cols = data.columns.difference(datetime_cols)
+
+    # Fill in missing values for non-datetime columns
+    data_non_datetime = data[other_cols]
+    data_non_datetime = SimpleImputer(missing_values=np.nan, strategy='mean').fit_transform(data_non_datetime)
+    data_non_datetime = pd.DataFrame(data_non_datetime, columns=other_cols, index=data.index)
 
-  # Reset index before converting to datetime
-  X_train_reset = X_train.reset_index(drop=True)
+    # Recombine data with datetime columns
+    data = pd.concat([data[datetime_cols], data_non_datetime], axis=1)
+
+    def create_lag_features(data, target, lag):
+        """Create features for our ML model (X matrix).
 
-  r2, mse, mae = model_evaluation(model, X_train_reset, X_test, y_train, y_test)
-  results[model_name] = {'R2': r2, 'MSE': mse, 'MAE': mae}
+        :param pd.DataFrame data: DataFrame
+        :param str target: Name of target column (int)
+        :param int lag: Lookback window (int)
+        """
+        for col in data.columns:
+            for i in range(1, lag + 1):
+                data[f'{col}-{i}'] = data[col].shift(i)
 
-  # Generate predictions for 1, 2, and 3 months after the last date in the training data
-  def prediction_generation(model, X_train, X_test, y_train, y_test):
-    # Fit the model
-    model.fit(X_train, y_train)
+            # Drop non-target values (we only keep historical feature values)
+            if col != target:
+                data = data.drop(col, axis=1)
 
-    # Get last date from the original X_train
-    last_date = X_train.index.max()
+        # OPTIONAL: Drop first N rows where N = lag
+        # Alternatively, we could impute the missing data
+        data = data.iloc[lag:]
+        return data
 
-    # Generate future dates, adding 1 day to start from the next month
-    future_dates = pd.date_range(last_date + pd.DateOffset(days=1), periods=3, freq='MS')
-    future_X = X.loc[future_dates]
-    future_predictions = model.predict(future_X)
+    def create_future_values(data, target, horizon):
+        """Create target columns for horizons greater than 1"""
+        targets = [target]
+        for i in range(1, horizon):
+            col_name = f'{target}+{i}'
+            data[col_name] = data[target].shift(-i)
+            targets.append(col_name)
 
-    return future_predictions
+        # Optional: Drop rows missing future target values
+        data = data[data[targets[-1]].notna()]
+        return data, targets
 
-  predictions = prediction_generation(model, X_train_reset, X_test, y_train, y_test)
-  predictions_dict[model_name] = predictions
+    print('\nInitial data shape:', data.shape)
 
-# Create dataframes from the results
-results_df = pd.DataFrame(results).transpose()
-predictions_df = pd.DataFrame(predictions_dict)
+    # Create feature data (X)
+    data = create_lag_features(data, target_col, loopback)
+    print('\ndata shape with feature columns:', data.shape)
 
-# Print the results
-print("Evaluation metrics for different models:")
-print(results_df.to_markdown(numalign="left", stralign="left"))
-print("\nPredictions for the next 3 months for different models:")
-print(predictions_df.to_markdown(numalign="left", stralign="left"))
+    # Create targets to forecast (y)
+    data, targets = create_future_values(data, target_col, horizon)
+    print('\ndata shape with target columns:', data.shape)
 
-# Iterate over the models
-for model in models:
-  model_name = model.__class__.__name__
+    # Separate features (X) and targets (y)
+    y = data[targets]
+    X = data.drop(targets, axis=1)
+    print('\nShape of X (features):', X.shape)
+    print('Shape of y (target(s)):', y.shape)
 
-  # Reset index before converting to datetime
-  X_train_reset = X_train.reset_index(drop=True)
+    # Adding temporal features
+    try:
+        X['hour'] = X.index.hour
+        X['sin_hour'] = np.sin(2 * np.pi * X['hour'].astype(int) / 24.0)
+        X['cos_hour'] = np.cos(2 * np.pi * X['hour'].astype(int) / 24.0)
+        X.drop(columns=['hour'], inplace=True)  # Optional
+    except AttributeError as e:
+        print(f"Index attribute error: {e}. Ensure the index is a DateTimeIndex.")
 
-  r2, mse, mae = model_evaluation(model, X_train_reset, X_test, y_train, y_test)
-  results[model_name] = {'R2': r2, 'MSE': mse, 'MAE': mae}
+    # Saving the features and targets to CSV
+    X.to_csv('features.csv')
+    y.to_csv('targets.csv')
+    return X, y
 
-  # Generate predictions for 1, 2, and 3 months after the last date in the training data
-  def prediction_generation(model, X_train, X_test, y_train, y_test):
-    # Fit the model
-    model.fit(X_train, y_train)
 
-    # Get last date from the original X_train
-    last_date = X_train.index.max()
+data = pd.read_excel('Data.xlsx')
+colonne_cible = 'Ireland_Milk_Price'
+data = data.iloc[:, 1:]  
+data = data.sort_values('Date')
 
-    # Convert last_date to pandas Timestamp before adding DateOffset
-    last_date = pd.Timestamp(last_date)
+time_series_to_tabular(data)
 
-    # Generate future dates, adding 1 day to start from the next month
-    future_dates = pd.date_range(last_date + pd.DateOffset(days=1), periods=3, freq='MS')
-    future_X = X.loc[future_dates]
-    future_predictions = model.predict(future_X)
+# 80% of data for training
+date_split_index = int(0.8 * len(data))
+print(date_split_index)
 
-    return future_predictions
+train = data.iloc[:date_split_index]
+test = data.iloc[date_split_index:]
 
-  predictions = prediction_generation(model, X_train_reset, X_test, y_train, y_test)
-  predictions_dict[model_name] = predictions
+X_train = train.drop(columns=['Date', colonne_cible])
+y_train = train[colonne_cible]
+X_test = test.drop(columns=['Date', colonne_cible])
+y_test = test[colonne_cible]
 
-# Create dataframes from the results
-results_df = pd.DataFrame(results).transpose()
-predictions_df = pd.DataFrame(predictions_dict)
 
-# Print the results
-print("Evaluation metrics for different models:")
-print(results_df.to_markdown(numalign="left", stralign="left"))
-print("\nPredictions for the next 3 months for different models:")
-print(predictions_df.to_markdown(numalign="left", stralign="left"))
-# Iterate over the models
-for model in models:
-  model_name = model.__class__.__name__
+model = LinearRegression()
+model.fit(X_train, y_train)
 
-  # Reset index before converting to datetime
-  X_train_reset = X_train.reset_index(drop=True)
 
-  r2, mse, mae = model_evaluation(model, X_train_reset, X_test, y_train, y_test)
-  results[model_name] = {'R2': r2, 'MSE': mse, 'MAE': mae}
+# List to store the performance metrics
+metrics_data = []
+predictions_data = {}
+predictions = model.predict(X_test)
 
-  # Generate predictions for 1, 2, and 3 months after the last date in the training data
-  def prediction_generation(model, X_train, X_test, y_train, y_test):
-    # Fit the model
-    model.fit(X_train, y_train)
+print(predictions)
 
-    # Get last date from the original X_train and normalize to midnight
-    last_date = X_train.index.max().normalize()
 
-    # Convert last_date to pandas Timestamp before adding DateOffset
-    last_date = pd.Timestamp(last_date)
+# Calculer les métriques d'évaluation
+r2 = r2_score(y_test, predictions)
+mse = mean_squared_error(y_test, predictions)
+mae = mean_absolute_error(y_test, predictions)
 
-    # Generate future dates, adding 1 day to start from the next month
-    future_dates = pd.date_range(last_date + pd.DateOffset(days=1), periods=3, freq='MS')
-    future_X = X.loc[future_dates]
-    future_predictions = model.predict(future_X)
+# Afficher les métriques
+print("R^2 score:", r2)
+print("Mean Squared Error:", mse)
+print("Mean Absolute Error:", mae)
 
-    return future_predictions
-
-  predictions = prediction_generation(model, X_train_reset, X_test, y_train, y_test)
-  predictions_dict[model_name] = predictions
-
-# Create dataframes from the results
-results_df = pd.DataFrame(results).transpose()
-predictions_df = pd.DataFrame(predictions_dict)
-
-# Print the results
-print("Evaluation metrics for different models:")
-print(results_df.to_markdown(numalign="left", stralign="left"))
-print("\nPredictions for the next 3 months for different models:")
-print(predictions_df.to_markdown(numalign="left", stralign="left"))
-
-# Convert the index of X to datetime
-X.index = pd.to_datetime(X.index)
-
-# Split the data into training and testing sets
-tscv = TimeSeriesSplit(n_splits=5)
-for train_index, test_index in tscv.split(X):
-  X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-  y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-
-# Iterate over the models
-for model in models:
-  model_name = model.__class__.__name__
-
-  # Reset index before converting to datetime
-  X_train_reset = X_train.reset_index(drop=True)
-
-  r2, mse, mae = model_evaluation(model, X_train_reset, X_test, y_train, y_test)
-  results[model_name] = {'R2': r2, 'MSE': mse, 'MAE': mae}
-
-  # Generate predictions for 1, 2, and 3 months after the last date in the training data
-  def prediction_generation(model, X_train, X_test, y_train, y_test):
-    # Fit the model
-    model.fit(X_train, y_train)
-
-    # Get last date from the original X_train and normalize to midnight
-    last_date = X_train.index.max().normalize()
-
-    # Convert last_date to pandas Timestamp before adding DateOffset
-    last_date = pd.Timestamp(last_date)
-
-    # Generate future dates, adding 1 day to start from the next month
-    future_dates = pd.date_range(last_date + pd.DateOffset(days=1), periods=3, freq='MS')
-    future_X = X.loc[future_dates]
-    future_predictions = model.predict(future_X)
-
-    return future_predictions
-
-  predictions = prediction_generation(model, X_train_reset, X_test, y_train, y_test)
-  predictions_dict[model_name] = predictions
-
-# Create dataframes from the results
-results_df = pd.DataFrame(results).transpose()
-predictions_df = pd.DataFrame(predictions_dict)
-
-# Print the results
-print("Evaluation metrics for different models:")
-print(results_df.to_markdown(numalign="left", stralign="left"))
-print("\nPredictions for the next 3 months for different models:")
-print(predictions_df.to_markdown(numalign="left", stralign="left"))
-
-
-# Split the data into training and testing sets
-tscv = TimeSeriesSplit(n_splits=5)
-for train_index, test_index in tscv.split(X):
-  X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-  y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-
-# Iterate over the models
-for model in models:
-  model_name = model.__class__.__name__
-
-  # Reset index before converting to datetime
-  X_train_reset = X_train.reset_index(drop=True)
-
-  r2, mse, mae = model_evaluation(model, X_train_reset, X_test, y_train, y_test)
-  results[model_name] = {'R2': r2, 'MSE': mse, 'MAE': mae}
-
-  # Generate predictions for 1, 2, and 3 months after the last date in the training data
-  def prediction_generation(model, X_train, X_test, y_train, y_test):
-    # Fit the model
-    model.fit(X_train, y_train)
-
-    # Convert X_train index to datetime
-    X_train.index = pd.to_datetime(X_train.index)
-
-    # Get last date from X_train and normalize to midnight
-    last_date = X_train.index.max().normalize()
-
-    # Convert last_date to pandas Timestamp before adding DateOffset
-    last_date = pd.Timestamp(last_date)
-
-    # Generate future dates, adding 1 day to start from the next month
-    future_dates = pd.date_range(last_date + pd.DateOffset(days=1), periods=3, freq='MS')
-    future_X = X.loc[future_dates]
-    future_predictions = model.predict(future_X)
-
-    return future_predictions
-
-  predictions = prediction_generation(model, X_train_reset, X_test, y_train, y_test)
-  predictions_dict[model_name] = predictions
-
-# Create dataframes from the results
-results_df = pd.DataFrame(results).transpose()
-predictions_df = pd.DataFrame(predictions_dict)
-
-# Print the results
-print("Evaluation metrics for different models:")
-print(results_df.to_markdown(numalign="left", stralign="left"))
-print("\nPredictions for the next 3 months for different models:")
-print(predictions_df.to_markdown(numalign="left", stralign="left"))
-
-
-# Split the data into training and testing sets
-tscv = TimeSeriesSplit(n_splits=5)
-for train_index, test_index in tscv.split(X):
-  # Convert X_train index to datetime before reset
-  X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-  X_train.index = pd.to_datetime(X_train.index)
-  y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-
-  model_name = model.__class__.__name__
-
-  # Reset index before converting to datetime
-  X_train_reset = X_train.reset_index(drop=True)
-
-  r2, mse, mae = model_evaluation(model, X_train_reset, X_test, y_train, y_test)
-  results[model_name] = {'R2': r2, 'MSE': mse, 'MAE': mae}
-
-  # Generate predictions for 1, 2, and 3 months after the last date in the training data
-  def prediction_generation(model, X_train, X_test, y_train, y_test):
-    # Fit the model
-    model.fit(X_train, y_train)
-
-    # Get last date from the original X_train and normalize to midnight
-    last_date = X_train.index.max().normalize()
-
-    # Convert last_date to pandas Timestamp before adding DateOffset
-    last_date = pd.Timestamp(last_date)
-
-    # Generate future dates, adding 1 day to start from the next month
-    future_dates = pd.date_range(last_date + pd.DateOffset(days=1), periods=3, freq='MS')
-    future_X = X.loc[future_dates]
-    future_predictions = model.predict(future_X)
-
-    return future_predictions
-
-  predictions = prediction_generation(model, X_train_reset, X_test, y_train, y_test)
-  predictions_dict[model_name] = predictions
-
-# Create dataframes from the results
-results_df = pd.DataFrame(results).transpose()
-predictions_df = pd.DataFrame(predictions_dict)
-
-# Print the results
-print("Evaluation metrics for different models:")
-print(results_df.to_markdown(numalign="left", stralign="left"))
-print("\nPredictions for the next 3 months for different models:")
-print(predictions_df.to_markdown(numalign="left", stralign="left"))
