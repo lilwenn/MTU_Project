@@ -184,7 +184,7 @@ def time_series_analysis(past_time, data):
     decomposition.resid.plot(ax=ax4, title='Résidu: Prix du lait en Irlande')
     plt.xlabel('Date')
     plt.tight_layout()
-    plt.savefig('analyse temporelle.png')
+    plt.savefig('visualization/analyse temporelle.png')
 
     # Statistiques descriptives
     print("\nDescriptive statistics for original time series:")
