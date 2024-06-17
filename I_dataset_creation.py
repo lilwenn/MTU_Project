@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.impute import SimpleImputer
 import matplotlib.pyplot as plt
 
-def visualization_sorted_tab(data):
+def visualization_sorted_tab():
     warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
     # Read milk prices data
@@ -135,113 +135,4 @@ def visualization_sorted_tab(data):
     # Save the merged data to an Excel file
     data.to_excel('spreadsheet/Data.xlsx', index=True)
 
-
-def verifier_tableau_excel(data, colonne_cible):
-
-    if data.empty:
-        print("Le tableau est vide.")
-        return False
-
-    if not all(isinstance(col, str) for col in data.columns):
-        print("Le tableau doit avoir des en-têtes de colonnes valides.")
-        return False
-
-    # types de données
-    types_colonnes = data.dtypes
-    for col, dtype in types_colonnes.items():
-        if dtype == 'object' and not data[col].apply(lambda x: isinstance(x, (str, type(None)))).all():
-            print(f"La colonne '{col}' contient des types de données hétérogènes.")
-            return False
-
-    # présence de valeurs manquantes
-    valeurs_manquantes = data.isnull().sum().sum()
-    if valeurs_manquantes > 0:
-        print(f"Le tableau contient {valeurs_manquantes} valeurs manquantes.")
-        return False
-
-    # taille du tableau
-    if len(data) < 10:  # Ce seuil peut être ajusté selon les besoins
-        print("Le tableau contient trop peu de données pour un traitement IA efficace.")
-        return False
-
-    # colonne cible présente
-    if colonne_cible not in data.columns:
-        print(f"La colonne cible '{colonne_cible}' n'est pas présente dans le tableau.")
-        return False
-
-    return True
-
-
-def time_series_to_tabular(data):
-    target = 'Ireland_Milk_Price'  # The column in data we want to forecast
-    past_time = 6  # This is how far back we want to look for features
-    futur_time = 3  # This is how far forward we want to forecast
-
-    # Separate datetime columns from others
-    date_col = data.select_dtypes(include=[np.datetime64]).columns
-    other_cols = data.columns.difference(date_col)
-
-    # Fill in missing values for non-datetime columns
-    data[other_cols] = SimpleImputer(missing_values=np.nan, strategy='mean').fit_transform(data[other_cols])
-    data[other_cols] = pd.DataFrame(data[other_cols], columns=other_cols, index=data.index)
-
-    # Recombine data with datetime columns
-    data = pd.concat([data[date_col], data[other_cols]], axis=1)
-
-    print('\nInitial data shape:', data.shape)
-
-    # Create feature data (X)
-    data = create_lag_features(data, past_time)
-    print('\ndata shape with feature columns:', data.shape)
-
-    # Create targets to forecast (y)
-    data, targets = create_future_values(data, target, futur_time)
-    print('\ndata shape with target columns:', data.shape)
-
-    # Separate features (X) and targets (y)
-    y = data[targets]
-    X = data.drop(targets, axis=1)
-    print('\nShape of X (features):', X.shape)
-    print('Shape of y (target(s)): ', y.shape)
-    # Saving the features and targets to CSV
-    X.to_excel('spreadsheet/features.xlsx')
-    y.to_excel('spreadsheet/targets.xlsx')
-
-    return X, y
-
-
-def create_lag_features(data, lag):
-    """Create features for our ML model (X matrix).
-
-    :param pd.DataFrame data: DataFrame
-    :param str target: Name of target column (int)
-    :param int lag: Lookback window (int)
-    """
-    lagged_data = []
-    for col in data.columns:
-        for i in range(1, lag + 1):
-            lagged_data.append(data[col].shift(i).rename(f'{col}-{i}'))
-
-    lagged_df = pd.concat(lagged_data, axis=1)
-    data = pd.concat([data, lagged_df], axis=1)
-
-    # Drop first N rows where N = lag
-    data = data.iloc[lag:]
-    return data
-
-def create_future_values(data, target, futur_time):
-    """Create target columns for futur_times greater than 1"""
-    targets = [target]
-    future_data = {}
-    for i in range(1, futur_time):
-        col_name = f'{target}+{i}'
-        future_data[col_name] = data[target].shift(-i)
-        targets.append(col_name)
-
-    future_df = pd.DataFrame(future_data)
-    data = pd.concat([data, future_df], axis=1)
-
-    # Optional: Drop rows missing future target values
-    data = data[data[targets[-1]].notna()]
-    return data, targets
 

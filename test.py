@@ -1,167 +1,166 @@
-import os
-os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-from tqdm import tqdm  # Progress bar for training loops
-
-from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler
-from sklearn.model_selection import train_test_split, TimeSeriesSplit, GridSearchCV
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
-from sklearn.svm import SVR
-from sklearn.impute import SimpleImputer
-
-
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM
-from tensorflow.keras.callbacks import EarlyStopping
-
-
-import torch
-import torch.nn as nn
-import torch.optim as optim
-
 import warnings
-from statsmodels.tsa.arima.model import ARIMA
-from statsmodels.tools.eval_measures import rmse
 
-def Performance(y_test, predictions, name, metrics_data, predictions_data):
-    r2 = r2_score(y_test, predictions)
-    mse = mean_squared_error(y_test, predictions)
-    mae = mean_absolute_error(y_test, predictions)
 
-    metrics_data.append({'Model': name,
-                         'R^2': round(r2,3),
-                         'MSE': round(mse,3),
-                         'MAE': round(mae,3)})
+def visualize_data():
 
-    predictions_data[name] = predictions
+    # Lire les données des prix du lait
+    price_data = pd.read_excel('initial_datas/Ire_EU_Milk_Prices.xlsx', sheet_name=0, skiprows=6, index_col=0)
 
-def time_series_to_tabular(data):
-    target = 'Ireland_Milk_Price'  # The column in data we want to forecast
-    loopback = 9  # This is how far back we want to look for features
-    horizon =   # This is how far forward we want to forecast
+    # Nettoyer les données
+    columns_to_delete = [col for col in price_data.columns if 'Unnamed' in str(col)]
+    price_data.drop(columns=columns_to_delete, inplace=True)
 
-    # Separate datetime columns from others
-    date_col = data.select_dtypes(include=[np.datetime64]).columns
-    other_cols = data.columns.difference(date_col)
+    price_data = price_data.iloc[:, :-3]
+    price_data.replace('c', np.nan, inplace=True)
+    price_data = price_data[:-641]
 
-    # Fill in missing values for non-datetime columns
-    data_non_datetime = data[other_cols]
-    data_non_datetime = SimpleImputer(missing_values=np.nan, strategy='mean').fit_transform(data_non_datetime)
-    data_non_datetime = pd.DataFrame(data_non_datetime, columns=other_cols, index=data.index)
+    # Convertir les index en datetime
+    price_data.index = pd.to_datetime(price_data.index, format='%Ym%m')
 
-    # Recombine data with datetime columns
-    data = pd.concat([data[date_col], data_non_datetime], axis=1)
+    # Visualiser l'évolution du prix du lait par pays
+    plt.figure(figsize=(30, 13))
+    for country in price_data.columns:
+        filtered_data = price_data[price_data[country] != 0]
+        plt.plot(filtered_data.index, filtered_data[country], label=country)
+    plt.xlabel('Year')
+    plt.ylabel('Milk Price')
+    plt.title('Milk Price Evolution by Country')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig('visualization/milk_price_evolution.png')
 
-    def create_lag_features(data, target, lag):
-        """Create features for our ML model (X matrix).
+    # Visualiser l'évolution du prix du lait en Irlande par rapport à la moyenne de l'UE
+    average_prices = price_data.mean(axis=1)
+    ireland_data = price_data[price_data['Ireland'] != 0]
+    plt.figure(figsize=(10, 6))
+    plt.plot(price_data.index, average_prices, label='Average Price', color='red')
+    plt.plot(ireland_data.index, ireland_data['Ireland'], label='Ireland', color='blue')
+    plt.xlabel('Year')
+    plt.ylabel('Milk Price')
+    plt.title('Average Milk Price Evolution with Ireland')
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig('visualization/milk_price_evolution_with_ireland.png')
 
-        :param pd.DataFrame data: DataFrame
-        :param str target: Name of target column (int)
-        :param int lag: Lookback window (int)
-        """
-        lagged_data = []
-        for col in data.columns:
-            for i in range(1, lag + 1):
-                lagged_data.append(data[col].shift(i).rename(f'{col}-{i}'))
+    # Lire les données de croissance de l'herbe
+    file_path = 'initial_datas/4 Data Grass Growth Yearly & Monthly 2013-2024.xlsx'
+    grass_data = pd.read_excel(file_path)
+    grass_data = grass_data.iloc[:-17]
 
-        lagged_df = pd.concat(lagged_data, axis=1)
-        data = pd.concat([data, lagged_df], axis=1)
+    # Visualiser la croissance de l'herbe
+    plt.figure(figsize=(15, 10))
+    for year in grass_data.columns:
+        plt.plot(grass_data.index, grass_data[year], label=year)
+    plt.title('Grass Growth Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Grass Quantity')
+    plt.legend(title='Year')
+    plt.grid(True)
+    plt.savefig('visualization/Grass_growth_plot.png')
 
-        # Drop first N rows where N = lag
-        data = data.iloc[lag:]
-        return data
+    print("Visualizations saved successfully.")
 
-    def create_future_values(data, target, horizon):
-        """Create target columns for horizons greater than 1"""
-        targets = [target]
-        future_data = {}
-        for i in range(1, horizon):
-            col_name = f'{target}+{i}'
-            future_data[col_name] = data[target].shift(-i)
-            targets.append(col_name)
+def sort_and_create_data_file():
 
-        future_df = pd.DataFrame(future_data)
-        data = pd.concat([data, future_df], axis=1)
+    price_data = pd.read_excel('initial_datas/Ire_EU_Milk_Prices.xlsx', sheet_name=0, skiprows=6, index_col=0)
 
-        # Optional: Drop rows missing future target values
-        data = data[data[targets[-1]].notna()]
-        return data, targets
 
-    print('\nInitial data shape:', data.shape)
 
-    # Create feature data (X)
-    data = create_lag_features(data, target, loopback)
-    print('\ndata shape with feature columns:', data.shape)
+   # Convert index to year-month format and remove Luxembourg column
+    price_data.index = price_data.index.strftime('%Y-%m')
+    price_data = price_data.drop(columns=['Luxembourg'])
+    price_data.dropna(how='any', inplace=True)
+    price_data = price_data[~(price_data == 0).any(axis=1)]
+    price_data.index.name = 'Date'
+    price_data.reset_index(inplace=True)
 
-    # Create targets to forecast (y)
-    data, targets = create_future_values(data, target, horizon)
-    print('\ndata shape with target columns:', data.shape)
+    # Rename columns
+    for col in price_data.columns:
+        if col != 'Date':
+            price_data = price_data.rename(columns={str(col): str(col) + '_Milk_Price'})
 
-    # Separate features (X) and targets (y)
-    y = data[targets]
-    X = data.drop(targets, axis=1)
-    print('\nShape of X (features):', X.shape)
-    print('Shape of y (target(s)): ', y.shape)
+    print(price_data)
 
-    # Adding temporal features
-    if not pd.api.types.is_datetime64_any_dtype(X.index):
-        print(f"Index attribute error. Ensure the index is a DateTimeIndex.")
-    else:
-        X['hour'] = X.index.hour
-        X['sin_hour'] = np.sin(2 * np.pi * X['hour'].astype(int) / 24.0)
-        X['cos_hour'] = np.cos(2 * np.pi * X['hour'].astype(int) / 24.0)
-        X.drop(columns=['hour'], inplace=True)  # Optional
+    # Load grass growth data
 
-    # Saving the features and targets to CSV
-    X.to_csv('spreadsheet/features.csv')
-    y.to_csv('spreadsheet/targets.csv')
-    return X, y
+    file_path = 'initial_datas/4 Data Grass Growth Yearly & Monthly 2013-2024.xlsx'
+    grass_data = pd.read_excel(file_path)
 
-data = pd.read_excel('spreadsheet/Data.xlsx')
-colonne_cible = 'Ireland_Milk_Price'
-data = data.iloc[:, 1:]
-data = data.sort_values('Date')
-data.set_index('Date', inplace=True)  # Set 'Date' as the index
-data.index = pd.to_datetime(data.index)  # Ensure the index is DateTimeIndex
 
-X, y = time_series_to_tabular(data)
+    grass_data = grass_data.iloc[:-17]
 
-# 80% of data for training
-date_split_index = int(0.8 * len(data))
-print(date_split_index)
+    # Plotting grass growth
+    plt.figure(figsize=(15, 10))
+    for year in grass_data.columns:
+        plt.plot(grass_data.index, grass_data[year], label=year)
 
-train = data.iloc[:date_split_index]
-test = data.iloc[date_split_index:]
+    plt.title('Grass Growth Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Grass Quantity')
+    plt.legend(title='Year')
+    plt.grid(True)
 
-X_train = train.drop(columns=[colonne_cible])
-y_train = train[colonne_cible]
-X_test = test.drop(columns=[colonne_cible])
-y_test = test[colonne_cible]
+    plt.savefig('visualization/Grass_growth_plot.png')
 
-model = LinearRegression()
-model.fit(X_train, y_train)
+    # Melt grass growth data and modify date format, Put informations in 1 column
 
-# List to store the performance metrics
-metrics_data = []
-predictions_data = {}
-predictions = model.predict(X_test)
+    merged_column = grass_data.melt()['value']
+    dates_column = grass_data['Date']
 
-# Calculate evaluation metrics
-r2 = r2_score(y_test, predictions)
-mse = mean_squared_error(y_test, predictions)
-mae = mean_absolute_error(y_test, predictions)
+    for year in [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]:
+        modified_dates_column = pd.to_datetime(dates_column)
+        modified_dates_column = modified_dates_column.apply(lambda x: x.replace(year=year))
+        grass_data['Modified_' + str(year)] = modified_dates_column
+    grass_data = grass_data.drop(columns=['Date'])
 
-# Display metrics
-print("R^2 score:", r2)
-print("Mean Squared Error:", mse)
-print("Mean Absolute Error:", mae)
+    # Prepare grass growth data for merging
+    values = grass_data[['2013', '2014', '2015', '2016', '2017', '2018', 2019, 2020, 2021, 2022, 2023, 2024]]
+    values_column = values.melt()['value']
 
-Performance(y_test, predictions, 'Linear Regression', metrics_data, predictions_data)
-print(metrics_data)
+    dates = grass_data[
+        ['Modified_2013', 'Modified_2014', 'Modified_2015', 'Modified_2016', 'Modified_2017', 'Modified_2018',
+         'Modified_2019', 'Modified_2020', 'Modified_2021', 'Modified_2022', 'Modified_2023', 'Modified_2024']]
+    dates_column = dates.melt()['value']
+
+    # Create DataFrame for merging
+    merged_df = pd.DataFrame({'Date': dates_column, 'Value': values_column})
+    merged_df['Mois'] = merged_df['Date'].dt.to_period('M')
+
+    # Calculate monthly average grass growth
+    monthly_avg = merged_df.groupby('Mois')['Value'].mean().reset_index()
+    monthly_avg = monthly_avg.rename(columns={'Mois': 'Date', 'Value': 'Average_grass_growth/week'})
+    grass_data = monthly_avg.iloc[:-8]
+
+    print(grass_data)
+
+    ## Creation of a table with grass information + price
+    print("Columns in price_data:", price_data.columns)
+    print("Columns in herbe_data:", monthly_avg.columns)
+
+    # Convert the data types of the 'Date' column to ensure consistency
+    price_data['Date'] = pd.to_datetime(price_data['Date'])
+    monthly_avg['Date'] = monthly_avg['Date'].dt.to_timestamp()
+    print("Data type in price_data - Date:", price_data['Date'].dtype)
+    print("Data type in monthly_avg - Date:", monthly_avg['Date'].dtype)
+
+    # Merge the datasets based on the 'Date' column
+    data = pd.merge(price_data, monthly_avg, on='Date')
+    print(data)
+
+    # Save the merged data to an Excel file
+    data.to_excel('spreadsheet/Data.xlsx', index=True)
+
+
+
+
+
+
+# Appel des fonctions
+visualize_data()
+sort_and_create_data_file()
