@@ -1,0 +1,11 @@
+
+*.pyc
+__pycache__/
+*.pdb
+.vscode/
+.idea/
+spreadsheet/*.xlsx
+.statsmodels_cache/
+pandas_cache/
+matplotlib_cache/
+test.py

@@ -65,6 +65,7 @@ def PolynomialRegression(X_train, X_test, y_train, degree):
     predictions = model.predict(X_test_poly)
 
     return predictions
+    """
 
 def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
     input_dim = X_train.shape[1]
@@ -86,6 +87,24 @@ def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
     np_array = tensor.numpy()
     lst = np_array.astype(np.float64)
     return lst
+
+    """
+
+
+def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
+    model = Sequential()
+    # Example model architecture
+    model.add(Dense(64, activation='relu', input_dim=X_train.shape[1]))
+    model.add(Dense(y_train.shape[1]))  # Adjust output layer for multiple outputs
+
+    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=validation_split, verbose=1)
+
+    predictions = model.predict(X_test)
+
+    return predictions
+
 
 def random_forest(X_train, X_test, y_train, n_estimators, random_state):
     rf_model = RandomForestRegressor(n_estimators=n_estimators, random_state=random_state)
@@ -141,4 +160,3 @@ def Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learnin
     predictions = [round(float(pred[0]), 2) for pred in predictions]
 
     return predictions, y_test
-
