@@ -134,5 +134,3 @@ def visualization_sorted_tab():
 
     # Save the merged data to an Excel file
     data.to_excel('spreadsheet/Data.xlsx', index=True)
-
-

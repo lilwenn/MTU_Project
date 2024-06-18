@@ -1,31 +1,29 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from tqdm import tqdm  # Progress bar for training loops
 
-from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler
-from sklearn.model_selection import train_test_split, TimeSeriesSplit, GridSearchCV
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
-from sklearn.svm import SVR
-from sklearn.impute import SimpleImputer
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C, WhiteKernel  
 
+
+from statsmodels.tsa.arima.model import ARIMA
 
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.layers import Dense, Dropout
+
 
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 
-import warnings
 from statsmodels.tsa.arima.model import ARIMA
-from statsmodels.tools.eval_measures import rmse
+
 
 
 class NeuralNetwork(nn.Module):
@@ -41,9 +39,6 @@ class NeuralNetwork(nn.Module):
         x = self.relu(self.fc2(x))
         x = self.fc3(x)
         return x
-
-
-
 
 def linear_regression_sklearn(X_train, X_test, y_train):
     model = LinearRegression()
@@ -65,7 +60,7 @@ def PolynomialRegression(X_train, X_test, y_train, degree):
     predictions = model.predict(X_test_poly)
 
     return predictions
-    """
+    
 
 def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
     input_dim = X_train.shape[1]
@@ -88,22 +83,6 @@ def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
     lst = np_array.astype(np.float64)
     return lst
 
-    """
-
-
-def ANN_model(X_train, y_train, X_test, epochs, batch_size, validation_split):
-    model = Sequential()
-    # Example model architecture
-    model.add(Dense(64, activation='relu', input_dim=X_train.shape[1]))
-    model.add(Dense(y_train.shape[1]))  # Adjust output layer for multiple outputs
-
-    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
-
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=validation_split, verbose=1)
-
-    predictions = model.predict(X_test)
-
-    return predictions
 
 
 def random_forest(X_train, X_test, y_train, n_estimators, random_state):
@@ -136,13 +115,12 @@ def Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learnin
     y_train_tensor = torch.tensor(y_train, dtype=torch.float32).view(-1, 1)
     y_test_tensor = torch.tensor(y_test, dtype=torch.float32).view(-1, 1)
 
-    # Initialize model
+
     input_dim = X_train.shape[1]
     model = NeuralNetwork(input_dim)
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    # Training loop
     for epoch in range(epochs):
         model.train()
         optimizer.zero_grad()
@@ -160,3 +138,59 @@ def Neural_Network_Pytorch(X_train, X_test, y_train, y_test, epochs=100, learnin
     predictions = [round(float(pred[0]), 2) for pred in predictions]
 
     return predictions, y_test
+
+
+def gradient_boosting_regressor(X_train, X_test, y_train, n_estimators, learning_rate):
+    model = GradientBoostingRegressor(n_estimators=n_estimators, learning_rate=learning_rate)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    return predictions
+
+
+def train_arima_model(y_train, y_test):
+    forecast_index = y_test.index  
+
+    y_train = pd.Series(y_train.values, index=y_train.index)
+
+    model = ARIMA(y_train, order=(5, 1, 0))
+    model_fit = model.fit()
+   
+    predictions = model_fit.get_forecast(steps=len(y_test)).predicted_mean
+
+    return predictions.values 
+
+def knn_regressor(X_train, X_test, y_train, n_neighbors):
+    model = KNeighborsRegressor(n_neighbors=n_neighbors)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    return predictions
+
+def SANN_model(X_train, y_train, X_test, epochs, batch_size):
+
+    model = Sequential()
+
+
+    model.add(Dense(64, activation='relu', input_dim=X_train.shape[1]))
+    model.add(Dropout(0.5))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(1, activation='linear')) 
+
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=1)
+    predictions = model.predict(X_test).flatten() 
+
+    return predictions
+
+def NARX_model(X_train, y_train, X_test):
+
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+        tf.keras.layers.Dense(32, activation='relu'),
+        tf.keras.layers.Dense(1, activation='linear') 
+    ])
+
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(X_train, y_train, epochs=50, batch_size=16, verbose=1)
+    predictions = model.predict(X_test).flatten() 
+
+    return predictions
