@@ -1,4 +1,5 @@
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler, RobustScaler
+from sklearn.impute import SimpleImputer
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -7,114 +8,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
-from sklearn.impute import SimpleImputer
 
 
-def check_tab(data, colonne_cible):
-
-    if data.empty:
-        print("Le tableau est vide.")
-        return False
-
-    if not all(isinstance(col, str) for col in data.columns):
-        print("Le tableau doit avoir des en-têtes de colonnes valides.")
-        return False
-
-    # types de données
-    types_colonnes = data.dtypes
-    for col, dtype in types_colonnes.items():
-        if dtype == 'object' and not data[col].apply(lambda x: isinstance(x, (str, type(None)))).all():
-            print(f"La colonne '{col}' contient des types de données hétérogènes.")
-            return False
-
-    # présence de valeurs manquantes
-    valeurs_manquantes = data.isnull().sum().sum()
-    if valeurs_manquantes > 0:
-        print(f"Le tableau contient {valeurs_manquantes} valeurs manquantes.")
-        return False
-
-    # taille du tableau
-    if len(data) < 10:  # Ce seuil peut être ajusté selon les besoins
-        print("Le tableau contient trop peu de données pour un traitement IA efficace.")
-        return False
-
-    # colonne cible présente
-    if colonne_cible not in data.columns:
-        print(f"La colonne cible '{colonne_cible}' n'est pas présente dans le tableau.")
-        return False
-
-    return True
-
-
-def correlation_matrix(data, colonne_cible, seuil_corr):
-
-    print(f"Nombre total de features initiales : {len(data.columns)}")
-
-    corr_matrix = data.corr()
-
-    print("Matrice de corrélation :")
-    print(corr_matrix)
-
-    # Enregistrer la matrice de corrélation
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
-    plt.title('Matrice de Corrélation')
-    plt.savefig('visualization/correlation_matrix.png')
-    plt.close()
-
-    features_importantes = corr_matrix[colonne_cible][abs(corr_matrix[colonne_cible]) >= seuil_corr].index.tolist()
-    if colonne_cible in features_importantes:
-        features_importantes.remove(colonne_cible)
-
-    # Supprimer les features inutiles
-    sorted_data = data[features_importantes + [colonne_cible]]
-
-    # Afficher les features conservées et leur nombre
-    print("Features conservées :")
-    print(features_importantes)
-    print(f"Nombre de features conservées : {len(features_importantes)}")
-
-    sorted_corr_matrix = sorted_data.corr()
-
-    # Afficher la matrice de corrélation
-    print("Matrice de corrélation :")
-    print(corr_matrix)
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(sorted_corr_matrix, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
-    plt.title('Matrice de Corrélation')
-    plt.savefig('visualization/sorted_corr_matrix.png')
-    plt.close()
-
-    return sorted_data
-
-
-def scale_data(df, method='standardisation'):
-
-    if method not in ['standardisation', 'normalisation']:
-        raise ValueError("La méthode doit être 'standardisation' ou 'normalisation'")
-
-    # Sélectionner les colonnes numériques
-    colonnes_numeriques = df.select_dtypes(include=['float64', 'int64']).columns
-
-    # Appliquer la normalisation ou standardisation
-    if method == 'standardisation':
-        scaler = StandardScaler()
-    elif method == 'minmax':
-        scaler = MinMaxScaler()
-    elif method == 'robust':
-        scaler = RobustScaler()
-    elif method == 'normalisation':
-        scaler = MinMaxScaler()
-
-
-    df_copy = df.copy()  
-    df_copy.loc[:, colonnes_numeriques] = scaler.fit_transform(df_copy[colonnes_numeriques])
-
-    return df_copy
 
 
 def create_lag_features(data, lag):
-    new_data = data.copy()  # Make a copy of the original data
+    new_data = data.copy()  
 
     lagged_cols = []
     for col in data.columns:
@@ -132,7 +31,7 @@ def create_lag_features(data, lag):
     return data
 
 def create_MA(data, past_time):
-    new_data = data.copy()  # Make a copy of the original data
+    new_data = data.copy() 
     
     ma_cols = []
     for col in new_data.columns:
@@ -154,7 +53,7 @@ def create_MA(data, past_time):
 
 def time_series_analysis(past_time, data):
 
-    # Séparer les colonnes datetime des autres
+
     date_col = data.select_dtypes(include=[np.datetime64]).columns
     other_cols = data.columns.difference(date_col)
 
@@ -175,7 +74,6 @@ def time_series_analysis(past_time, data):
     data_ireland = data_ireland.merge(data_all_periods, how='outer', left_index=True, right_index=True).fillna(0)
     decomposition = seasonal_decompose(data_ireland['Ireland_Milk_Price'], model='additive', period=12)
 
-    # Afficher la décomposition
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(15, 12), sharex=True)
 
     decomposition.observed.plot(ax=ax1, title='Série temporelle originale: Prix du lait en Irlande')
@@ -212,3 +110,129 @@ def time_series_analysis(past_time, data):
     data_final = data_final.reindex(sorted(data_final.columns), axis=1)
 
     data_final.to_excel('spreadsheet/data_final.xlsx', index=True)
+
+    return data_final
+
+
+def check_tab(data, target_column):
+    """Validates a dataset for basic quality checks and suitability for ML.
+    
+    Args:
+        df (pandas.DataFrame): The dataset to be validated.
+        target_col (str): The name of the target column.
+
+    Returns:
+        bool: True if the dataset is valid, False otherwise.
+    """
+
+    if data.empty:
+        print("The dataframe is empty.")
+        return False
+
+    if not all(isinstance(col, str) for col in data.columns):
+        print("The dataframe must have valid column headers")
+        return False
+
+    # types de données
+    column_types = data.dtypes
+    for col, dtype in column_types.items():
+        if dtype == 'object' and not data[col].apply(lambda x: isinstance(x, (str, type(None)))).all():
+            print(f"Column '{col}' contains mixed data types.")
+            return False
+
+    # présence de valeurs manquantes
+    missing_values = data.isnull().sum().sum()
+    if missing_values > 0:
+        print(f"The dataframe contains {missing_values} missing values.")
+        return False
+
+    # taille du tableau
+    if len(data) < 10:  
+        print("The dataframe contains too few rows for effective AI processing.")
+        return False
+
+    # colonne cible présente
+    if target_column not in data.columns:
+        print(f"The target column '{target_column}' is not present in the dataframe.")
+        return False
+
+    return True
+
+
+def feature_selection_correlation(data, target_column, seuil_corr):
+    """Selects features based on correlation with the target variable.
+
+    Args:
+        df (pandas.DataFrame): The dataset.
+        target_col (str): The name of the target column.
+        corr_threshold (float): The minimum absolute correlation threshold.
+
+    Returns:
+        pandas.DataFrame: The dataset with selected features.
+    """
+
+    print(f"Nombre total de features initiales : {len(data.columns)}")
+
+    corr_matrix = data.corr()
+
+    print("Matrice de corrélation :")
+    print(corr_matrix)
+
+    # Save Correlation Matrix
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
+    plt.title('Correlation Matrix')
+    plt.savefig('visualization/correlation_matrix.png')
+    plt.close()
+
+    features_importantes = corr_matrix[target_column][abs(corr_matrix[target_column]) >= seuil_corr].index.tolist()
+    if target_column in features_importantes:
+        features_importantes.remove(target_column)
+
+    # Delete features
+    sorted_data = data[features_importantes + [target_column]]
+
+    sorted_corr_matrix = sorted_data.corr()
+
+    # Afficher la matrice de corrélation
+    print('Correlation Matrix')
+    print(corr_matrix)
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(sorted_corr_matrix, annot=True, fmt=".2f", cmap="coolwarm", cbar=True)
+    plt.title('Correlation Matrix')
+    plt.savefig('visualization/sorted_corr_matrix.png')
+    plt.close()
+
+    return sorted_data
+
+
+def scale_data(df, method):
+    """Scales numerical features using the specified method.
+
+    Args:
+        df (pandas.DataFrame): The dataset.
+        method (str): The scaling method ('standard', 'minmax', 'robust').
+
+    Returns:
+        pandas.DataFrame: The dataset with scaled features.
+    """
+
+    # Sélectionner les colonnes numériques
+    colonnes_numeriques = df.select_dtypes(include=['float64', 'int64']).columns
+
+    # Appliquer la normalisation ou standardisation
+    if method == 'standardisation':
+        scaler = StandardScaler()
+    elif method == 'minmax':
+        scaler = MinMaxScaler()
+    elif method == 'robust':
+        scaler = RobustScaler()
+    elif method == 'normalisation':
+        scaler = MinMaxScaler()
+
+
+    df_copy = df.copy()  
+    df_copy.loc[:, colonnes_numeriques] = scaler.fit_transform(df_copy[colonnes_numeriques])
+
+    return df_copy
+
