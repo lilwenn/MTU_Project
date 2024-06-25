@@ -8,6 +8,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
+from scipy import stats
+from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression
 
 
 
@@ -51,7 +53,7 @@ def create_MA(data, past_time):
 
 
 
-def time_series_analysis(past_time, data):
+def time_series_analysis(past_time, data, colonne_cible):
 
 
     date_col = data.select_dtypes(include=[np.datetime64]).columns
@@ -65,14 +67,14 @@ def time_series_analysis(past_time, data):
     data.set_index('Date', inplace=True)
 
 
-    data_ireland = data[['Ireland_Milk_Price']].copy()
+    data_ireland = data[[colonne_cible]].copy()
 
     all_periods = pd.date_range(start=data_ireland.index.min(), end=data_ireland.index.max(), freq='MS')
     data_all_periods = pd.DataFrame(index=all_periods)
 
 
     data_ireland = data_ireland.merge(data_all_periods, how='outer', left_index=True, right_index=True).fillna(0)
-    decomposition = seasonal_decompose(data_ireland['Ireland_Milk_Price'], model='additive', period=12)
+    decomposition = seasonal_decompose(data_ireland[colonne_cible], model='additive', period=12)
 
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(15, 12), sharex=True)
 
@@ -86,7 +88,7 @@ def time_series_analysis(past_time, data):
 
     # Statistiques descriptives
     print("\nDescriptive statistics for original time series:")
-    print(data_ireland['Ireland_Milk_Price'].describe().to_markdown(numalign="left", stralign="left"))
+    print(data_ireland[colonne_cible].describe().to_markdown(numalign="left", stralign="left"))
 
     print("\nDescriptive statistics for trend component:")
     print(decomposition.trend.describe().to_markdown(numalign="left", stralign="left"))
@@ -220,7 +222,6 @@ def scale_data(df, method):
     # Sélectionner les colonnes numériques
     colonnes_numeriques = df.select_dtypes(include=['float64', 'int64']).columns
 
-    # Appliquer la normalisation ou standardisation
     if method == 'standardisation':
         scaler = StandardScaler()
     elif method == 'minmax':
@@ -230,9 +231,53 @@ def scale_data(df, method):
     elif method == 'normalisation':
         scaler = MinMaxScaler()
 
+    else:
+        return
 
     df_copy = df.copy()  
     df_copy.loc[:, colonnes_numeriques] = scaler.fit_transform(df_copy[colonnes_numeriques])
 
     return df_copy
+
+
+
+
+# Feature selection function
+def feature_selection(X, y, method):
+    cols = list(X.columns)
+    n_features = len(cols) - 1
+
+    # Only univariate feature selection is currently supported
+    if len(y.shape) > 1 and y.shape[1] > 1:
+        y = y.iloc[:, 0]
+
+    if method == 'f_regression':
+        selector = SelectKBest(f_regression, k=n_features)
+        _ = selector.fit_transform(X, y)
+        weights = pd.DataFrame({'feature': cols, 'weight': selector.scores_})
+
+    elif method == 'mutual_info_regression' or method == 'mi':
+        selector = SelectKBest(mutual_info_regression, k=n_features)
+        _ = selector.fit_transform(X, y)
+        weights = pd.DataFrame({'feature': cols, 'weight': selector.scores_})
+
+    elif method == 'pearson' or method == 'absolute_pearson_correlation' or method == 'apc':
+        results = []
+        for col in X.columns:
+            try:
+                weight = abs(stats.pearsonr(X[col], y.iloc[:,0])[0])
+            except:
+                weight = abs(stats.pearsonr(X[col], y)[0])
+            results.append({'feature': col, 'weight': weight})
+        weights = pd.DataFrame(results)
+
+    elif method == None:
+        weights = None
+
+    else:
+        raise ValueError(f'Unexpected method {method}.')
+
+    return weights
+
+
 

@@ -78,7 +78,7 @@ def dataframe_to_rows(df, index=True, header=True):
     for row in df.itertuples(index=False, name=None):
         yield list(row)  # Yield each row as a list
 
-def color_predictions_excel(predictions_data):
+def color_predictions_excel(predictions_data,name):
     """Colors cells in an Excel sheet based on prediction accuracy compared to actual values.
 
     Args:
@@ -113,7 +113,7 @@ def color_predictions_excel(predictions_data):
             else:
                 cell.fill = PatternFill(start_color="F24405", end_color="F24405", fill_type="solid")  # Red
 
-    workbook.save("spreadsheet/predictions_colored.xlsx")
+    workbook.save(name)
 
 
 def main():
@@ -134,12 +134,9 @@ def main():
     data = data.iloc[:, 1:]
     data = time_series_analysis(past_time, data)
 
-
-    feature_selection_correlation
-
-    
     # Corrélation
-    # data = correlation_matrix(data, colonne_cible, seuil_corr)
+    seuil_corr = 0.9
+    data = feature_selection_correlation(data, colonne_cible, seuil_corr)
 
     # Normalisation / standardisation
     # data = scale_data(data, method='normalisation')
@@ -154,11 +151,33 @@ def main():
 
     # Split into training and testing sets
     
-    data.index = pd.to_datetime(data.index, dayfirst=True)  
-    data = data.asfreq(pd.infer_freq(data.index)) 
-    X = data.drop(columns=['Ireland_Milk_Price'])
-    y = data['Ireland_Milk_Price']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+   # split = "random" 
+    split = "last"
+
+    if split ==  "random" :
+        data.index = pd.to_datetime(data.index, dayfirst=True)  
+        data = data.asfreq(pd.infer_freq(data.index)) 
+        X = data.drop(columns=['Ireland_Milk_Price'])
+        y = data['Ireland_Milk_Price']
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    elif split == "last":
+
+        data.index = pd.to_datetime(data.index, dayfirst=True)
+        data = data.asfreq(pd.infer_freq(data.index))  
+        test_size = 0.1  # Proportion of data for testing
+        split_index = int(len(data) * (1 - test_size))  
+        X_train = data.drop(columns=['Ireland_Milk_Price']).iloc[:split_index]
+        y_train = data['Ireland_Milk_Price'].iloc[:split_index]
+        X_test = data.drop(columns=['Ireland_Milk_Price']).iloc[split_index:]
+        y_test = data['Ireland_Milk_Price'].iloc[split_index:]
+
+    # Convert y_test to pandas Series with appropriate index
+    y_test = pd.Series(y_test.values, index=X_test.index)
+
+    # Collect dates for the test set
+    test_dates = X_test.index
 
 
     # Convert y_test to pandas Series with appropriate index
@@ -292,7 +311,7 @@ def main():
     # Export metrics
     metrics_df = pd.DataFrame(metrics_data)
     metrics_df = metrics_df.sort_values(by='MAPE', ascending=True)
-    metrics_df.to_excel('spreadsheet/emetrics.xlsx', index=False)
+    metrics_df.to_excel('spreadsheet/metrics.xlsx', index=False)
 
     # Export combined predictions
     predictions_data.to_excel('spreadsheet/predictions.xlsx', index=False)
@@ -301,7 +320,8 @@ def main():
 
 
     # Call the function with the DataFrame
-    color_predictions_excel(df_predictions_rounded)
+    name = "spreadsheet/predictions_col.xlsx"
+    color_predictions_excel(df_predictions_rounded,name)
 
 
 
