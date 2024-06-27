@@ -101,10 +101,10 @@ if data_creation:
 
     # Save DataFrame to Excel
     df.reset_index(inplace=True)
-    df.to_excel('spreadsheet/test.xlsx', index=False)
+    df.to_excel('spreadsheet/weekly_sorted_data.xlsx', index=False)
 
 # Read preprocessed data from Excel
-df = pd.read_excel('spreadsheet/test.xlsx')
+df = pd.read_excel('spreadsheet/weekly_sorted_data.xlsx')
 df_pre = df[df['Date'] < '2015-04-01']
 df_post = df[df['Date'] >= '2015-04-01']
 
