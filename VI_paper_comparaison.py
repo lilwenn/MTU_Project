@@ -27,7 +27,7 @@ import openpyxl
 from openpyxl.styles import PatternFill 
 from openpyxl.utils.dataframe import dataframe_to_rows
 
-import constants as const 
+import Constants as const 
 
 # ___________________________________________________________________________________________________
 #                                        FUNCTIONS
@@ -51,57 +51,65 @@ def mape(y_true, y_pred):
 #                                        CODE
 #____________________________________________________________________________________________________
 
-data_creation = False  # Dataset creation flag
+data_creation = True
 
 if data_creation:
     # Read data
-    df_prices = pd.read_excel('spreadsheet/Data_prices_monthly.xlsx')
+    df_prices = pd.read_excel('spreadsheet/Data_prices_grass_weekly.xlsx')
     df_yield = pd.read_csv('initial_datas/Data_weekly_yield.csv')
 
     # Data preprocessing steps
-    df_prices['Date'] = pd.to_datetime(df_prices['Date'])
+
+
     df_yield['year_month'] = df_yield['year_month'].astype(str)
     df_yield['year'] = df_yield['year_month'].str[:4].astype(int)
     df_yield['month'] = df_yield['year_month'].str[4:6].astype(int)
     df_yield['Date'] = pd.to_datetime(df_yield['year'].astype(str) + df_yield['month'].astype(str).str.zfill(2), format='%Y%m') + pd.to_timedelta((df_yield['week'] - 1) * 7, unit='D')
     df_yield['yield_per_supplier'] = df_yield['litres'] / df_yield['num_suppliers']
     df_yield['cos_week'] = np.cos(df_yield['week'] * (2 * np.pi / 52))
-    df_merged = df_yield.merge(df_prices, on='Date', how='left')
+    df_yield['year_week'] = df_yield['year'].astype(str) + '_' + df_yield['week'].astype(str)
+
+    df_prices['year'] = df_prices['Date'].dt.year
+    df_prices['week'] = df_prices['Date'].dt.strftime('%U').astype(int) + 1
+    df_prices['year_week'] =df_prices['year'].astype(str) + '_' + df_prices['week'].astype(str)
+
+    df_merged = df_yield.merge(df_prices, on='year_week', how='left')
     df_merged.drop(df_merged.columns[4:50], axis=1, inplace=True)
-    df_merged = df_merged[(df_merged['Date'] >= '2009-01-01') & (df_merged['Date'] <= '2021-11-30')].copy()
+    df_merged = df_merged[(df_merged['year_week'] >= '2009_1') & (df_merged['year_week'] <= '2021_52')].copy()
     df_merged.dropna(axis=1, how='all', inplace=True)
     df_merged = df_merged.loc[:, ~df_merged.columns.duplicated()]
     df_merged.dropna(subset=['num_suppliers', 'feed_bag', 'feed_bulk', 'feed_totals'], inplace=True)
-    df_merged.sort_values(by='Date', inplace=True)
-    columns_to_drop = ['Unnamed: 0', 'feed_ex_port', 'Croatia_milk_price', 'Malta_milk_price', 'EU_milk_price_without UK']
+    columns_to_drop = ['feed_ex_port', 'Croatia_milk_price', 'Malta_milk_price', 'EU_milk_price_without UK']
     df_merged.drop(columns=columns_to_drop, inplace=True)
     columns_to_drop = df_merged.columns[-27:]
     df_merged.drop(columns=columns_to_drop, inplace=True)
-    df = df_merged.drop(columns=['year_month', 'week', 'year', 'month'])
+    df = df_merged.drop(columns=['Date_x','Date_y','year_month', 'month'])
     milk_price_columns = [col for col in df.columns if col.endswith('_milk_price')]
-    df.dropna(subset=milk_price_columns, inplace=True)
 
+    df.dropna(subset=milk_price_columns, inplace=True)
     # Fill NaN values with column mean
     for col in df.columns:
         if df[col].isnull().any():
             df[col] = df[col].fillna(df[col].mean())
 
-    df['Date'] = pd.to_datetime(df['Date'])
-
-    # Add 'Year' and 'Month' columns
-    df['Year'] = df['Date'].dt.year
-    df['Month'] = df['Date'].dt.month
-    df_monthly = df.groupby(['Year', 'Month']).mean().reset_index()
-    print(df_monthly.head().to_markdown(index=False, numalign="left", stralign="left"))
+    df.to_excel('spreadsheet/test.xlsx', index=False)
 
     # Time series analysis
     target_column = 'litres'
     past_time = 7
     df = time_series_analysis(past_time, df, target_column)
 
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # Add 'Year' and 'Month' columns
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+
     # Save DataFrame to Excel
     df.reset_index(inplace=True)
     df.to_excel('spreadsheet/weekly_sorted_data.xlsx', index=False)
+
+
 
 # Read preprocessed data from Excel
 df = pd.read_excel('spreadsheet/weekly_sorted_data.xlsx')
