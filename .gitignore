@@ -4,7 +4,7 @@ __pycache__/
 *.pdb
 .vscode/
 .idea/
-spreadsheet/*.xlsx
+#spreadsheet/*.xlsx
 visualization/*.xlsx
 .statsmodels_cache/
 pandas_cache/
