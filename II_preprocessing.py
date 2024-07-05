@@ -63,9 +63,6 @@ def time_series_analysis(past_time, data, colonne_cible):
     data[other_cols] = pd.DataFrame(data[other_cols], columns=other_cols, index=data.index)
 
     data = pd.concat([data[date_col], data[other_cols]], axis=1)
-    data['Date'] = pd.to_datetime(data['Date'])
-    data.set_index('Date', inplace=True)
-
 
     data_ireland = data[[colonne_cible]].copy()
 
@@ -85,19 +82,6 @@ def time_series_analysis(past_time, data, colonne_cible):
     plt.xlabel('Date')
     plt.tight_layout()
     plt.savefig('visualization/analyse temporelle.png')
-
-    # Statistiques descriptives
-    print("\nDescriptive statistics for original time series:")
-    print(data_ireland[colonne_cible].describe().to_markdown(numalign="left", stralign="left"))
-
-    print("\nDescriptive statistics for trend component:")
-    print(decomposition.trend.describe().to_markdown(numalign="left", stralign="left"))
-
-    print("\nDescriptive statistics for seasonal component:")
-    print(decomposition.seasonal.describe().to_markdown(numalign="left", stralign="left"))
-
-    print("\nDescriptive statistics for residual component:")
-    print(decomposition.resid.describe().to_markdown(numalign="left", stralign="left"))
 
     # Lissage
 
