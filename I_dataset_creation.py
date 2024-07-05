@@ -180,19 +180,23 @@ def final_data_creation():
     price_data = pd.read_excel('spreadsheet/Prices_datas_weekly_2009-2021.xlsx')
     yield_data = pd.read_excel("spreadsheet/Yield_data_weekly_2009_2021.xlsx")
 
-    grass_data = grass_data.drop(columns=['Date', 'Week'])
+    grass_data = grass_data.drop(columns=['Week'])
+    price_data = price_data.drop(columns=['Date'])
+
+
 
     final_data = pd.merge(price_data, grass_data, on='year_week')
     final_data = pd.merge(final_data, yield_data, on='year_week')
 
     # Mettre 'year_week' en première colonne
-    columns = ['year_week'] + [col for col in final_data.columns if col != 'year_week']
+
+    columns = ['Date', 'year_week'] + [col for col in final_data.columns if col not in ['Date', 'year_week']]
     final_data = final_data[columns]
 
     # Utiliser pandas pour écrire dans un fichier Excel sans index
     final_data.to_excel("spreadsheet/Final_Weekly_2009_2021.xlsx", index=False)
 
-price_data_creation()
+#price_data_creation()
 #grass_data_creation()
 #yield_data_creation()
-#final_data_creation()
+final_data_creation()

@@ -4,6 +4,7 @@
 
 import pandas as pd 
 import numpy as np  
+from sklearn.impute import SimpleImputer
 import tensorflow as tf 
 from tensorflow.keras.models import Sequential  
 from tensorflow.keras.layers import Dense, Dropout 
@@ -20,7 +21,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.gaussian_process import GaussianProcessRegressor 
 from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression 
 from statsmodels.tsa.seasonal import seasonal_decompose 
-from I_dataset_creation import visualization_sorted_tab 
+
 from II_preprocessing import check_tab, feature_selection_correlation, scale_data, time_series_analysis, feature_selection  
 from III_train_models import NARX_model, train_arima_model, SANN_model, knn_regressor, linear_regression_sklearn, PolynomialRegression, Neural_Network_Pytorch, ANN_model, random_forest, gradient_boosting_regressor  # Functions for model training
 import openpyxl  
@@ -51,7 +52,7 @@ def mape(y_true, y_pred):
 #                                        CODE
 #____________________________________________________________________________________________________
 
-data_creation = True
+data_creation = False
 
 if data_creation:
     # Read data
@@ -110,17 +111,55 @@ if data_creation:
     df.to_excel('spreadsheet/weekly_sorted_data.xlsx', index=False)
 
 
+"""
+# Time series analysis
+past_time = 16
+
+if 'Date' in df.columns:
+    df.set_index('Date', inplace=True)
+
+df = time_series_analysis(past_time, df, target_column)
+
+df.to_excel("spreadsheet/test.xlsx", index=False)
+
+df.reset_index(inplace=True)"""
 
 # Read preprocessed data from Excel
-df = pd.read_excel('spreadsheet/weekly_sorted_data.xlsx')
-df_pre = df[df['Date'] < '2015-04-01']
-df_post = df[df['Date'] >= '2015-04-01']
+df = pd.read_excel('spreadsheet/Final_Weekly_2009_2021.xlsx')
 
-X_train = df_pre.drop(columns=['litres', 'Date'])
-y_train = df_pre['litres']
+df = df.drop(columns=['year_week','EU_milk_price_without UK', 'feed_ex_port','Malta_milk_price','Croatia_milk_price', 'Malta_Milk_Price'])
+n_recent = int(len(df) * 0.9) #On prends 10% des données
 
-X_test = df_post.drop(columns=['litres', 'Date'])
-y_test = df_post['litres']
+# Séparer les données en ensembles d'entraînement et de test
+test_data = df.iloc[n_recent:]
+train_data = df.iloc[:n_recent]
+
+# Sauvegarder l'ensemble d'entraînement et de test
+test_data.to_excel('spreadsheet/test_data.xlsx', index=False)
+train_data.to_excel('spreadsheet/train_data.xlsx', index=False)
+
+# Séparer la colonne 'Date' avant l'imputation
+dates_pre = train_data['Date']
+dates_post = test_data['Date']
+
+train_data = train_data.drop(columns=['Date'])
+test_data = test_data.drop(columns=['Date'])
+
+# Imputer les valeurs manquantes
+imputer = SimpleImputer(strategy='mean')
+
+train_data_imputed = pd.DataFrame(imputer.fit_transform(train_data), columns=train_data.columns)
+test_data_imputed = pd.DataFrame(imputer.transform(test_data), columns=test_data.columns)
+
+# Réintégrer la colonne 'Date' après l'imputation
+train_data_imputed['Date'] = dates_pre.values
+test_data_imputed['Date'] = dates_post.values
+
+X_train = train_data_imputed.drop(columns=['litres', 'Date']) 
+y_train = train_data_imputed['litres']
+
+X_test = test_data_imputed.drop(columns=['litres', 'Date']) 
+y_test = test_data_imputed['litres']
 
 mape_scorer = make_scorer(mape, greater_is_better=False)
 

@@ -47,7 +47,7 @@ models = {
 }
 
 hyperparameters = {
-    'BayesianRidge': {
+ """   'BayesianRidge': {
         'model__tol': uniform(1e-2, 1e-4),
         'model__alpha_1': uniform(1e-5, 1e-7),
         'model__alpha_2': uniform(1e-5, 1e-7),
@@ -81,7 +81,7 @@ hyperparameters = {
         'model__tol': [1e-2, 1e-3, 1e-4],
         'model__selection': ['random', 'cyclic']
     },
-    'LinearRegression': {},
+    'LinearRegression': {},"""
     'PassiveAggressiveRegressor': {
         'model__C': [0.01, 0.1, 1.0, 10],
         'model__epsilon': [0.0, 0.5, 1.0],
