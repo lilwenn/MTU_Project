@@ -5,8 +5,7 @@ __pycache__/
 .vscode/
 .idea/
 #spreadsheet/*.xlsx
-visualization/*.xlsx
+visualization/*
 .statsmodels_cache/
 pandas_cache/
 matplotlib_cache/
-test.py

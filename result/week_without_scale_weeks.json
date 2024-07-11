@@ -1,0 +1,17 @@
+{
+    "BayesianRidge": {
+        "MinMaxScaler": {
+            "F_regression": {
+                "MAPE": {
+                    "week_1": 131.62044198165617
+                },
+                "MAE": {
+                    "week_1": 10137011.106519092
+                },
+                "Prediction": {
+                    "week_1": 20628853.84920004
+                }
+            }
+        }
+    }
+}

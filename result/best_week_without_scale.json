@@ -1,0 +1,119 @@
+[
+    {
+        "Model": "DecisionTreeRegressor",
+        "Best Feature Selection": "mutual_info_regression",
+        "MAPE": {
+            "week_1": 8.670953393220755
+        },
+        "MAE": {
+            "week_1": 883740.0687022901
+        },
+        "Prediction": {
+            "week_1": 7730820.0
+        }
+    },
+    {
+        "Model": "ExtraTreeRegressor",
+        "Best Feature Selection": "mutual_info_regression",
+        "MAPE": {
+            "week_1": 7.908422799601697
+        },
+        "MAE": {
+            "week_1": 917515.641221374
+        },
+        "Prediction": {
+            "week_1": 7730820.0
+        }
+    },
+    {
+        "Model": "GaussianProcessRegressor",
+        "Best Feature Selection": "f_regression",
+        "MAPE": {
+            "week_1": 100.0
+        },
+        "MAE": {
+            "week_1": 20867282.022900764
+        },
+        "Prediction": {
+            "week_1": 7730819.999226918
+        }
+    },
+    {
+        "Model": "KNeighborsRegressor",
+        "Best Feature Selection": "mutual_info_regression",
+        "MAPE": {
+            "week_1": 6.867339247992582
+        },
+        "MAE": {
+            "week_1": 721228.9832061067
+        },
+        "Prediction": {
+            "week_1": 9853944.8
+        }
+    },
+    {
+        "Model": "Lasso",
+        "Best Feature Selection": "mutual_info_regression",
+        "MAPE": {
+            "week_1": 7.681216742494618
+        },
+        "MAE": {
+            "week_1": 630148.169592294
+        },
+        "Prediction": {
+            "week_1": 10813277.501954967
+        }
+    },
+    {
+        "Model": "LinearRegression",
+        "Best Feature Selection": "f_regression",
+        "MAPE": {
+            "week_1": 8.013708376186113
+        },
+        "MAE": {
+            "week_1": 783825.6770710476
+        },
+        "Prediction": {
+            "week_1": 11348100.995847652
+        }
+    },
+    {
+        "Model": "PassiveAggressiveRegressor",
+        "Best Feature Selection": "null",
+        "MAPE": {
+            "week_1": 9.02030307074527
+        },
+        "MAE": {
+            "week_1": 1027187.9688526423
+        },
+        "Prediction": {
+            "week_1": 12238331.3620886
+        }
+    },
+    {
+        "Model": "RandomForestRegressor",
+        "Best Feature Selection": "mutual_info_regression",
+        "MAPE": {
+            "week_1": 5.372759681207952
+        },
+        "MAE": {
+            "week_1": 582916.5494656488
+        },
+        "Prediction": {
+            "week_1": 8898136.85
+        }
+    },
+    {
+        "Model": "Ridge",
+        "Best Feature Selection": "mutual_info_regression",
+        "MAPE": {
+            "week_1": 7.859682077161301
+        },
+        "MAE": {
+            "week_1": 681304.0726592401
+        },
+        "Prediction": {
+            "week_1": 10728637.302831061
+        }
+    }
+]

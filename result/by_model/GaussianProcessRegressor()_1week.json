@@ -1,0 +1,230 @@
+{
+    "MinMaxScaler": {
+        "F_regression": {
+            "MAPE": {
+                "week_1": 29.321952458093403
+            },
+            "MAE": {
+                "week_1": 2598387.332541895
+            },
+            "Prediction": {
+                "week_1": 7732388.24494442
+            }
+        },
+        "Mutual_info_regression": {
+            "MAPE": {
+                "week_1": 22.028986781262912
+            },
+            "MAE": {
+                "week_1": 2363134.925387805
+            },
+            "Prediction": {
+                "week_1": 7730830.645904986
+            }
+        },
+        "Pearson Correlation": {
+            "MAPE": {
+                "week_1": 9.717462359855778
+            },
+            "MAE": {
+                "week_1": 1145474.5143068247
+            },
+            "Prediction": {
+                "week_1": 7730820.835379066
+            }
+        },
+        "Feature Importance": {
+            "MAPE": {
+                "week_1": 6.547774719114709
+            },
+            "MAE": {
+                "week_1": 653559.0
+            },
+            "Prediction": {
+                "week_1": 9712457.209427426
+            }
+        },
+        "No scoring": {
+            "MAPE": {
+                "week_1": 10.409548621088442
+            },
+            "MAE": {
+                "week_1": 855893.1526717558
+            },
+            "Prediction": {
+                "week_1": 9920731.01653801
+            }
+        }
+    },
+    "StandardScaler": {
+        "F_regression": {
+            "MAPE": {
+                "week_1": 10.339993918730064
+            },
+            "MAE": {
+                "week_1": 1225059.1184729745
+            },
+            "Prediction": {
+                "week_1": 7730820.071128813
+            }
+        },
+        "Mutual_info_regression": {
+            "MAPE": {
+                "week_1": 10.426913090316521
+            },
+            "MAE": {
+                "week_1": 1910811.8612650079
+            },
+            "Prediction": {
+                "week_1": 7730820.0078056175
+            }
+        },
+        "Pearson Correlation": {
+            "MAPE": {
+                "week_1": 12.226872306784912
+            },
+            "MAE": {
+                "week_1": 2786474.305752717
+            },
+            "Prediction": {
+                "week_1": 7730820.001802204
+            }
+        },
+        "Feature Importance": {
+            "MAPE": {
+                "week_1": 27.927170023030236
+            },
+            "MAE": {
+                "week_1": 3361453.4156727097
+            },
+            "Prediction": {
+                "week_1": 7725762.2893891735
+            }
+        },
+        "No scoring": {
+            "MAPE": {
+                "week_1": 125.99371344274996
+            },
+            "MAE": {
+                "week_1": 16624141.308086833
+            },
+            "Prediction": {
+                "week_1": 7728946.065417747
+            }
+        }
+    },
+    "RobustScaler": {
+        "F_regression": {
+            "MAPE": {
+                "week_1": 15.41044984154452
+            },
+            "MAE": {
+                "week_1": 1652331.9362556003
+            },
+            "Prediction": {
+                "week_1": 7730824.368113216
+            }
+        },
+        "Mutual_info_regression": {
+            "MAPE": {
+                "week_1": 10.362045099913669
+            },
+            "MAE": {
+                "week_1": 1331042.9005526963
+            },
+            "Prediction": {
+                "week_1": 7730820.0971792815
+            }
+        },
+        "Pearson Correlation": {
+            "MAPE": {
+                "week_1": 7.332955414600499
+            },
+            "MAE": {
+                "week_1": 1068428.352791825
+            },
+            "Prediction": {
+                "week_1": 7730820.015081868
+            }
+        },
+        "Feature Importance": {
+            "MAPE": {
+                "week_1": 19.4620262374191
+            },
+            "MAE": {
+                "week_1": 2396254.7404580154
+            },
+            "Prediction": {
+                "week_1": 8620945.91904402
+            }
+        },
+        "No scoring": {
+            "MAPE": {
+                "week_1": 80.79328751222066
+            },
+            "MAE": {
+                "week_1": 11788465.35591603
+            },
+            "Prediction": {
+                "week_1": 8545195.82496049
+            }
+        }
+    },
+    "No scaling": {
+        "F_regression": {
+            "MAPE": {
+                "week_1": 100.0
+            },
+            "MAE": {
+                "week_1": 20088950.022900764
+            },
+            "Prediction": {
+                "week_1": 7730819.999226918
+            }
+        },
+        "Mutual_info_regression": {
+            "MAPE": {
+                "week_1": 100.0
+            },
+            "MAE": {
+                "week_1": 20088950.022900764
+            },
+            "Prediction": {
+                "week_1": 7730819.999226918
+            }
+        },
+        "Pearson Correlation": {
+            "MAPE": {
+                "week_1": 100.0
+            },
+            "MAE": {
+                "week_1": 20088950.022900764
+            },
+            "Prediction": {
+                "week_1": 7730819.999226918
+            }
+        },
+        "Feature Importance": {
+            "MAPE": {
+                "week_1": 100.0
+            },
+            "MAE": {
+                "week_1": 20088950.022900764
+            },
+            "Prediction": {
+                "week_1": 7730819.999226918
+            }
+        },
+        "No scoring": {
+            "MAPE": {
+                "week_1": 100.0
+            },
+            "MAE": {
+                "week_1": 20088950.022900764
+            },
+            "Prediction": {
+                "week_1": 7730819.999226918
+            }
+        }
+    }
+}

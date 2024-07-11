@@ -1,0 +1,16 @@
+{
+    "DecisionTreeRegressor": {},
+    "ExtraTreeRegressor": {
+        "null": {
+            "MAPE": {
+                "week_1": 10.517030976461678
+            },
+            "MAE": {
+                "week_1": 1101108.2671755725
+            },
+            "Prediction": {
+                "week_1": 7730820.0
+            }
+        }
+    }
+}
