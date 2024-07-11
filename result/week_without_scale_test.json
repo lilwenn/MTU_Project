@@ -1,0 +1,6602 @@
+[
+    {
+        "Iteration": 1,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.2789297321666
+        ],
+        "MAE": [
+            1362766.0671641792
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            29.705805636863815
+        ],
+        "MAE": [
+            2210494.925108044
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.057727349649566
+        ],
+        "MAE": [
+            1550726.537313433
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.23932250485986
+        ],
+        "MAE": [
+            1751058.4240579752
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411168501120923
+        ],
+        "MAE": [
+            1100393.1001237072
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            15.64509026920557
+        ],
+        "MAE": [
+            1187465.5224138468
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            17.297524239344455
+        ],
+        "MAE": [
+            2496617.559522998
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            21.093577334029895
+        ],
+        "MAE": [
+            3367911.978849283
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.39545505914316
+        ],
+        "MAE": [
+            711495.3519402985
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.36711996353379
+        ],
+        "MAE": [
+            728775.3877611941
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.21700783565927
+        ],
+        "MAE": [
+            1261357.7783234247
+        ]
+    },
+    {
+        "Iteration": 1,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216631863168876
+        ],
+        "MAE": [
+            1261383.6472423002
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            8.698017888727911
+        ],
+        "MAE": [
+            1166746.634328358
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.4871411501489
+        ],
+        "MAE": [
+            1371746.9402985075
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.118772141085339
+        ],
+        "MAE": [
+            1509364.5820895522
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.740788192072902
+        ],
+        "MAE": [
+            1731603.4029850746
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411173375153789
+        ],
+        "MAE": [
+            1100393.307855703
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            12.090208180031576
+        ],
+        "MAE": [
+            1009224.1887023454
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.532341569962805
+        ],
+        "MAE": [
+            1376686.5085633264
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            15.359932892925743
+        ],
+        "MAE": [
+            2017296.8680550153
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.3805589847456625
+        ],
+        "MAE": [
+            728776.4982089552
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.349623376180542
+        ],
+        "MAE": [
+            660845.3580597017
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.21663490190975
+        ],
+        "MAE": [
+            1261323.5784633711
+        ]
+    },
+    {
+        "Iteration": 2,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217321891564051
+        ],
+        "MAE": [
+            1261369.055626794
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.153840122228889
+        ],
+        "MAE": [
+            1251105.1492537314
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.71798506422498
+        ],
+        "MAE": [
+            1703974.2835820895
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.093129598593269
+        ],
+        "MAE": [
+            1375549.4179104478
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.326919443527654
+        ],
+        "MAE": [
+            1375603.0746268656
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.247408137462426
+        ],
+        "MAE": [
+            1222315.3654842437
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            22.48084818105844
+        ],
+        "MAE": [
+            3625359.942427309
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.446017831262596
+        ],
+        "MAE": [
+            1365222.5989945864
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.70889492538447
+        ],
+        "MAE": [
+            757290.7189552238
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.765039185784038
+        ],
+        "MAE": [
+            820813.0405970151
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216137863755806
+        ],
+        "MAE": [
+            1261305.4932167393
+        ]
+    },
+    {
+        "Iteration": 3,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216281924164337
+        ],
+        "MAE": [
+            1261305.9365320657
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.260212478279552
+        ],
+        "MAE": [
+            1320747.6865671643
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.765423139283147
+        ],
+        "MAE": [
+            1689485.0746268656
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.996663002492896
+        ],
+        "MAE": [
+            1443917.223880597
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.141036212548705
+        ],
+        "MAE": [
+            2097077.5771144282
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411170588642443
+        ],
+        "MAE": [
+            1100393.222135631
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            17.22261359428397
+        ],
+        "MAE": [
+            1247176.5960179612
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.53690119714335
+        ],
+        "MAE": [
+            1600076.1896436189
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.877256311543027
+        ],
+        "MAE": [
+            1917299.7080758866
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.592645307517807
+        ],
+        "MAE": [
+            753046.2459701493
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            8.34354959167274
+        ],
+        "MAE": [
+            815981.3728358208
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.21700300253871
+        ],
+        "MAE": [
+            1261235.5674106015
+        ]
+    },
+    {
+        "Iteration": 4,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217350139651327
+        ],
+        "MAE": [
+            1261304.9932701942
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.482079290474212
+        ],
+        "MAE": [
+            1163663.134328358
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.444310172997424
+        ],
+        "MAE": [
+            1407586.1044776118
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.055211025961151
+        ],
+        "MAE": [
+            1500824.5223880596
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.61497127164403
+        ],
+        "MAE": [
+            1686134.0298507463
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411171201887381
+        ],
+        "MAE": [
+            1100393.2982522966
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.83366537227212
+        ],
+        "MAE": [
+            1243654.5903907565
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.033959554273675
+        ],
+        "MAE": [
+            1491804.8632517636
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.151699485154323
+        ],
+        "MAE": [
+            1444394.0940502777
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.596438824596586
+        ],
+        "MAE": [
+            728505.5497014928
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.929980835971625
+        ],
+        "MAE": [
+            721567.7931343282
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216369505526004
+        ],
+        "MAE": [
+            1261302.4846096656
+        ]
+    },
+    {
+        "Iteration": 5,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217709076967015
+        ],
+        "MAE": [
+            1261238.3050159912
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.801094589006615
+        ],
+        "MAE": [
+            1442383.880597015
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.241103383178428
+        ],
+        "MAE": [
+            1588110.1940298507
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            8.927792566225344
+        ],
+        "MAE": [
+            1091065.9888059702
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.231605512134434
+        ],
+        "MAE": [
+            1791352.1791044776
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            13.560074196116686
+        ],
+        "MAE": [
+            1074345.84240333
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            14.714982758835493
+        ],
+        "MAE": [
+            1871210.1408225899
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            20.30782266724727
+        ],
+        "MAE": [
+            3185792.2109081065
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.554100141896203
+        ],
+        "MAE": [
+            715238.0095522391
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.5053755544390715
+        ],
+        "MAE": [
+            710122.8734328359
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217386324812649
+        ],
+        "MAE": [
+            1261320.5381639483
+        ]
+    },
+    {
+        "Iteration": 6,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.21636938127097
+        ],
+        "MAE": [
+            1261312.9869415294
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.673604167542317
+        ],
+        "MAE": [
+            1133734.8358208956
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.029970967578791
+        ],
+        "MAE": [
+            1696507.552238806
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.386005808582913
+        ],
+        "MAE": [
+            1261429.134328358
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.249110794799218
+        ],
+        "MAE": [
+            1618573.3556722305
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            15.713484064678376
+        ],
+        "MAE": [
+            1233408.3862347226
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.862535718023887
+        ],
+        "MAE": [
+            1419123.2867486004
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            15.663318224776082
+        ],
+        "MAE": [
+            2123647.094020513
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.291684550893614
+        ],
+        "MAE": [
+            782021.2044776119
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.633588127158951
+        ],
+        "MAE": [
+            707469.840597015
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217065163919298
+        ],
+        "MAE": [
+            1261315.468597607
+        ]
+    },
+    {
+        "Iteration": 7,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.21628148511892
+        ],
+        "MAE": [
+            1261330.191640114
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.44016891164749
+        ],
+        "MAE": [
+            1408783.9104477612
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.273499474651043
+        ],
+        "MAE": [
+            1411440.8507462686
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.201252099039095
+        ],
+        "MAE": [
+            1776664.0377804022
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            18.439805560505278
+        ],
+        "MAE": [
+            2207519.8408591747
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            17.156363484011667
+        ],
+        "MAE": [
+            1239193.253887669
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            26.469731430321048
+        ],
+        "MAE": [
+            4508163.872875394
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.031034037112066
+        ],
+        "MAE": [
+            1433308.5903963915
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.602390887278465
+        ],
+        "MAE": [
+            734496.2441791046
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.512491632780979
+        ],
+        "MAE": [
+            689305.143880597
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217650213221289
+        ],
+        "MAE": [
+            1261271.2325901606
+        ]
+    },
+    {
+        "Iteration": 8,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.21614510181236
+        ],
+        "MAE": [
+            1261308.680403467
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.889717265999948
+        ],
+        "MAE": [
+            1282910.0895522388
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.154803667867524
+        ],
+        "MAE": [
+            1203781.5074626866
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            14.521123761016982
+        ],
+        "MAE": [
+            1684028.7313432836
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.206749610623833
+        ],
+        "MAE": [
+            1503529.3582089553
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.741444961135635
+        ],
+        "MAE": [
+            1241602.9947372554
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.71455957889378
+        ],
+        "MAE": [
+            1406771.004695381
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.150127346781728
+        ],
+        "MAE": [
+            1519729.0182925148
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.567949060880345
+        ],
+        "MAE": [
+            731660.7792537312
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.835579459617364
+        ],
+        "MAE": [
+            699413.2008955223
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.218018210412044
+        ],
+        "MAE": [
+            1261316.6723591373
+        ]
+    },
+    {
+        "Iteration": 9,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217115283860684
+        ],
+        "MAE": [
+            1261360.895460974
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.83271491768963
+        ],
+        "MAE": [
+            1767874.5074626866
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.785715325211065
+        ],
+        "MAE": [
+            1874039.9554152759
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.154546487405236
+        ],
+        "MAE": [
+            1198288.5223880596
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.127174472675293
+        ],
+        "MAE": [
+            1240266.671641791
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411171121175562
+        ],
+        "MAE": [
+            1100393.2459196427
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.93988313588233
+        ],
+        "MAE": [
+            1254573.2292185214
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.174775680121709
+        ],
+        "MAE": [
+            1457707.203186762
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            38.51007670907378
+        ],
+        "MAE": [
+            7016021.883371435
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.018682617085707
+        ],
+        "MAE": [
+            791181.6937313431
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.644157530363964
+        ],
+        "MAE": [
+            713550.505074627
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216647510680337
+        ],
+        "MAE": [
+            1261298.2705981657
+        ]
+    },
+    {
+        "Iteration": 10,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217190370544058
+        ],
+        "MAE": [
+            1261332.6693505996
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.40077001787257
+        ],
+        "MAE": [
+            1487510.3731343283
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.351286980413658
+        ],
+        "MAE": [
+            1822601.9402985075
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.023850706056942
+        ],
+        "MAE": [
+            1296605.5223880596
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.720867366986191
+        ],
+        "MAE": [
+            1461080.0447761193
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            15.083936446653523
+        ],
+        "MAE": [
+            1141562.1486856148
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.864853136205074
+        ],
+        "MAE": [
+            1450352.6306692949
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            21.071222412759457
+        ],
+        "MAE": [
+            3354351.5062747505
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.6397709029423435
+        ],
+        "MAE": [
+            780798.1462686567
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.972893556781404
+        ],
+        "MAE": [
+            689931.1519402985
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216367975296532
+        ],
+        "MAE": [
+            1261335.3074609905
+        ]
+    },
+    {
+        "Iteration": 11,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216841113260486
+        ],
+        "MAE": [
+            1261311.1589824164
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.911416122508111
+        ],
+        "MAE": [
+            1331098.5870646765
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.942089215551126
+        ],
+        "MAE": [
+            1688800.0
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            14.691887673066315
+        ],
+        "MAE": [
+            1691901.537313433
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.732954664016045
+        ],
+        "MAE": [
+            1619489.134328358
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            13.472339700264182
+        ],
+        "MAE": [
+            1056763.3197921817
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            18.156400087984302
+        ],
+        "MAE": [
+            2672561.724645564
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.598493159002484
+        ],
+        "MAE": [
+            1633992.036907087
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.5408205295912385
+        ],
+        "MAE": [
+            733794.2211940298
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            8.724808680879384
+        ],
+        "MAE": [
+            807419.6262686568
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217637675932197
+        ],
+        "MAE": [
+            1261277.3200187886
+        ]
+    },
+    {
+        "Iteration": 12,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216854241711543
+        ],
+        "MAE": [
+            1261295.5751914673
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.520548146052693
+        ],
+        "MAE": [
+            1279792.6268656717
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.14014631546292
+        ],
+        "MAE": [
+            1305912.9402985075
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.483147444798153
+        ],
+        "MAE": [
+            1561424.2537313432
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            19.034587990092156
+        ],
+        "MAE": [
+            1671756.9063741793
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.90743996662998
+        ],
+        "MAE": [
+            1256575.6494336063
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            15.185681039109939
+        ],
+        "MAE": [
+            2008619.0495716298
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.955306774931346
+        ],
+        "MAE": [
+            1416333.3036022205
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.1047844773225775
+        ],
+        "MAE": [
+            773985.4371641794
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.859651783317401
+        ],
+        "MAE": [
+            755267.5019402986
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217672435979427
+        ],
+        "MAE": [
+            1261356.8784852005
+        ]
+    },
+    {
+        "Iteration": 13,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217034574687817
+        ],
+        "MAE": [
+            1261339.7443874413
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.523841458303798
+        ],
+        "MAE": [
+            1384241.6865671643
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.675753512069566
+        ],
+        "MAE": [
+            1627287.0
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.312647913015322
+        ],
+        "MAE": [
+            1276812.537313433
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.17573879641307
+        ],
+        "MAE": [
+            1647185.0
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411171688690828
+        ],
+        "MAE": [
+            1100393.2381564118
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.979851720789007
+        ],
+        "MAE": [
+            1273455.649061264
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.531386063404383
+        ],
+        "MAE": [
+            1630992.6318890126
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.342344590868189
+        ],
+        "MAE": [
+            1749267.7511357192
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.837954990003317
+        ],
+        "MAE": [
+            772289.5170149251
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.8687060951958685
+        ],
+        "MAE": [
+            712640.5632835819
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217026028723765
+        ],
+        "MAE": [
+            1261323.000213392
+        ]
+    },
+    {
+        "Iteration": 14,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217153313829755
+        ],
+        "MAE": [
+            1261326.7623742574
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.151461612883663
+        ],
+        "MAE": [
+            1265128.1421143136
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.703807029674849
+        ],
+        "MAE": [
+            1522107.208955224
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.397293865194069
+        ],
+        "MAE": [
+            1308179.1641791044
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.010663391685421
+        ],
+        "MAE": [
+            1441497.865671642
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411171000007641
+        ],
+        "MAE": [
+            1100393.177845364
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.52507097186346
+        ],
+        "MAE": [
+            1226516.6235301762
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.448710131930122
+        ],
+        "MAE": [
+            1366727.2438769299
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            15.00633179677546
+        ],
+        "MAE": [
+            1936132.510717565
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.54232768121442
+        ],
+        "MAE": [
+            742683.1567164176
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.245053629551479
+        ],
+        "MAE": [
+            708079.5479104477
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216837154213248
+        ],
+        "MAE": [
+            1261320.4272688946
+        ]
+    },
+    {
+        "Iteration": 15,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216330611536224
+        ],
+        "MAE": [
+            1261375.7481273138
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.33681096361118
+        ],
+        "MAE": [
+            1434741.0597014925
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.34445054981932
+        ],
+        "MAE": [
+            1570677.3134328357
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.425866118254874
+        ],
+        "MAE": [
+            1158280.4925373134
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            9.846413234852228
+        ],
+        "MAE": [
+            1368145.6268656717
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            15.670842319275943
+        ],
+        "MAE": [
+            1236041.1024853732
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            36.17429831752649
+        ],
+        "MAE": [
+            6519405.466431492
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            15.093089267293811
+        ],
+        "MAE": [
+            1961154.6512717896
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.051327006267701
+        ],
+        "MAE": [
+            809857.8483582088
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            9.186916783769208
+        ],
+        "MAE": [
+            781927.4949253732
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216084493235405
+        ],
+        "MAE": [
+            1261313.4084548648
+        ]
+    },
+    {
+        "Iteration": 16,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216886272862038
+        ],
+        "MAE": [
+            1261347.3469208847
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.408980546865463
+        ],
+        "MAE": [
+            1409212.0820895522
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.665469105676769
+        ],
+        "MAE": [
+            1367808.014925373
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.836625725814242
+        ],
+        "MAE": [
+            1279174.7611940298
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            51.70669252177559
+        ],
+        "MAE": [
+            2779540.4925373136
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411171143179914
+        ],
+        "MAE": [
+            1100393.2276285915
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            15.82114030578437
+        ],
+        "MAE": [
+            1131131.354119851
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            28.580383479883704
+        ],
+        "MAE": [
+            4986387.853351762
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.88847597487016
+        ],
+        "MAE": [
+            1479374.5545324194
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.773240529106957
+        ],
+        "MAE": [
+            707477.4307462686
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.753659805367826
+        ],
+        "MAE": [
+            735284.772835821
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217323286334542
+        ],
+        "MAE": [
+            1261259.8901830076
+        ]
+    },
+    {
+        "Iteration": 17,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217486693444433
+        ],
+        "MAE": [
+            1261325.9165810023
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.568586772525768
+        ],
+        "MAE": [
+            1464656.1791044776
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.133867691943529
+        ],
+        "MAE": [
+            1215229.4029850746
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.042150951970505
+        ],
+        "MAE": [
+            1306626.985074627
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.837972502172402
+        ],
+        "MAE": [
+            1622092.1940298507
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169622153583
+        ],
+        "MAE": [
+            1100393.2461476645
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.8188477557133
+        ],
+        "MAE": [
+            1208708.4979179152
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.852557964124307
+        ],
+        "MAE": [
+            1722606.831058686
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.024775210730926
+        ],
+        "MAE": [
+            1509085.869577172
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.670887105986278
+        ],
+        "MAE": [
+            759822.4223880597
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.332947455067685
+        ],
+        "MAE": [
+            694260.096119403
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216151772491594
+        ],
+        "MAE": [
+            1261304.2303944153
+        ]
+    },
+    {
+        "Iteration": 18,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.21699394658371
+        ],
+        "MAE": [
+            1261244.3633137816
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            14.673016733691538
+        ],
+        "MAE": [
+            1692305.671641791
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            17.15749204483089
+        ],
+        "MAE": [
+            2574004.604477612
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.336271698976988
+        ],
+        "MAE": [
+            1139149.014925373
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.631447748898864
+        ],
+        "MAE": [
+            1536955.0895522388
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411168127033946
+        ],
+        "MAE": [
+            1100393.0502544306
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.09712879410394
+        ],
+        "MAE": [
+            1178784.4193873634
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.439525360279491
+        ],
+        "MAE": [
+            1365139.534072833
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.662629002577527
+        ],
+        "MAE": [
+            1389689.9736432708
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.682122264796883
+        ],
+        "MAE": [
+            757354.4189552236
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.791738007113
+        ],
+        "MAE": [
+            793964.5811940298
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216849206711826
+        ],
+        "MAE": [
+            1261379.8149923647
+        ]
+    },
+    {
+        "Iteration": 19,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.21641388832438
+        ],
+        "MAE": [
+            1261309.744467159
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.38604293542916
+        ],
+        "MAE": [
+            1506252.671641791
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.563500973728797
+        ],
+        "MAE": [
+            1625597.791044776
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.68917682284692
+        ],
+        "MAE": [
+            1409436.4328358208
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.435860187101667
+        ],
+        "MAE": [
+            1649761.6268656717
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            15.844658600537276
+        ],
+        "MAE": [
+            1212232.6823938275
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            55.338386738172076
+        ],
+        "MAE": [
+            10337738.778456254
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.514259045509206
+        ],
+        "MAE": [
+            1558824.6131666
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.419003472182638
+        ],
+        "MAE": [
+            789384.567164179
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.043202207973606
+        ],
+        "MAE": [
+            759166.023880597
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216296064087649
+        ],
+        "MAE": [
+            1261330.4799601154
+        ]
+    },
+    {
+        "Iteration": 20,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.21628961760117
+        ],
+        "MAE": [
+            1261318.6027033632
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.261936956057248
+        ],
+        "MAE": [
+            1504604.3582089553
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            15.567779867956718
+        ],
+        "MAE": [
+            1983377.0447761193
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.714169202366747
+        ],
+        "MAE": [
+            1383053.4179104478
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.990120938741661
+        ],
+        "MAE": [
+            1513455.4328358208
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411170774768822
+        ],
+        "MAE": [
+            1100393.282860811
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            13.721278429185697
+        ],
+        "MAE": [
+            1119322.8719892262
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            17.00727727632033
+        ],
+        "MAE": [
+            2430681.343700365
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.970142719358426
+        ],
+        "MAE": [
+            1422831.4174788392
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.027265765988922
+        ],
+        "MAE": [
+            743340.1835820896
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.9155577641966435
+        ],
+        "MAE": [
+            746043.7425373136
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.21691138430472
+        ],
+        "MAE": [
+            1261272.291304471
+        ]
+    },
+    {
+        "Iteration": 21,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216122745379316
+        ],
+        "MAE": [
+            1261284.279547364
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.2523703974055
+        ],
+        "MAE": [
+            1389199.6119402985
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.168922995683229
+        ],
+        "MAE": [
+            1823399.0298507463
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.821253605560054
+        ],
+        "MAE": [
+            1528340.119402985
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            9.323308852585667
+        ],
+        "MAE": [
+            1341817.9552238807
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            17.086000157203824
+        ],
+        "MAE": [
+            1244750.916572701
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            54.09095566342723
+        ],
+        "MAE": [
+            10107278.550132055
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            18.894608848228486
+        ],
+        "MAE": [
+            2791362.9447163516
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.184902171409252
+        ],
+        "MAE": [
+            821067.7110447763
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.382013968367314
+        ],
+        "MAE": [
+            726479.3302985074
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216701837969463
+        ],
+        "MAE": [
+            1261359.6169647966
+        ]
+    },
+    {
+        "Iteration": 22,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216148319767784
+        ],
+        "MAE": [
+            1261260.5287178846
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.268981159379104
+        ],
+        "MAE": [
+            1226898.7462686568
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.631838133799913
+        ],
+        "MAE": [
+            1641045.4776119404
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.294487218284594
+        ],
+        "MAE": [
+            1433247.6641791044
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            15.587206331219983
+        ],
+        "MAE": [
+            1818454.343283582
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.409598749877187
+        ],
+        "MAE": [
+            1194129.599743475
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.59444884686599
+        ],
+        "MAE": [
+            1414523.018918257
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.687151367228488
+        ],
+        "MAE": [
+            1408231.941393848
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.703852759627178
+        ],
+        "MAE": [
+            758600.5185074623
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.055213052588935
+        ],
+        "MAE": [
+            712077.9955223881
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217571104416805
+        ],
+        "MAE": [
+            1261291.8935134308
+        ]
+    },
+    {
+        "Iteration": 23,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.2186052737508
+        ],
+        "MAE": [
+            1261299.3373730397
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.634018584937952
+        ],
+        "MAE": [
+            1553108.119402985
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.817677892512462
+        ],
+        "MAE": [
+            1564499.6865671643
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.554365463380146
+        ],
+        "MAE": [
+            1388930.8955223882
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.446155296889815
+        ],
+        "MAE": [
+            1532573.0447761193
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            17.088242920629455
+        ],
+        "MAE": [
+            1250427.486389475
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.825142501676243
+        ],
+        "MAE": [
+            1410333.1599696164
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.453736051088184
+        ],
+        "MAE": [
+            1520146.6827824009
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.671261090495926
+        ],
+        "MAE": [
+            754540.4229850747
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            8.061184123445093
+        ],
+        "MAE": [
+            810998.5973134327
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.21677127861593
+        ],
+        "MAE": [
+            1261297.5540084299
+        ]
+    },
+    {
+        "Iteration": 24,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217132278652521
+        ],
+        "MAE": [
+            1261290.965204268
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.042165600476505
+        ],
+        "MAE": [
+            1252930.776119403
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.334390863134608
+        ],
+        "MAE": [
+            1447867.0
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            8.424995453205156
+        ],
+        "MAE": [
+            1224372.6119402985
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.86634807253972
+        ],
+        "MAE": [
+            1595322.9402985075
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            13.559789495978713
+        ],
+        "MAE": [
+            1075049.0793928017
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.368044208633885
+        ],
+        "MAE": [
+            1365357.2675914671
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.530007934695742
+        ],
+        "MAE": [
+            1392187.7536840613
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.604230212472704
+        ],
+        "MAE": [
+            763402.8238805971
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.888557655303323
+        ],
+        "MAE": [
+            758439.261641791
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216876003563128
+        ],
+        "MAE": [
+            1261319.4393416655
+        ]
+    },
+    {
+        "Iteration": 25,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216847320406297
+        ],
+        "MAE": [
+            1261317.8549856655
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.853619762479527
+        ],
+        "MAE": [
+            1391291.2537313432
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.223918329452959
+        ],
+        "MAE": [
+            1387720.4776119404
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.085050367284367
+        ],
+        "MAE": [
+            1189363.134328358
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            11.46600391340057
+        ],
+        "MAE": [
+            1575145.4180554128
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411170796464335
+        ],
+        "MAE": [
+            1100393.286686557
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.827332867529073
+        ],
+        "MAE": [
+            1255242.5923220878
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.085237811470071
+        ],
+        "MAE": [
+            1468348.1258332622
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.911899279448466
+        ],
+        "MAE": [
+            1409988.6958473895
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.740743834646908
+        ],
+        "MAE": [
+            759939.1149253729
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.607049885677891
+        ],
+        "MAE": [
+            791177.4289552238
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217160861433927
+        ],
+        "MAE": [
+            1261324.299762442
+        ]
+    },
+    {
+        "Iteration": 26,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216606490741926
+        ],
+        "MAE": [
+            1261357.9444820723
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.454392251038959
+        ],
+        "MAE": [
+            1379881.3731343283
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            17.17956776370308
+        ],
+        "MAE": [
+            2180426.1791044776
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            8.649565855130547
+        ],
+        "MAE": [
+            1197288.0597014925
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            14.63151273002761
+        ],
+        "MAE": [
+            1629594.514925373
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            16.539276980641905
+        ],
+        "MAE": [
+            1226744.7452416797
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.410919086368011
+        ],
+        "MAE": [
+            1536799.7681958869
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.07538799260961
+        ],
+        "MAE": [
+            1495257.4368045814
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            6.095358607361331
+        ],
+        "MAE": [
+            731630.6046268657
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            7.369498253784197
+        ],
+        "MAE": [
+            739316.6747761194
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.216201481721622
+        ],
+        "MAE": [
+            1261335.7556482132
+        ]
+    },
+    {
+        "Iteration": 27,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216489395463457
+        ],
+        "MAE": [
+            1261329.7462691427
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.392569528711087
+        ],
+        "MAE": [
+            1619249.7462686568
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.075029015033738
+        ],
+        "MAE": [
+            1559149.7313432836
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.746875381582653
+        ],
+        "MAE": [
+            1607677.1641791044
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.052476530501172
+        ],
+        "MAE": [
+            1690505.7313432836
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            17.18139197796751
+        ],
+        "MAE": [
+            1256744.0993022064
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            12.974899172596022
+        ],
+        "MAE": [
+            1424055.2207893047
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            52.60148942802548
+        ],
+        "MAE": [
+            9801601.600850534
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.609425515817794
+        ],
+        "MAE": [
+            730811.1052238805
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            8.023972029770112
+        ],
+        "MAE": [
+            809495.0788059699
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.218159797282603
+        ],
+        "MAE": [
+            1261305.5938367548
+        ]
+    },
+    {
+        "Iteration": 28,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.216474385029386
+        ],
+        "MAE": [
+            1261319.525070504
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            9.351694707218165
+        ],
+        "MAE": [
+            1308597.7462686568
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.14352043618658
+        ],
+        "MAE": [
+            1543360.5074626866
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            32.524247091417166
+        ],
+        "MAE": [
+            2147969.380597015
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            10.285373649317954
+        ],
+        "MAE": [
+            1335636.7014925373
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411167866731992
+        ],
+        "MAE": [
+            1100393.040358769
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            13.265303595655142
+        ],
+        "MAE": [
+            1072803.9333109835
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            15.852642205348985
+        ],
+        "MAE": [
+            2098306.246885305
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            22.504900111436857
+        ],
+        "MAE": [
+            3648379.0978919435
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.517613011716428
+        ],
+        "MAE": [
+            775894.6946268658
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.596471423805007
+        ],
+        "MAE": [
+            724206.7400000002
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.215813963330799
+        ],
+        "MAE": [
+            1261298.556372911
+        ]
+    },
+    {
+        "Iteration": 29,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217132599672984
+        ],
+        "MAE": [
+            1261284.8486968158
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "BayesianRidge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.413929951033401
+        ],
+        "MAE": [
+            1232166.8794746934
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "BayesianRidge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.413934619205353
+        ],
+        "MAE": [
+            1232165.819505222
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            10.449280681144018
+        ],
+        "MAE": [
+            1394222.8208955224
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "DecisionTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.01339603836401
+        ],
+        "MAE": [
+            1656838.7462686568
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.85459946465458
+        ],
+        "MAE": [
+            1275466.5671641792
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "ExtraTreeRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            12.896748650259488
+        ],
+        "MAE": [
+            1685712.6268656717
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "GaussianProcessRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            155.37813794158888
+        ],
+        "MAE": [
+            9490240.275029348
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "KNeighborsRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.43024349241503
+        ],
+        "MAE": [
+            1539708.83880597
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "Lasso",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.41117180538704
+        ],
+        "MAE": [
+            1100393.3133402844
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "Lasso",
+        "Feature Selection": null,
+        "MAPE": [
+            14.75814945313641
+        ],
+        "MAE": [
+            1132506.9943975767
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "LinearRegression",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            11.411169783518476
+        ],
+        "MAE": [
+            1100393.2860233616
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "LinearRegression",
+        "Feature Selection": null,
+        "MAPE": [
+            12.088551070680682
+        ],
+        "MAE": [
+            1009147.2853215601
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.228876207866216
+        ],
+        "MAE": [
+            1498338.4624682579
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "PassiveAggressiveRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            13.269815005769752
+        ],
+        "MAE": [
+            1558180.2840501675
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            5.927203884114269
+        ],
+        "MAE": [
+            761931.5197014925
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "RandomForestRegressor",
+        "Feature Selection": null,
+        "MAPE": [
+            6.948822675916881
+        ],
+        "MAE": [
+            710471.6298507464
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "Ridge",
+        "Feature Selection": "f_regression",
+        "MAPE": [
+            13.217236058105483
+        ],
+        "MAE": [
+            1261245.8577035798
+        ]
+    },
+    {
+        "Iteration": 30,
+        "Model": "Ridge",
+        "Feature Selection": null,
+        "MAPE": [
+            13.217353535740692
+        ],
+        "MAE": [
+            1261310.9960719608
+        ]
+    }
+]

@@ -15,7 +15,11 @@ from sklearn.linear_model import BayesianRidge
 from sklearn.impute import IterativeImputer
 from collections import Counter
 from itertools import product
+import warnings
+from sklearn.exceptions import ConvergenceWarning
 
+# Ignorer les ConvergenceWarning
+warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 
 
@@ -152,7 +156,7 @@ def grass_data_creation():
 
     df_week = merged_df[['Week', 'Grass_growth']].copy()
 
-    imputer = IterativeImputer(estimator=BayesianRidge(), max_iter=50, random_state=42, tol=1e-4)
+    imputer = IterativeImputer(estimator=RandomForestRegressor(), max_iter=100, random_state=42, tol=1e-3)
     imputed_values = imputer.fit_transform(df_week)
     merged_df['Grass_growth'] = imputed_values[:, 1]
     merged_df.to_excel('spreadsheet/Grass_data_weekly_2009-2024.xlsx', index=False)
@@ -196,7 +200,7 @@ def final_data_creation():
     # Utiliser pandas pour écrire dans un fichier Excel sans index
     final_data.to_excel("spreadsheet/Final_Weekly_2009_2021.xlsx", index=False)
 
-#price_data_creation()
+price_data_creation()
 #grass_data_creation()
 #yield_data_creation()
-final_data_creation()
+#final_data_creation()
