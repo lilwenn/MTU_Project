@@ -519,6 +519,7 @@ if False: # Test autosklearn
 
 import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_absolute_error
 
 class Const:
     forecast_weeks = 52
@@ -576,6 +577,12 @@ def train_and_predict_arima_corrected(df, exog_future, order=(1, 1, 1)):
 
     return predictions, last_date
 
+def calculate_mape(y_true, y_pred):
+    y_true, y_pred = pd.Series(y_true).reset_index(drop=True), pd.Series(y_pred).reset_index(drop=True)
+    mask = y_true != 0
+    y_true, y_pred = y_true[mask], y_pred[mask]
+    return (abs(y_true - y_pred) / y_true).mean() * 100
+
 def train_models(df, model_name):
     """
     Train multiple machine learning models on preprocessed data, evaluate their performance,
@@ -598,7 +605,7 @@ def train_models(df, model_name):
     result = {}
     result[model_name] = {}
 
-    if model_name == 'ARIMA':
+    if (model_name == 'ARIMA'):
         result[model_name] = {}
 
         # Preprocess exogenous data
@@ -617,14 +624,38 @@ def train_models(df, model_name):
         # Call the function to get predictions and last date
         predictions, last_date = train_and_predict_arima_corrected(df, exog_future, best_order)
 
-        # Store predictions and last date in results
+        # Get actual values for comparison
+        actual_values = df_copy['litres'].iloc[-const.forecast_weeks:].values
+
+        # Calculate MAE and MAPE
+        mae = mean_absolute_error(actual_values, predictions)
+        mape = calculate_mape(actual_values, predictions)
+
+        # Store predictions, last date, MAE, and MAPE in results
         result[model_name]['Predictions'] = predictions.tolist()
         result[model_name]['Last_Date'] = last_date.strftime('%Y-%m-%d')
+        result[model_name]['MAE'] = mae
+        result[model_name]['MAPE'] = mape
 
-        # Print the predictions and the last date for verification
+        # Print the predictions, the last date, MAE, and MAPE for verification
         print("Predictions for the next 52 weeks:")
         print(predictions)
         print("Last date in the training data:", last_date)
+        print("MAE:", mae)
+        print("MAPE:", mape)
+
+
+
+    elif model_name == 'NeuralNetworkPyTorch':
+        for week in range(1, const.forecast_weeks + 1):
+            target_col = f'{const.target_column}_next_{week}weeks'
+            model = NeuralNetwork(input_dim=len(features))
+            criterion = nn.MSELoss()
+            optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+            mape_score, mae_score, prediction = train_and_predict_pytorch(df, features, target_col, model, criterion, optimizer)
+            print(f'MAPE for NeuralNetworkPyTorch with {target_col}: {mape_score:.2f}')
+
 
     return result
 
@@ -632,4 +663,5 @@ def train_models(df, model_name):
 df = pd.read_excel('spreadsheet/lagged_results.xlsx')
 
 # Train models
-train_models(df, 'ARIMA')
+#train_models(df, 'ARIMA')
+train_models(df, 'NeuralNetworkPyTorch')
