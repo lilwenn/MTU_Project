@@ -22,12 +22,14 @@ import Constants as const
 
 from sklearn.metrics import mean_absolute_percentage_error, mean_absolute_error
 from statsmodels.tsa.stattools import adfuller
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_absolute_error
+import pandas as pd
+from statsmodels.tsa.stattools import adfuller
+from sklearn.metrics import mean_absolute_error
+#import autosklearn.classification
+#from flaml import AutoML
 
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
-import autosklearn.classification
-from flaml import AutoML
 from sklearn.metrics import r2_score
 import sklearn.model_selection
 import sklearn.datasets
@@ -243,50 +245,43 @@ def train_and_predict_pytorch(df, features, target_col, model, criterion, optimi
     return mape_score, mae_score, prediction
 
 
-def train_and_predict_arima(df, target_col, p=1, d=1, q=1):
-    """
-    Trains an ARIMA model on time series data and makes a one-step-ahead prediction.
+def train_and_predict_arima(df):
+    # Check if 'Date' is in the columns
+    if 'Date' in df.columns:
+        # Set the date as index
+        df_copy = df.set_index('Date')
+    else:
+        # Assume 'Date' is the index
+        df_copy = df.copy()
 
-    Args:
-        df (pd.DataFrame): DataFrame containing the time series data.
-        target_col (str): Name of the column containing the target variable.
-        p (int): Order of the autoregressive (AR) term. Default is 1.
-        d (int): Degree of differencing. Default is 1.
-        q (int): Order of the moving average (MA) term. Default is 1.
+    # Infer the frequency
+    inferred_freq = pd.infer_freq(df_copy.index)
 
-    Returns:
-        tuple: A tuple containing:
-            - MAPE score (float)
-            - MAE score (float)
-            - One-step-ahead forecast (float)
-            - Residuals (list)
-    """
+    # Resample if not weekly on Sundays
+    if inferred_freq != 'W-SUN':
+        df_copy = df_copy.resample('W-SUN').mean().fillna(df_copy.mean())
 
-    series = df[target_col]
+    # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
+    exog_data = df_copy.drop(columns=[col for col in df_copy.columns if 'litres' in col])
 
-    # Test for stationarity (optional, but recommended)
-    adfuller_result = adfuller(series)
-    if adfuller_result[1] > 0.05:  # If p-value > 0.05, the series is likely non-stationary
-        print("Warning: Time series is likely non-stationary. Consider adjusting 'd'.")
+    # Repeat the last row to match the number of forecast steps
+    last_row_exog_data = np.tile(exog_data.iloc[[-1]].values, (const.forecast_weeks, 1))
 
-    # Fit ARIMA model
-    model = ARIMA(series, order=(p, d, q))
+    # Train the ARIMA model
+    model = ARIMA(df_copy['litres'], exog=exog_data, order=(1, 1, 1), dates=df_copy.index, freq='W-SUN')
     model_fit = model.fit()
 
-    # Make predictions
-    forecast = model_fit.forecast(steps=1)[0]
+    # Predict the next const.forecast_weeks weeks
+    predictions = model_fit.forecast(steps=const.forecast_weeks, exog=last_row_exog_data)
 
-    # Calculate in-sample predictions for error calculation
-    in_sample_predictions = model_fit.predict()
+    # Get the last date in the training data
+    last_date = df_copy.index.max()
 
-    # Evaluate model
-    mape_score = mean_absolute_percentage_error(series, in_sample_predictions)
-    mae_score = mean_absolute_error(series, in_sample_predictions)
+    # Reset the index
+    df_copy = df_copy.reset_index()
 
-    # Get residuals
-    residuals = model_fit.resid.tolist()
+    return predictions, last_date
 
-    return mape_score, mae_score, forecast, residuals
 
 def build_nn_model(input_dim):
     model = Sequential()
@@ -323,20 +318,36 @@ def train_models(df, model_name):
     if model_name == 'ARIMA':
         result[model_name] = {}
 
-        for week in range(1, const.forecast_weeks + 1):
-            target_col = f'{const.target_column}_next_{week}weeks'
-            mape_score, mae_score, prediction, selected_features = train_and_predict_arima(df, target_col)
-            print(f'MAPE for ARIMA with {target_col}: {mape_score:.2f}')
+        # Call the function to get predictions and last date
+        predictions, last_date = train_and_predict_arima(df)
 
-            result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
-            result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
-            result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
+        # Store predictions and last date in results
+        result[model_name]['Predictions'] = predictions.tolist()
+        result[model_name]['Last_Date'] = last_date.strftime('%Y-%m-%d')
 
-            # Plot correlation matrix for ARIMA
-            plot_correlation_matrix(df, const.target_column, [], output_file=f'visualization/correlation/ARIMA_{week}.png')
+        # Print the predictions and the last date for verification
+        print("Predictions for the next 52 weeks:")
+        print(predictions)
+        print("Last date in the training data:", last_date)
 
-            with open(f'result/by_model/ARIMA_{week}week.json', 'w') as json_file:
-                json.dump(result[model_name], json_file, indent=4)
+        """        # Loop through forecast weeks and store each week's metrics
+                for week in range(1, const.forecast_weeks + 1):
+                    target_col = f'{const.target_column}_next_{week}weeks'
+                    mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, pipeline)
+                    print(f'MAPE for ARIMA with {target_col}: {mape_score:.2f}')
+
+                    # Store metrics in results
+                    result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
+                    result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
+                    result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
+
+                    # Plot correlation matrix for ARIMA
+                    plot_correlation_matrix(df, const.target_column, [], output_file=f'visualization/correlation/ARIMA_{week}.png')
+
+                    # Save results to JSON
+                    with open(f'result/by_model/ARIMA_{week}week.json', 'w') as json_file:
+                        json.dump(result[model_name], json_file, indent=4)"""
+
 
     elif model_name == 'NeuralNetworkTensorflow':
         for week in range(1, const.forecast_weeks + 1):
@@ -439,129 +450,23 @@ def find_best_combination(model_data):
 
 
 if __name__ == "__main__":
-
-
-    #Entrainement des modeles
+    """
     df = load_and_preprocess_data()
-    for model_name, model in const.models.items():
-        train_models(df, model)
+        #Entrainement des modeles
+        df = load_and_preprocess_data()
+        for model_name, model in const.models.items():
+            train_models(df, model)
+    
+    df = pd.read_excel('spreadsheet/lagged_results.xlsx')
 
     train_models(df, 'ARIMA')
-    train_models(df, 'NeuralNetworkPyTorch')
-    train_models(df, 'NeuralNetworkTensorflow')
+    #train_models(df, 'NeuralNetworkPyTorch')
+    #train_models(df, 'NeuralNetworkTensorflow')
+
+    """
     
 
-    # Faire la moyenne de chaque itération
-
-    # Trouver la meilleur combinaison pour chaque modele
-
-    with open('result/week_without_scale_52weeks.json', 'r') as json_file:
-        data = json.load(json_file)
-
-
-    best_combinations = {}
-
-    folder_path = 'result/by_model'
-    file_list = os.listdir(folder_path)
-
-    for file_name in file_list:
-
-        model_name = file_name.split('_')[0] 
-        model_data = data.get(model_name, {}) 
-        best_combination = find_best_combination(model_data)
-        best_combinations[model_name] = {
-            'best_combination': best_combination[:2],  
-            'best_mape': best_combination[2]['MAPE']  
-        }
-
-    with open("result/best_week_with_scale_52weeks.json", 'w') as json_file:
-        json.dump(best_combinations, json_file, indent=4)
-
-
-    print(json.dumps(data, indent=4))
-
-    best_combinations = {}
-    for model, model_data in data.items():
-        best_combinations[model] = find_best_combination(model_data)
-
-
-    best_combinations_json = []
-    for model, (scaler_name, best_method, metrics) in best_combinations.items():
-        best_combinations_json.append({
-            "Model": model,
-            "Scaler": scaler_name,
-            "Best Feature Selection": best_method,
-            "MAPE": metrics["MAPE"],
-            "MAE": metrics["MAE"],
-            "Prediction": metrics["Prediction"]
-        })
-
-
-    with open("result/best_week_with_scale_52weeks.json", 'w') as json_file:
-        json.dump(best_combinations_json, json_file, indent=4)
-
-
-    # Mettre les résultats dans un Tableau
-    with open('result/best_week_with_scale_52weeks.json', 'r') as json_file:
-        data = json.load(json_file)
-
-   
-    df = pd.DataFrame(data)
-    df['MAPE'] = df['MAPE'].apply(lambda x: x['week_1'])
-    df['MAE'] = df['MAE'].apply(lambda x: x['week_1'])
-
-    df = df.sort_values(by='MAPE')
-    df = df[['Model', 'Scaler', 'MAPE', 'MAE', 'Best Feature Selection', 'Prediction']]
-    df.to_excel('result/best_models_sorted_with_scale.xlsx', index=False)
-
-
-    # Tracer les courbes de MAPE et précision
-
-    with open('result/best_week_with_scale_52weeks.json', 'r') as json_file:
-        data = json.load(json_file)
-
-    # Initialiser les figures et axes pour les trois graphiques
-    fig_mape, ax_mape = plt.subplots(figsize=(10, 6))
-    fig_mae, ax_mae = plt.subplots(figsize=(10, 6))
-    fig_pred, ax_pred = plt.subplots(figsize=(10, 6))
-
-    # Parcourir chaque modèle pour tracer les courbes
-    for model_data in data:
-        model = model_data["Model"]
-        weeks = list(model_data["MAPE"].keys())
-        weeks_int = [int(week.split('_')[1]) for week in weeks]  # Convertir les semaines en entiers
-
-        # Récupérer les valeurs de MAPE, MAE et Prediction
-        mape_values = list(model_data["MAPE"].values())
-        mae_values = list(model_data["MAE"].values())
-        pred_values = list(model_data["Prediction"].values())
-
-        # Tracer les courbes
-        ax_mape.plot(weeks_int, mape_values, label=model)
-        ax_mae.plot(weeks_int, mae_values, label=model)
-        ax_pred.plot(weeks_int, pred_values, label=model)
-
-    # Ajouter des titres et des légendes
-    ax_mape.set_title('MAPE par Modèle au fil du temps')
-    ax_mape.set_xlabel('Semaine')
-    ax_mape.set_ylabel('MAPE')
-    ax_mape.legend()
-
-    ax_mae.set_title('MAE par Modèle au fil du temps')
-    ax_mae.set_xlabel('Semaine')
-    ax_mae.set_ylabel('MAE')
-    ax_mae.legend()
-
-    ax_pred.set_title('Prédictions par Modèle au fil du temps')
-    ax_pred.set_xlabel('Semaine')
-    ax_pred.set_ylabel('Prédiction')
-    ax_pred.legend()
-
-    # Afficher les graphiques
-    #plt.show()
-
-
-if True: # Test autosklearn
+if False: # Test autosklearn
 
     #pip install auto-sklearn
     X, y = sklearn.datasets.load_breast_cancer(return_X_y=True)
@@ -612,3 +517,119 @@ if True: # Test autosklearn
     r2 = r2_score(y_test, y_pred)
     print(f'R-squared on test set: {r2:.2f}')
 
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+
+class Const:
+    forecast_weeks = 52
+    target_column = 'litres'
+
+const = Const()
+
+def preprocess_exog_data(df, forecast_weeks):
+    # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
+    exog_data = df.drop(columns=[col for col in df.columns if 'litres' in col])
+
+    # Split exog_data into exog_train and exog_future
+    exog_train = exog_data.iloc[:-forecast_weeks]
+    exog_future = exog_data.iloc[-forecast_weeks:]
+
+    # Ensure the number of columns in exog_future matches exog_train
+    exog_future = exog_future.reindex(columns=exog_train.columns, fill_value=0)
+
+    return exog_train, exog_future
+
+def train_and_predict_arima_corrected(df, exog_future, order=(1, 1, 1)):
+    # Check if 'Date' is in the columns
+    if 'Date' in df.columns:
+        # Set the date as index
+        df_copy = df.set_index('Date')
+    else:
+        # Assume 'Date' is the index
+        df_copy = df.copy()
+
+    # Infer the frequency
+    inferred_freq = pd.infer_freq(df_copy.index)
+
+    # Resample if not weekly on Sundays
+    if inferred_freq != 'W-SUN':
+        df_copy = df_copy.resample('W-SUN').mean().fillna(df_copy.mean())
+
+    # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
+    exog_data = df_copy.drop(columns=[col for col in df_copy.columns if 'litres' in col])
+
+    # Ensure the number of columns in exog_future matches exog_data
+    exog_future = exog_future.reindex(columns=exog_data.columns, fill_value=0)
+
+    # Train the ARIMA model
+    model = ARIMA(df_copy['litres'], exog=exog_data, order=order, dates=df_copy.index, freq='W-SUN')
+    model_fit = model.fit()
+
+    # Predict the next const.forecast_weeks weeks
+    predictions = model_fit.forecast(steps=const.forecast_weeks, exog=exog_future)
+
+    # Get the last date in the training data
+    last_date = df_copy.index.max()
+
+    # Reset the index
+    df_copy = df_copy.reset_index()
+
+    return predictions, last_date
+
+def train_models(df, model_name):
+    """
+    Train multiple machine learning models on preprocessed data, evaluate their performance,
+    and save results including MAPE, MAE, and predictions for each model, scaler, and scoring method combination.
+
+    Args:
+    - df (DataFrame): Preprocessed DataFrame obtained from load_and_preprocess_data().
+    - result_file (str): File path where lagged results were saved.
+    - features (list): List of feature columns for model training.
+    - const (object): Object containing constants such as models, scalers, scoring methods, etc.
+
+    Outputs:
+    - Saves JSON files with evaluation metrics ('result/week_without_scale_weeks.json').
+    - Saves correlation matrices for selected features as PNG files in 'visualization/correlation/'.
+    """
+
+    # Define features (use all columns except 'Date' and target columns)
+    features = [col for col in df.columns if not col.startswith(f'{const.target_column}_next_') and col != 'Date']
+
+    result = {}
+    result[model_name] = {}
+
+    if model_name == 'ARIMA':
+        result[model_name] = {}
+
+        # Preprocess exogenous data
+        exog_train, exog_future = preprocess_exog_data(df, const.forecast_weeks)
+
+        # Check if 'Date' is in the columns
+        if 'Date' in df.columns:
+            # Set the date as index
+            df_copy = df.set_index('Date')
+        else:
+            # Assume 'Date' is the index
+            df_copy = df.copy()
+
+        best_order = (1, 1, 1)  # Hardcoding the ARIMA order as (1, 1, 1)
+
+        # Call the function to get predictions and last date
+        predictions, last_date = train_and_predict_arima_corrected(df, exog_future, best_order)
+
+        # Store predictions and last date in results
+        result[model_name]['Predictions'] = predictions.tolist()
+        result[model_name]['Last_Date'] = last_date.strftime('%Y-%m-%d')
+
+        # Print the predictions and the last date for verification
+        print("Predictions for the next 52 weeks:")
+        print(predictions)
+        print("Last date in the training data:", last_date)
+
+    return result
+
+# Load data
+df = pd.read_excel('spreadsheet/lagged_results.xlsx')
+
+# Train models
+train_models(df, 'ARIMA')
