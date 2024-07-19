@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from statsmodels.tsa.arima.model import ARIMA
 
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
@@ -165,6 +166,61 @@ def load_and_preprocess_data():
     return df
 
 
+def preprocess_exog_data(df, forecast_weeks):
+    # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
+    exog_data = df.drop(columns=[col for col in df.columns if 'litres' in col])
+
+    # Split exog_data into exog_train and exog_future
+    exog_train = exog_data.iloc[:-forecast_weeks]
+    exog_future = exog_data.iloc[-forecast_weeks:]
+
+    # Ensure the number of columns in exog_future matches exog_train
+    exog_future = exog_future.reindex(columns=exog_train.columns, fill_value=0)
+
+    return exog_train, exog_future
+
+
+def train_and_predict_arima(df, exog_future, order=(1, 1, 1)):
+    # Check if 'Date' is in the columns
+    if 'Date' in df.columns:
+        # Set the date as index
+        df_copy = df.set_index('Date')
+    else:
+        # Assume 'Date' is the index
+        df_copy = df.copy()
+
+    # Infer the frequency
+    inferred_freq = pd.infer_freq(df_copy.index)
+
+    # Resample if not weekly on Sundays
+    if inferred_freq != 'W-SUN':
+        df_copy = df_copy.resample('W-SUN').mean().fillna(df_copy.mean())
+
+    # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
+    exog_data = df_copy.drop(columns=[col for col in df_copy.columns if 'litres' in col])
+
+    # Ensure the number of columns in exog_future matches exog_data
+    exog_future = exog_future.reindex(columns=exog_data.columns, fill_value=0)
+
+    # Train the ARIMA model
+    model = ARIMA(df_copy['litres'], exog=exog_data, order=order, dates=df_copy.index, freq='W-SUN')
+    model_fit = model.fit()
+
+    # Predict the next const.forecast_weeks weeks
+    predictions = model_fit.forecast(steps=const.forecast_weeks, exog=exog_future)
+
+    # Get the last date in the training data
+    last_date = df_copy.index.max()
+
+    # Reset the index
+    df_copy = df_copy.reset_index()
+
+    return predictions, last_date
+
+
+
+
+
 def train_models(df, model_name,model):
     """
     Train multiple machine learning models on preprocessed data, evaluate their performance,
@@ -186,43 +242,76 @@ def train_models(df, model_name,model):
 
     result = {}
     result[model_name] = {}
+
     
-    for scaler_name, scaler in const.scalers.items():
-        result[model_name][scaler_name] = {}
+    if (model_name == 'ARIMA'):
+        exog_train, exog_future = preprocess_exog_data(df, const.forecast_weeks)
 
-        for scoring_name, scoring_func in const.scoring_methods.items():
-            result[model_name][scaler_name][scoring_name] = {}
-            result[model_name][scaler_name][scoring_name]['MAPE'] = {}
-            result[model_name][scaler_name][scoring_name]['MAE'] = {}
-            result[model_name][scaler_name][scoring_name]['Prediction'] = {}
+        # Check if 'Date' is in the columns
+        if 'Date' in df.columns:
+            # Set the date as index
+            df_copy = df.set_index('Date')
+        else:
+            # Assume 'Date' is the index
+            df_copy = df.copy()
 
-            # Default scoring function and k value if scoring_func is None
-            default_scoring_func = f_regression
-            default_k = 5
+        best_order = (1, 1, 1)  # Hardcoding the ARIMA order as (1, 1, 1)
 
-            pipeline = Pipeline([
-                ('selectkbest', SelectKBest(score_func=scoring_func if scoring_func else default_scoring_func, k=const.k_values.get(scoring_name, default_k))),
-                ('scaler', scaler),
-                ('model', model)
-            ])
+        # Call the function to get predictions and last date
+        predictions, last_date = train_and_predict_arima(df, exog_future, best_order)
 
-            selected_features_set = set()
+        # Get actual values for comparison
+        actual_values = df_copy['litres'].iloc[-const.forecast_weeks:].values
 
-            for week in range(1, const.forecast_weeks + 1):
-                target_col = f'{const.target_column}_next_{week}weeks'
-                mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, pipeline)
-                print(f'MAPE for {model_name} with {target_col}, scaler {scaler_name}, scoring {scoring_name}: {mape_score:.2f}')
+        # Calculate MAE and MAPE
+        mae_score = mae(actual_values, predictions)
+        mape_score = mape(actual_values, predictions)
 
-                result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
-                result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
-                result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
+        # Store predictions, last date, MAE, and MAPE in results
+        result[model_name]['Predictions'] = predictions.tolist()
+        result[model_name]['MAE'] = mae_score
+        result[model_name]['MAPE'] = mape_score
 
-                selected_features_set.update(selected_features)
+        with open(f'result/by_model/{model_name}_{const.forecast_weeks}week.json', 'w') as json_file:
+            json.dump(result[model_name], json_file, indent=4)
+    
+    else : 
+        for scaler_name, scaler in const.scalers.items():
+            result[model_name][scaler_name] = {}
 
-            plot_correlation_matrix(df, const.target_column , list(selected_features_set), output_file=f'visualization/correlation/correlation_matrix_{model_name}_{week}{scaler_name}_{scoring_name}.png')
+            for scoring_name, scoring_func in const.scoring_methods.items():
+                result[model_name][scaler_name][scoring_name] = {}
+                result[model_name][scaler_name][scoring_name]['MAPE'] = {}
+                result[model_name][scaler_name][scoring_name]['MAE'] = {}
+                result[model_name][scaler_name][scoring_name]['Prediction'] = {}
 
-            with open(f'result/by_model/{model_name}_{week}week.json', 'w') as json_file:
-                json.dump(result[model_name], json_file, indent=4)
+                # Default scoring function and k value if scoring_func is None
+                default_scoring_func = f_regression
+                default_k = 5
+
+                pipeline = Pipeline([
+                    ('selectkbest', SelectKBest(score_func=scoring_func if scoring_func else default_scoring_func, k=const.k_values.get(scoring_name, default_k))),
+                    ('scaler', scaler),
+                    ('model', model)
+                ])
+
+                selected_features_set = set()
+
+                for week in range(1, const.forecast_weeks + 1):
+                    target_col = f'{const.target_column}_next_{week}weeks'
+                    mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, pipeline)
+                    print(f'MAPE for {model_name} with {target_col}, scaler {scaler_name}, scoring {scoring_name}: {mape_score:.2f}')
+
+                    result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
+                    result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
+                    result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
+
+                    selected_features_set.update(selected_features)
+
+                plot_correlation_matrix(df, const.target_column , list(selected_features_set), output_file=f'visualization/correlation/correlation_matrix_{model_name}_{week}{scaler_name}_{scoring_name}.png')
+
+                with open(f'result/by_model/{model_name}_{week}week.json', 'w') as json_file:
+                    json.dump(result[model_name], json_file, indent=4)
 
 
 def find_best_model_configs(result_dir, file_name, best_combinations, results_list):
@@ -371,6 +460,11 @@ if __name__ == "__main__":
     """
 
 
+    df = pd.read_excel('spreadsheet/lagged_results.xlsx')
+
+    train_models(df, 'ARIMA', None)
+"""
+
     # Load the data from the JSON file with utf-8 encoding
     with open(f'result/best_combinations_{const.forecast_weeks}week.json', 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
@@ -393,3 +487,4 @@ if __name__ == "__main__":
 
 
     plot_model_performance(f'result/best_combinations_{const.forecast_weeks}week.json', const)
+"""
