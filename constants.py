@@ -38,7 +38,6 @@ import numpy as np
 #____________________________________________________________________________________________________
 
 
-
 target_column = 'litres'
 forecast_weeks = 52
 
@@ -106,7 +105,7 @@ hyperparameters = {
     'RandomForestRegressor': {
         'model__n_estimators': [50, 100, 200, 300, 400],
         'model__criterion': ['mae', 'mse'],
-        'model__max_features': ['sqrt', 'log2', None, 0.5, 1.0],  
+        'model__max_features': ['auto','sqrt', 'log2', None, 0.5, 1.0],  
         'model__max_depth': [None, 16, 32, 64, 128],
         'model__min_samples_split': [2, 10, 20]
     },

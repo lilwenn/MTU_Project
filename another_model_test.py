@@ -40,22 +40,9 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 
-
-class NeuralNetwork(nn.Module):
-    def __init__(self, input_dim):
-        super(NeuralNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 64)
-        self.dropout = nn.Dropout(0.2)
-        self.fc2 = nn.Linear(64, 32)
-        self.fc3 = nn.Linear(32, 1)
-
-    def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = self.dropout(x)
-        x = torch.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+from sklearn.metrics import mean_absolute_error
 
 
 def mape(y_true, y_pred):
@@ -88,13 +75,18 @@ def iteration_mean(mean_results, result, iteration):
     return mean_results
 
 
-
 def train_and_predict(df, features, target_col, model_pipeline):
     X = df[features]
     y = df[target_col]
 
     # Split data into training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Instantiate the RandomForestRegressor model
+    model = RandomForestRegressor()
+
+    # Update the pipeline with the instantiated model
+    model_pipeline.steps[-1] = ('model', model)
 
     # Train the model pipeline
     model_pipeline.fit(X_train, y_train)
@@ -151,6 +143,9 @@ def determine_lags(df, target_column, max_lag=40):
         optimal_lag = max_lag
     
     print(f"Optimal number of lags: {optimal_lag}")
+
+    optimal_lag = 2
+
     return optimal_lag
 
 
@@ -168,7 +163,7 @@ def load_and_preprocess_data():
     - df (DataFrame): Preprocessed DataFrame ready for model training.
     - result_file (str): File path where lagged results will be saved.
     """
-
+    print("Start preprocessing ... ...")
     # Load your data
     full_df = pd.read_excel('spreadsheet/Final_Weekly_2009_2021.xlsx')
 
@@ -283,159 +278,6 @@ def train_and_predict_arima(df):
     return predictions, last_date
 
 
-def build_nn_model(input_dim):
-    model = Sequential()
-    model.add(Dense(64, activation='relu', input_dim=input_dim))
-    model.add(Dropout(0.2))
-    model.add(Dense(32, activation='relu'))
-    model.add(Dense(1))  # Output layer
-
-    model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae', 'mape'])
-    return model
-
-def train_models(df, model_name):
-    """
-    Train multiple machine learning models on preprocessed data, evaluate their performance,
-    and save results including MAPE, MAE, and predictions for each model, scaler, and scoring method combination.
-
-    Args:
-    - df (DataFrame): Preprocessed DataFrame obtained from load_and_preprocess_data().
-    - result_file (str): File path where lagged results were saved.
-    - features (list): List of feature columns for model training.
-    - const (object): Object containing constants such as models, scalers, scoring methods, etc.
-
-    Outputs:
-    - Saves JSON files with evaluation metrics ('result/week_without_scale_weeks.json').
-    - Saves correlation matrices for selected features as PNG files in 'visualization/correlation/'.
-    """
-
-    # Define features (use all columns except 'Date' and target columns)
-    features = [col for col in df.columns if not col.startswith(f'{const.target_column}_next_') and col != 'Date']
-
-    result = {}
-    result[model_name] = {}
-
-    if model_name == 'ARIMA':
-        result[model_name] = {}
-
-        # Call the function to get predictions and last date
-        predictions, last_date = train_and_predict_arima(df)
-
-        # Store predictions and last date in results
-        result[model_name]['Predictions'] = predictions.tolist()
-        result[model_name]['Last_Date'] = last_date.strftime('%Y-%m-%d')
-
-        # Print the predictions and the last date for verification
-        print("Predictions for the next 52 weeks:")
-        print(predictions)
-        print("Last date in the training data:", last_date)
-
-        """        # Loop through forecast weeks and store each week's metrics
-                for week in range(1, const.forecast_weeks + 1):
-                    target_col = f'{const.target_column}_next_{week}weeks'
-                    mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, pipeline)
-                    print(f'MAPE for ARIMA with {target_col}: {mape_score:.2f}')
-
-                    # Store metrics in results
-                    result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
-                    result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
-                    result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
-
-                    # Plot correlation matrix for ARIMA
-                    plot_correlation_matrix(df, const.target_column, [], output_file=f'visualization/correlation/ARIMA_{week}.png')
-
-                    # Save results to JSON
-                    with open(f'result/by_model/ARIMA_{week}week.json', 'w') as json_file:
-                        json.dump(result[model_name], json_file, indent=4)"""
-
-
-    elif model_name == 'NeuralNetworkTensorflow':
-        for week in range(1, const.forecast_weeks + 1):
-            target_col = f'{const.target_column}_next_{week}weeks'
-            X = df[features]
-            y = df[target_col]
-
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-            # Build the neural network model
-            model = build_nn_model(X_train.shape[1])
-
-            # Train the model
-            model.fit(X_train, y_train, epochs=50, batch_size=32, verbose=0)
-
-            # Evaluate the model
-            mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, model)
-            print(f'MAPE for NeuralNetwork with {target_col}: {mape_score:.2f}')
-
-            result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
-            result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
-            result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
-
-            selected_features_set.update(selected_features)
-
-        # Plot correlation matrix for NeuralNetwork
-        plot_correlation_matrix(df, const.target_column , list(selected_features_set), output_file=f'visualization/correlation/NeuralNetwork_{week}.png')
-
-    elif model_name == 'NeuralNetworkPyTorch':
-        for week in range(1, const.lag + 1):
-            target_col = f'{const.target_column}_next_{week}weeks'
-            model = NeuralNetwork(input_dim=len(features))
-            criterion = nn.MSELoss()
-            optimizer = optim.Adam(model.parameters(), lr=0.001)
-
-            mape_score, mae_score, prediction = train_and_predict_pytorch(df, features, target_col, model, criterion, optimizer)
-            print(f'MAPE for NeuralNetworkPyTorch with {target_col}: {mape_score:.2f}')
-
-            result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
-            result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
-            result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
-
-            selected_features_set.update(selected_features)
-
-        # Plot correlation matrix for NeuralNetworkPyTorch
-        plot_correlation_matrix(df, const.target_column , list(selected_features_set), output_file=f'visualization/correlation/NeuralNetworkPyTorch_{week}.png')
-
-
-    else:
-    
-        for scaler_name, scaler in const.scalers.items():
-            result[model_name][scaler_name] = {}
-
-            for scoring_name, scoring_func in const.scoring_methods.items():
-                result[model_name][scaler_name][scoring_name] = {}
-                result[model_name][scaler_name][scoring_name]['MAPE'] = {}
-                result[model_name][scaler_name][scoring_name]['MAE'] = {}
-                result[model_name][scaler_name][scoring_name]['Prediction'] = {}
-
-                # Default scoring function and k value if scoring_func is None
-                default_scoring_func = f_regression
-                default_k = 5
-
-                pipeline = Pipeline([
-                    ('selectkbest', SelectKBest(score_func=scoring_func if scoring_func else default_scoring_func, k=const.k_values.get(scoring_name, default_k))),
-                    ('scaler', scaler),
-                    ('model', model)
-                ])
-
-                selected_features_set = set()
-
-                for week in range(1, const.forecast_weeks + 1):
-                    target_col = f'{const.target_column}_next_{week}weeks'
-                    mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, pipeline)
-                    print(f'MAPE for {model_name} with {target_col} and scoring {scoring_name}: {mape_score:.2f}')
-
-                    result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
-                    result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
-                    result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
-
-                    selected_features_set.update(selected_features)
-
-                plot_correlation_matrix(df, const.target_column , list(selected_features_set), output_file=f'visualization/correlation/{model_name}_{week}{scaler_name}_{scoring_name}.png')
-
-                with open(f'result/by_model/{model_name}_{week}week.json', 'w') as json_file:
-                    json.dump(result[model_name], json_file, indent=4)
-
-
 def find_best_combination(model_data):
     best_mape = float('inf')
     best_combination = None
@@ -447,85 +289,6 @@ def find_best_combination(model_data):
                     best_mape = mape
                     best_combination = (scaler_name, scoring_name, metrics)
     return best_combination
-
-
-if __name__ == "__main__":
-    """
-    df = load_and_preprocess_data()
-        #Entrainement des modeles
-        df = load_and_preprocess_data()
-        for model_name, model in const.models.items():
-            train_models(df, model)
-    
-    df = pd.read_excel('spreadsheet/lagged_results.xlsx')
-
-    train_models(df, 'ARIMA')
-    #train_models(df, 'NeuralNetworkPyTorch')
-    #train_models(df, 'NeuralNetworkTensorflow')
-
-    """
-    
-
-if False: # Test autosklearn
-
-    #pip install auto-sklearn
-    X, y = sklearn.datasets.load_breast_cancer(return_X_y=True)
-    X_train, X_test, y_train, y_test = \
-    sklearn.model_selection.train_test_split(X, y, random_state=1)
-
-    automl = autosklearn.classification.AutoSklearnClassifier(
-    time_left_for_this_task=120, # Temps limite en secondes (ici 2 minutes)
-    per_run_time_limit=30, # Temps limite par modèle en secondes
-    tmp_folder='/tmp/autosklearn_classification_example_tmp',
-    output_folder='/tmp/autosklearn_classification_example_out',
-    delete_tmp_folder_after_terminate=True,
-    delete_output_folder_after_terminate=True,
-    )
-    automl.fit(X_train, y_train)
-
-    y_hat = automl.predict(X_test)
-    print("Accuracy score:", sklearn.metrics.accuracy_score(y_test, y_hat))
-
-
-    # autre maniere
-
-
-
-    # Install FLAML library using a subprocess call, ignoring errors
-    subprocess.call([sys.executable, "-m", "pip", "install", "flaml"])
-
-    # Create a FLAML AutoML instance
-    automl = AutoML()
-
-    # Set the AutoML settings
-    settings = {
-        "time_budget": 60,  # total running time in seconds
-        "metric": 'r2',  # primary metric for evaluating model performance
-        "estimator_list": ['lgbm', 'rf', 'xgboost'], # list of ML learners; we exclude 'catboost' as it is not compatible with FLAML
-        "task": 'regression',  # task type
-        "log_file_name": 'flaml.log',  # log file name
-        "seed": 1, # random seed
-    }
-
-    # Train the AutoML model
-    automl.fit(X_train=X_train, y_train=y_train, **settings)
-
-    # Make predictions on the test set
-    y_pred = automl.predict(X_test)
-
-    # Evaluate the model's performance
-    r2 = r2_score(y_test, y_pred)
-    print(f'R-squared on test set: {r2:.2f}')
-
-import pandas as pd
-from statsmodels.tsa.arima.model import ARIMA
-from sklearn.metrics import mean_absolute_error
-
-class Const:
-    forecast_weeks = 52
-    target_column = 'litres'
-
-const = Const()
 
 def preprocess_exog_data(df, forecast_weeks):
     # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
@@ -589,9 +352,8 @@ def train_models(df, model_name):
     and save results including MAPE, MAE, and predictions for each model, scaler, and scoring method combination.
 
     Args:
-    - df (DataFrame): Preprocessed DataFrame obtained from load_and_preprocess_data().
-    - result_file (str): File path where lagged results were saved.
-    - features (list): List of feature columns for model training.
+    - df (DataFrame): Preprocessed DataFrame.
+    - model_name (str): Name of the model to train.
     - const (object): Object containing constants such as models, scalers, scoring methods, etc.
 
     Outputs:
@@ -599,69 +361,81 @@ def train_models(df, model_name):
     - Saves correlation matrices for selected features as PNG files in 'visualization/correlation/'.
     """
 
+    def save_results(results, model_name, forecast_weeks, suffix=""):
+        with open(f'result/by_model/{model_name}_{forecast_weeks}week{suffix}.json', 'w') as json_file:
+            json.dump(results, json_file, indent=4)
+
+    def calculate_metrics_and_save(predictions, actual_values, result, model_name, forecast_weeks):
+        mae_score = mean_absolute_error(actual_values, predictions)
+        mape_score = calculate_mape(actual_values, predictions)
+        result[model_name]['Predictions'] = predictions.tolist()
+        result[model_name]['MAE'] = mae_score
+        result[model_name]['MAPE'] = mape_score
+        return mae_score, mape_score
+
     # Define features (use all columns except 'Date' and target columns)
     features = [col for col in df.columns if not col.startswith(f'{const.target_column}_next_') and col != 'Date']
+    result = {model_name: {}}
 
-    result = {}
-    result[model_name] = {}
-
-    if (model_name == 'ARIMA'):
-        result[model_name] = {}
-
-        # Preprocess exogenous data
+    if model_name == 'ARIMA':
         exog_train, exog_future = preprocess_exog_data(df, const.forecast_weeks)
-
-        # Check if 'Date' is in the columns
-        if 'Date' in df.columns:
-            # Set the date as index
-            df_copy = df.set_index('Date')
-        else:
-            # Assume 'Date' is the index
-            df_copy = df.copy()
-
+        df_copy = df.set_index('Date') if 'Date' in df.columns else df.copy()
         best_order = (1, 1, 1)  # Hardcoding the ARIMA order as (1, 1, 1)
 
-        # Call the function to get predictions and last date
         predictions, last_date = train_and_predict_arima_corrected(df, exog_future, best_order)
-
-        # Get actual values for comparison
         actual_values = df_copy['litres'].iloc[-const.forecast_weeks:].values
 
-        # Calculate MAE and MAPE
-        mae = mean_absolute_error(actual_values, predictions)
-        mape = calculate_mape(actual_values, predictions)
-
-        # Store predictions, last date, MAE, and MAPE in results
-        result[model_name]['Predictions'] = predictions.tolist()
+        mae_score, mape_score = calculate_metrics_and_save(predictions, actual_values, result, model_name, const.forecast_weeks)
         result[model_name]['Last_Date'] = last_date.strftime('%Y-%m-%d')
-        result[model_name]['MAE'] = mae
-        result[model_name]['MAPE'] = mape
+        save_results(result[model_name], model_name, const.forecast_weeks)
+        print(f'MAPE for {model_name} with {const.target_column}: {mape_score:.2f}')
 
-        # Print the predictions, the last date, MAE, and MAPE for verification
-        print("Predictions for the next 52 weeks:")
-        print(predictions)
-        print("Last date in the training data:", last_date)
-        print("MAE:", mae)
-        print("MAPE:", mape)
+    else:
+        for scaler_name, scaler in const.scalers.items():
+            result[model_name][scaler_name] = {}
 
+            for scoring_name, scoring_func in const.scoring_methods.items():
+                result[model_name][scaler_name][scoring_name] = {}
+                result[model_name][scaler_name][scoring_name]['MAPE'] = {}
+                result[model_name][scaler_name][scoring_name]['MAE'] = {}
+                result[model_name][scaler_name][scoring_name]['Prediction'] = {}
 
+                # Instantiate RandomForestRegressor() here
+                model = RandomForestRegressor()
 
-    elif model_name == 'NeuralNetworkPyTorch':
-        for week in range(1, const.forecast_weeks + 1):
-            target_col = f'{const.target_column}_next_{week}weeks'
-            model = NeuralNetwork(input_dim=len(features))
-            criterion = nn.MSELoss()
-            optimizer = optim.Adam(model.parameters(), lr=0.001)
+                pipeline = Pipeline([
+                    ('selectkbest', SelectKBest(score_func=scoring_func if scoring_func else f_regression, k=const.k_values.get(scoring_name, 5))),
+                    ('scaler', scaler),
+                    ('model', model)  # Use the instantiated model object
+                ])
 
-            mape_score, mae_score, prediction = train_and_predict_pytorch(df, features, target_col, model, criterion, optimizer)
-            print(f'MAPE for NeuralNetworkPyTorch with {target_col}: {mape_score:.2f}')
+                selected_features_set = set()
 
+                for week in range(1, const.forecast_weeks + 1):
+                    target_col = f'{const.target_column}_next_{week}weeks'
+                    mape_score, mae_score, prediction, selected_features = train_and_predict(df, features, target_col, pipeline)
+                    print(f'MAPE for {model_name} with {target_col}, {scaler_name} and scoring {scoring_name}: {mape_score:.2f}')
+
+                    result[model_name][scaler_name][scoring_name]['MAPE'][f'week_{week}'] = mape_score
+                    result[model_name][scaler_name][scoring_name]['MAE'][f'week_{week}'] = mae_score
+                    result[model_name][scaler_name][scoring_name]['Prediction'][f'week_{week}'] = prediction
+
+                    selected_features_set.update(selected_features)
+
+                plot_correlation_matrix(df, const.target_column , list(selected_features_set), output_file=f'visualization/correlation/{model_name}_{scaler_name}_{scoring_name}_{week}.png')
+
+                # Save results for each combination
+                #save_results(result[model_name], model_name, const.forecast_weeks)
 
     return result
 
+    return result
 # Load data
-df = pd.read_excel('spreadsheet/lagged_results.xlsx')
+df = load_and_preprocess_data()
 
 # Train models
 #train_models(df, 'ARIMA')
-train_models(df, 'NeuralNetworkPyTorch')
+train_models(df, 'RandomForestRegressor')
+
+
+#train_models(df, 'NeuralNetworkPyTorch')
