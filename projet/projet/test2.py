@@ -21,7 +21,7 @@ from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer, SimpleImputer
 from statsmodels.tsa.seasonal import seasonal_decompose 
 from III_preprocessing import time_series_analysis
-from train_models import NARX_model, train_arima_model, SANN_model, knn_regressor, linear_regression_sklearn, PolynomialRegression, Neural_Network_Pytorch, ANN_model, random_forest, gradient_boosting_regressor  # Functions for model training
+from test.train_models import NARX_model, train_arima_model, SANN_model, knn_regressor, linear_regression_sklearn, PolynomialRegression, Neural_Network_Pytorch, ANN_model, random_forest, gradient_boosting_regressor  # Functions for model training
 import openpyxl  
 from openpyxl.styles import PatternFill 
 from openpyxl.utils.dataframe import dataframe_to_rows
