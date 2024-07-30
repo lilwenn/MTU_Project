@@ -1,38 +1,79 @@
-from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler, RobustScaler
-from sklearn.impute import SimpleImputer
-
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.tsa.seasonal import seasonal_decompose
 from scipy import stats
-from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression
 
-from II_visualization import plot_after_smoothing, plot_decomposed_components
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler, RobustScaler
+from sklearn.impute import SimpleImputer
+from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression
 from sklearn.ensemble import RandomForestRegressor
 
-
+from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
-from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler, RobustScaler
-from sklearn.impute import SimpleImputer
+from II_Data_visualization import plot_after_smoothing, plot_decomposed_components
+import Constants as const
 
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.tsa.seasonal import seasonal_decompose
-from scipy import stats
-from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression
+def load_and_preprocess_data(k, full_df):
+    """
+    Load and preprocess data: clean, impute missing values, and create lagged features.
+    
+    Args:
+    - k (int): Number of past periods to create lag features.
+    - full_df (DataFrame): Raw DataFrame with the initial data.
+    
+    Returns:
+    - df (DataFrame): Preprocessed DataFrame ready for model training.
+    """
+    
+    # Clean your data
+    columns_to_drop = ['year_week', 'Week', 'EU_milk_price_without UK', 'feed_ex_port', 'Malta_milk_price', 'Croatia_milk_price', 'Malta_Milk_Price']
+    full_df = full_df.drop(columns=columns_to_drop)
 
-from II_visualization import plot_after_smoothing, plot_decomposed_components
-from sklearn.ensemble import RandomForestRegressor
+    # Define columns to impute
+    columns_to_impute = ['yield_per_supplier']
+
+    # Impute missing values
+    imputer = SimpleImputer(strategy='mean')
+    full_df[columns_to_impute] = imputer.fit_transform(full_df[columns_to_impute])
+
+    # Drop columns with any remaining NaNs
+    columns_with_nan = full_df.columns[full_df.isna().any()].tolist()
+    full_df = full_df.drop(columns=columns_with_nan)
+
+    # Create lagged features
+    df = full_df.copy()
+    for i in range(1, const.FORECAST_WEEKS + 1):
+        df[f'{const.TARGET_COLUMN}_next_{i}weeks'] = df[const.TARGET_COLUMN].shift(-i)
+
+    df = df.dropna()
+
+    past_time = k
+
+    if 'Date' in df.columns:
+        df = df.set_index('Date')
+
+    df = time_series_analysis(past_time, df, const.TARGET_COLUMN)
+    df = df.reset_index()
+
+    df.to_excel('spreadsheet/lagged_results.xlsx', index=False)
+    return df
+
+def preprocess_arima_data(df, forecast_weeks):
+    # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
+    exog_data = df.drop(columns=[col for col in df.columns if 'litres' in col])
+
+    # Split exog_data into exog_train and exog_future
+    exog_train = exog_data.iloc[:-forecast_weeks]
+    exog_future = exog_data.iloc[-forecast_weeks:]
+
+    # Ensure the number of columns in exog_future matches exog_train
+    exog_future = exog_future.reindex(columns=exog_train.columns, fill_value=0)
+
+    return exog_train, exog_future
 
 
 
@@ -58,6 +99,7 @@ def determine_lags(df, target_column, max_lag=40):
     ax[0].set_title('Autocorrelation Function (ACF)')
     ax[1].set_title('Partial Autocorrelation Function (PACF)')
     plt.savefig(f"visualization/Autocorrelation_{target_column}.png")
+    plt.close(fig)
     
     # Determine the optimal number of lags using acf function
     acf_values = acf(series, nlags=max_lag, alpha=0.05)[0]
@@ -92,6 +134,7 @@ def create_lag_features(data, lag):
 
     return data
 
+
 def create_MA(data, past_time):
     new_data = data.copy() 
     
@@ -112,25 +155,46 @@ def create_MA(data, past_time):
     return new_data
 
 def time_series_analysis(past_time, data, colonne_cible):
+    """
+    Perform time series analysis: handle missing values, decompose series, and create features.
+    
+    Args:
+    - past_time (int): Number of periods for moving average and lag features.
+    - data (DataFrame): DataFrame with time series data.
+    - colonne_cible (str): Target column name.
+    
+    Returns:
+    - data_final (DataFrame): DataFrame with time series features.
+    """
+    
+    # Ensure a copy of the data to avoid SettingWithCopyWarning
+    data = data.copy()
 
-
+    # Identify date and non-date columns
     date_col = data.select_dtypes(include=[np.datetime64]).columns
     other_cols = data.columns.difference(date_col)
 
-    data[other_cols] = SimpleImputer(missing_values=np.nan, strategy='mean').fit_transform(data[other_cols])
-    data[other_cols] = pd.DataFrame(data[other_cols], columns=other_cols, index=data.index)
+    # Impute missing values
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    data[other_cols] = imputer.fit_transform(data[other_cols])
 
+    # Keep the date column and the imputed data
     data = pd.concat([data[date_col], data[other_cols]], axis=1)
 
+    # Create time series for the target column
     data_ireland = data[[colonne_cible]].copy()
 
+    # Create a complete date range
     all_periods = pd.date_range(start=data_ireland.index.min(), end=data_ireland.index.max(), freq='MS')
     data_all_periods = pd.DataFrame(index=all_periods)
 
-
+    # Merge to ensure all periods are included
     data_ireland = data_ireland.merge(data_all_periods, how='outer', left_index=True, right_index=True).fillna(0)
+    
+    # Decompose the time series
     decomposition = seasonal_decompose(data_ireland[colonne_cible], model='additive', period=12)
 
+    # Plot the decomposition
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(15, 12), sharex=True)
 
     decomposition.observed.plot(ax=ax1, title='Original Time Series: Milk Price in Ireland')
@@ -139,52 +203,16 @@ def time_series_analysis(past_time, data, colonne_cible):
     decomposition.resid.plot(ax=ax4, title='Residual: Milk Price in Ireland')
     plt.xlabel('Date')
     plt.tight_layout()
-    plt.savefig(f'visualization/time series analysis_{colonne_cible}.png')
+    plt.savefig(f'visualization/time_series_analysis_{colonne_cible}.png')
+    plt.close(fig)
 
-    # Lissage
-
+    # Create moving averages and lag features
     data_MA = create_MA(data, past_time)
     data_lagged = create_lag_features(data, past_time)
 
-
+    # Concatenate the data
     data_final = pd.concat([data_lagged, data_MA], axis=1)
-
-
-    data_final = data_final.loc[:,~data_final.columns.duplicated()]
+    data_final = data_final.loc[:, ~data_final.columns.duplicated()]
     data_final = data_final.reindex(sorted(data_final.columns), axis=1)
 
     return data_final
-
-
-
-def feature_importance(X, y):
-    """
-    Calculate feature importances using a RandomForestRegressor.
-
-    Args:
-        X (numpy.ndarray or pandas.DataFrame): Features matrix.
-        y (numpy.ndarray or pandas.Series): Target variable.
-
-    Returns:
-        numpy.ndarray: Feature importances.
-    """
-    model = RandomForestRegressor()
-    model.fit(X, y)
-
-    return model.feature_importances_
-
-
-def pearson_corr(X, y):
-    """
-    Calculate Pearson correlation coefficients between features and target variable.
-
-    Args:
-        X (numpy.ndarray or pandas.DataFrame): Features matrix.
-        y (numpy.ndarray or pandas.Series): Target variable.
-
-    Returns:
-        numpy.ndarray: Pearson correlation coefficients.
-    """
-    corr_matrix = np.corrcoef(X, y, rowvar=False)
-    corr_with_target = np.abs(corr_matrix[:-1, -1])  
-    return corr_with_target

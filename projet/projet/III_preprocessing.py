@@ -11,7 +11,7 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 from scipy import stats
 from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression
 
-from II_visualization import plot_after_smoothing, plot_decomposed_components
+from II_Data_visualization import plot_after_smoothing, plot_decomposed_components
 from sklearn.ensemble import RandomForestRegressor
 
 

@@ -1,0 +1,31 @@
+Defaulting to user installation because normal site-packages is not writeable
+Collecting featuretools
+  Using cached featuretools-1.31.0-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: cloudpickle>=1.5.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (3.0.0)
+Requirement already satisfied: holidays>=0.17 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (0.53)
+Requirement already satisfied: numpy>=1.25.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (24.0)
+Collecting pandas>=2.0.0 (from featuretools)
+  Using cached pandas-2.2.2-cp39-cp39-win_amd64.whl.metadata (19 kB)
+Requirement already satisfied: psutil>=5.7.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (6.0.0)
+Requirement already satisfied: scipy>=1.10.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (1.13.1)
+Requirement already satisfied: tqdm>=4.66.3 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (4.66.4)
+Requirement already satisfied: woodwork>=0.28.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from featuretools) (0.31.0)
+Requirement already satisfied: python-dateutil in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from holidays>=0.17->featuretools) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from pandas>=2.0.0->featuretools) (2024.1)
+Requirement already satisfied: tzdata>=2022.7 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from pandas>=2.0.0->featuretools) (2024.1)
+Requirement already satisfied: colorama in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from tqdm>=4.66.3->featuretools) (0.4.6)
+Requirement already satisfied: scikit-learn>=1.1.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from woodwork>=0.28.0->featuretools) (1.4.2)
+Requirement already satisfied: importlib-resources>=5.10.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from woodwork>=0.28.0->featuretools) (6.4.0)
+Requirement already satisfied: zipp>=3.1.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from importlib-resources>=5.10.0->woodwork>=0.28.0->featuretools) (3.19.2)
+Requirement already satisfied: six>=1.5 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from python-dateutil->holidays>=0.17->featuretools) (1.16.0)
+Requirement already satisfied: joblib>=1.2.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from scikit-learn>=1.1.0->woodwork>=0.28.0->featuretools) (1.4.2)
+Requirement already satisfied: threadpoolctl>=2.0.0 in c:\users\nimbus\appdata\roaming\python\python39\site-packages (from scikit-learn>=1.1.0->woodwork>=0.28.0->featuretools) (3.5.0)
+Using cached featuretools-1.31.0-py3-none-any.whl (587 kB)
+Using cached pandas-2.2.2-cp39-cp39-win_amd64.whl (11.6 MB)
+Installing collected packages: pandas, featuretools
+  Attempting uninstall: pandas
+    Found existing installation: pandas 1.5.3
+    Uninstalling pandas-1.5.3:
+      Successfully uninstalled pandas-1.5.3
+Successfully installed featuretools-1.31.0 pandas-2.2.2
