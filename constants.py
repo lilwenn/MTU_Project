@@ -14,7 +14,7 @@ from sklearn.svm import LinearSVR, NuSVR, SVR
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
+from sklearn.preprocessing import MinMaxScaler, QuantileTransformer, StandardScaler, RobustScaler
 from scipy.stats import uniform, randint
 
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
@@ -71,10 +71,19 @@ def pearson_corr(X, y):
 
 
 
-TARGET_COLUMN = 'litres'
+TARGET_COLUMN = 'litres' # Ireland_Milk_price
 FORECAST_WEEKS = 52
-window_list = [11, 12]
-Non_ml = ['Pmdarima', 'Darts' , 'ARIMA']
+LAG = 1  
+WINDOWS_LIST = [4]
+NON_ML = ['Pmdarima', 'Darts' , 'ARIMA']
+
+
+ACTION = {
+    "time_series_smoothing" : True,
+    "shifting": True,
+    "compare lifting methods": False,
+    "Multi-step" : True
+}
 
 MODELS = {
     'BayesianRidge': BayesianRidge(),
@@ -175,5 +184,6 @@ SCALERS = {
     #'MinMaxScaler': MinMaxScaler(),
     #'StandardScaler': StandardScaler(),
     'RobustScaler': RobustScaler(),
+    'QuantileTransformer': QuantileTransformer(),
     'No scaling': None,
 }

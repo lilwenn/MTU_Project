@@ -1,0 +1,36 @@
+
+colonne des prix passés 
+df_final['expanding_window_price'] = df_final['elec_prices'].expanding().mean()
+
+shifting
+df_final = shifting(self.variables_config["variables_to_shift"], df_final, self.variables_config["window_lookback(shift)"])
+
+multistep         
+df_final, namelist = multi_step(df_final, self.variables_config["target_variable"],self.variables_config["horizon"])
+
+Selapartion BBD
+
+df_train = df.loc[start:end]
+df_test = df.loc[start:end]
+
+attention plusieurs features ?
+target = [self.variables_config["target_variable"]] + namelist
+features = self.get_features(df_final)
+
+x_train, y_train, x_test, y_true,
+Print les shapes
+
+scalers = [StandardScaler(), MinMaxScaler(), RobustScaler(), QuantileTransformer()]
+for model_name in self.models:
+    for scaler in scalers:
+
+univarié ou multivarié ??
+y_train et y_test sont aplatis en vecteurs unidimensionnels avec np.ravel
+
+clf = RandomizedSearchCV(pipeline, distributions, n_iter=10, cv=5, verbose=1, n_jobs=-1)
+
+cv_results = cross_validate(search.best_estimator_, x_train, y_train_ravel, cv=5, scoring='neg_mean_squared_error', return_train_score=True)
+y_pred = cross_val_predict(search.best_estimator_, x_train, y_train_ravel, cv=5)
+
+
+Resultats + sauvegarde

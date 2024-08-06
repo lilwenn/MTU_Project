@@ -168,15 +168,33 @@ def yield_data_creation():
     df_yield['year'] = df_yield['year_month'].str[:4].astype(int)
     df_yield['month'] = df_yield['year_month'].str[4:6].astype(int)
     df_yield['Date'] = pd.to_datetime(df_yield['year'].astype(str) + df_yield['month'].astype(str).str.zfill(2), format='%Y%m') + pd.to_timedelta((df_yield['week'] - 1) * 7, unit='D')
-
-    df_yield['yield_per_supplier'] = df_yield['litres'] / df_yield['num_suppliers']
-    df_yield['cos_week'] = np.cos(df_yield['week'] * (2 * np.pi / 52))
     df_yield['year_week'] = df_yield['year'].astype(str) + '_' + df_yield['week'].astype(str)
-
-
     df_yield = df_yield.drop(columns=['Date','year_month','grass_growth','week','month','year'])
     df_yield.to_excel("spreadsheet/Yield_data_weekly_2009_2021.xlsx", index=False)
 
+
+def delete_columns(df):
+    # Columns to drop by name
+    columns_to_drop = [
+        'feed_ex_port', 'feed_bulk', 'feed_bag', 'EU_milk_price_without UK', 
+        'year_week', 'Malta_milk_price', 'Croatia_milk_price', 'Malta_Milk_Price'
+    ]
+
+    df = df.drop(columns=columns_to_drop, errors='ignore')
+    
+    columns_to_drop_by_index = df.columns[29:62] 
+    df = df.drop(columns=columns_to_drop_by_index)
+
+    columns_to_drop_by_index = df.columns[31:41] 
+    df = df.drop(columns=columns_to_drop_by_index)
+
+
+    columns_to_drop_by_index = df.columns[31:57] 
+    df = df.drop(columns=columns_to_drop_by_index)
+
+
+
+    return df
 
 def final_data_creation():
     grass_data = pd.read_excel('spreadsheet/Grass_data_weekly_2009-2024.xlsx')
@@ -186,20 +204,27 @@ def final_data_creation():
     grass_data = grass_data.drop(columns=['Week'])
     price_data = price_data.drop(columns=['Date'])
 
+    df = pd.merge(price_data, grass_data, on='year_week')
+    df = pd.merge(df, yield_data, on='year_week')
 
 
-    final_data = pd.merge(price_data, grass_data, on='year_week')
-    final_data = pd.merge(final_data, yield_data, on='year_week')
+    columns = ['Date', 'year_week'] + [col for col in df.columns if col not in ['Date', 'year_week']]
+    df = df[columns]
 
-    # Mettre 'year_week' en première colonne
+    print(f'Size of the initial dataset : {df.shape}')
 
-    columns = ['Date', 'year_week'] + [col for col in final_data.columns if col not in ['Date', 'year_week']]
-    final_data = final_data[columns]
+    final_data = delete_columns(df)
 
-    # Utiliser pandas pour écrire dans un fichier Excel sans index
+    print(f'Size of the final dataset : {final_data.shape}')
+
+
     final_data.to_excel("spreadsheet/Final_Weekly_2009_2021.xlsx", index=False)
 
-price_data_creation()
+#price_data_creation()
 #grass_data_creation()
 #yield_data_creation()
-#final_data_creation()
+final_data_creation()
+
+
+
+    

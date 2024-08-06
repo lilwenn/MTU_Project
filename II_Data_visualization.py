@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import altair as alt
 import altair_saver
+from statsmodels.tsa.seasonal import seasonal_decompose
 
 
 
@@ -15,7 +16,7 @@ def plot_over_time ():
 
     # Plot for Irish Milk Price Over Time
     plt.figure(figsize=(10, 6))
-    irish_milk_price = apply_moving_average(milk_price_df['Ireland_Milk_Price'], window=4)
+    irish_milk_price = apply_moving_average(milk_price_df['Ireland_milk_price'], window=4)
     plt.plot(milk_price_df['Date'], irish_milk_price, label='Ireland', color='blue')
     plt.xlabel('Date')
     plt.ylabel('Milk Price (euro/ 100 kg)')
@@ -195,7 +196,76 @@ def plot_correlation_matrix(df, target, selected_features, output_file='correlat
     plt.savefig(output_file)
     plt.close()
 
+def plot_seasonal_decompose(data_ireland, colonne_cible ):
+    # Decompose the time series
+    decomposition = seasonal_decompose(data_ireland[colonne_cible], model='additive', period=12) #12 car les motifs se repetent tous les mois
 
+
+    # Plot the decomposition
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(15, 12), sharex=True)
+
+    decomposition.observed.plot(ax=ax1, title='Original Time Series: Milk Price in Ireland')
+    decomposition.trend.plot(ax=ax2, title='Trend: Milk Price in Ireland')
+    decomposition.seasonal.plot(ax=ax3, title='Seasonality: Milk Price in Ireland')
+    decomposition.resid.plot(ax=ax4, title='Residual: Milk Price in Ireland')
+    plt.xlabel('Date')
+    plt.tight_layout()
+    plt.savefig(f'visualization/time_series_analysis_{colonne_cible}.png')
+    plt.close(fig)
+
+
+def plot_comparison(original_data, ma_data, wma_data, ew_data, sg_data, column_name):
+    """
+    Plot original data against different smoothing methods, focusing only on the period between 2014 and 2016.
+    
+    Args:
+    - original_data (DataFrame): Original time series data.
+    - ma_data (DataFrame): DataFrame with Moving Average features.
+    - wma_data (DataFrame): DataFrame with Weighted Moving Average features.
+    - ew_data (DataFrame): DataFrame with Exponential Smoothing features.
+    - sg_data (DataFrame): DataFrame with Savitzky-Golay Smoothing features.
+    - column_name (str): The column to plot.
+    """
+    # Define the date range for filtering
+    start_date = '2014-01-01'
+    end_date = '2015-12-31'
+
+    # Filter the data to the specified date range
+    original_data_filtered = original_data.loc[start_date:end_date]
+    ma_data_filtered = ma_data.loc[start_date:end_date]
+    wma_data_filtered = wma_data.loc[start_date:end_date]
+    ew_data_filtered = ew_data.loc[start_date:end_date]
+    sg_data_filtered = sg_data.loc[start_date:end_date]
+    
+    plt.figure(figsize=(14, 6))
+    
+    # Plot original data
+    plt.plot(original_data_filtered.index, original_data_filtered[column_name], label='Original Data', color='blue')
+    
+    # Plot moving average data
+    plt.plot(ma_data_filtered.index, ma_data_filtered[f'{column_name}_MA'], label='Moving Average', color='red')
+    
+    # Plot weighted moving average data
+    plt.plot(wma_data_filtered.index, wma_data_filtered[f'{column_name}_WMA'], label='Weighted Moving Average', color='green')
+    
+    # Plot exponential smoothing data
+    plt.plot(ew_data_filtered.index, ew_data_filtered[f'{column_name}_EW'], label='Exponential Smoothing', color='purple')
+    
+    # Plot Savitzky-Golay smoothing data
+    plt.plot(sg_data_filtered.index, sg_data_filtered[f'{column_name}_SG'], label='Savitzky-Golay Smoothing', color='orange')
+    
+    plt.title(f'Comparison of Smoothing Methods for {column_name} (2014-2015)')
+    plt.xlabel('Date')
+    plt.ylabel('Value')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig('visualization/Smoothing_Comparison_2014_2016.png')
+    #plt.show()
+    plt.close()
+
+
+
+"""
 # Read the Excel file into a DataFrame
 df = pd.read_excel('spreadsheet/Final_Weekly_2009_2021.xlsx')
 
@@ -243,3 +313,4 @@ summary_df = pd.DataFrame({
 # Sort by average change
 summary_df = summary_df.sort_values(by='Average Change (%)', ascending=False)
 plot_change_bar()
+"""

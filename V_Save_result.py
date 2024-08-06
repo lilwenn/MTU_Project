@@ -8,123 +8,245 @@ import pandas as pd
 import Constants as const
 
 
-
-def find_best_model_configs(result_dir, file_name, best_combinations, results_list):
+def find_best_model_configs(model_name, window_list, Non_ml):
     """
-    Analyzes JSON result files to find the best model configurations for each model based on MAPE."""
+    Analyzes JSON result files to find the best model configurations for each model based on the best MAPE across all iterations.
+    """
+    best_mape = float('inf')
+    best_combination = None
+    best_iteration = None
 
-    file_path = os.path.join(result_dir, file_name)
-    with open(file_path, 'r') as f:
-        data = json.load(f)
 
-        best_mape = float('inf')
-        best_combination = None
-        best_predictions = None
 
+    if model_name not in Non_ml :
+        for w in window_list: 
+            file_path = os.path.join(f'result/by_model/{model_name}_{w}_model_{const.FORECAST_WEEKS}.json')
+
+            if not os.path.exists(file_path):
+                print(f"Result file for iteration {w} does not exist: {file_path}")
+                continue
+
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+            
         for scaler_name, scaler_data in data.items():
             for scoring_name, metrics in scaler_data.items():
-                # Find the key for the last week
-                last_week = max(metrics['MAPE'].keys(), key=lambda x: int(x.split('_')[1]))
-                mape = metrics['MAPE'][last_week]
-                if mape < best_mape:
+                weeks = list(metrics['MAPE'].keys())
+                last_week = max(weeks, key=lambda x: int(x.split('_')[1]))
+                mape = metrics['mean_MAPE']
+                predictions = metrics['Predictions']
+
+                if mape < best_mape and 1 < mape :
                     best_mape = mape
-                    mape_list = metrics['MAPE']
-                    best_combination = (scaler_name, scoring_name, mape)
-                    best_predictions = metrics['Prediction']
+                    best_iteration = w
+                    best_combination = {
+                        'MAPE': metrics['MAPE'],
+                        'MAE': metrics['MAE'],
+                        'MAE2': metrics['MAE2'],
+                        'ME': metrics['ME'],
+                        'MSE': metrics['MAE2'], 
+                        'RMSE': metrics['RMSE'],
+                        'Execution Time': metrics['Execution Time'],
+                        'Scaler': scaler_name,
+                        'Scoring': scoring_name,
+                        'Predictions': predictions,
+                        'Iteration': w
+                    }
 
-        if best_combination:
-            scaler_name, scoring_name, mape = best_combination
-            model_name = file_name.replace(".json", "") 
-            best_combinations[model_name] = {
-                'scaler': scaler_name,
-                'scoring': scoring_name,
-                'MAPE': mape_list,
-                'predictions': best_predictions
+
+                        
+    else:
+        w = 0
+        file_path = os.path.join(f'result/by_model/{model_name}_{w}_model_{const.FORECAST_WEEKS}.json')
+
+        if not os.path.exists(file_path):
+            print(f"Result file for iteration {w} does not exist: {file_path}")
+            
+        with open(file_path, 'r') as f:
+            data = json.load(f)    
+
+        weeks = list(data['MAPE'].keys())
+        last_week = max(weeks, key=lambda x: int(x.split('_')[1]))
+        mape = data['MAPE'][last_week]
+        if mape < best_mape:
+            best_mape = mape
+            best_iteration = w
+            best_combination = {
+                'MAPE': data ['MAPE'],
+                'MAE': data ['MAE'],
+                'MAE2':data ['MAE2'],
+                'ME':data ['ME'],
+                'MSE': data ['MAE2'],
+                'RMSE': data ['RMSE'],
+                'Execution Time': data['Execution Time'],
+                'Scaler': None,
+                'Scoring': None,
+                'Predictions': data['Predictions'],
+                'Iteration': w
             }
-            results_list.append({
-                'model': model_name,
-                'scaler': scaler_name,
-                'scoring': scoring_name,
-                'MAPE': mape,
-                'predictions': best_predictions
-            })
+            
 
-    # Save the best combinations to a JSON file
-    if best_combinations:
-        with open(f'result/best_combinations_{const.forecast_weeks}week.json', 'w') as f:
-            json.dump(best_combinations, f, indent=4)
+    if best_combination:
+        output_file_path = f'result/by_model/{model_name}_best_model.json'
+        with open(output_file_path, 'w') as f:
+            json.dump(best_combination, f, indent=4)
 
-    # Convert the results list to a DataFrame and save it to an Excel file
-    if results_list:
-        results_df = pd.DataFrame(results_list)
-        # Sort the DataFrame by MAPE in ascending order
-        results_df = results_df.sort_values(by='MAPE')
-        results_df.to_excel(f'result/best_combinations_{const.forecast_weeks}week.xlsx', index=False)
-        print(f" {file_name} results saved to xlsx")
+        print(f"Best combination for {model_name} across all iterations saved (Iteration {best_iteration})")
 
-def plot_model_performance(best_combinations_file, const):
+    return best_combination
+
+def update_global_results(model_name):
     """
-    Plots MAPE, Predictions, and MAE over time for each model using the best combinations JSON file.
+    Updates a global JSON file with the best results of a specific model.
+    """
+    # Define the path for the best model results file
+    best_model_result_file = f'result/by_model/{model_name}_best_model.json'
+    global_results_file = 'result/global_results.json'
 
+    if not os.path.exists(best_model_result_file):
+        print(f"Best model result file {best_model_result_file} does not exist.")
+        return
+
+    with open(best_model_result_file, 'r') as f:
+        best_model_data = json.load(f)
+
+    if os.path.exists(global_results_file):
+        with open(global_results_file, 'r') as f:
+            global_data = json.load(f)
+    else:
+        global_data = {}
+
+    global_data[model_name] = best_model_data
+
+    with open(global_results_file, 'w') as f:
+        json.dump(global_data, f, indent=4)
+
+    print(f"Global JSON results updated")
+
+def save_results_to_excel(output_excel_file, week):
+    """
+    Sauvegarde les meilleurs résultats du fichier JSON global dans un fichier Excel,
+    triés par le MAPE le plus bas, et les enregistre également dans un fichier JSON.
+    """
+
+    results = []  # Initialiser la liste pour stocker les résultats pour Excel
+    with open('result/global_results.json', 'r') as f:
+        model_data = json.load(f)
+
+    # Extraire les informations nécessaires
+    for model_name in model_data.keys():
+        results.append({
+            'Model Name': model_name,
+            'MAPE': model_data[model_name]['MAPE'][f'week_{week}'],
+            'MAE': model_data[model_name]['MAE'][f'week_{week}'],
+            'Execution Time': model_data[model_name]['Execution Time'],
+            'Scaler': model_data[model_name]['Scaler'],
+            'Scoring': model_data[model_name]['Scoring']
+        })
+
+    # Sauvegarder les résultats dans un fichier Excel et un fichier JSON si des résultats sont disponibles
+    if results:
+        df_results = pd.DataFrame(results)
+        df_results = df_results.sort_values(by='MAPE', ascending=True)
+        df_results.to_excel(output_excel_file, index=False)
+
+        print(df_results)
+
+        print(f"Results saved to {output_excel_file}.")
+
+    else:
+        print("No results to save.")
+
+def plot_mape(json_file):
+    """
+    Crée un graphique pour les MAPE et l'enregistre en tant qu'image.
+    
     Args:
-    - best_combinations_file (str): Path to the JSON file containing the best model configurations.
-    - const (object): Object containing constants such as forecast_weeks.
+        json_file (str): Chemin vers le fichier JSON contenant les données.
     """
-    # Load the best combinations JSON file
-    with open(best_combinations_file, 'r') as f:
-        best_combinations = json.load(f)
+    # Lire le fichier JSON
+    with open(json_file, 'r') as file:
+        data = json.load(file)
+    
+    # Créer la figure pour les MAPE
+    fig, ax = plt.subplots(figsize=(12, 8))
+    
+    # Prétraiter les données pour le graphique MAPE
+    for model_name, model_data in data.items():
+        if model_name == "ARIMA":
+            continue
+        
+        # Convertir les semaines en un format numérique pour l'axe x
+        weeks = list(model_data.get("MAPE", {}).keys())
+        week_numbers = [int(week.split('_')[1]) for week in weeks]
+        
+        # Tracer les MAPE si elles existent
+        mape_values = list(model_data.get("MAPE", {}).values())
+        if mape_values:
+            ax.plot(week_numbers, mape_values, label=f'{model_name} MAPE')
+    
+    # Ajouter des labels et un titre au graphique MAPE
+    ax.set_xlabel('Weeks')
+    ax.set_ylabel('MAPE')
+    ax.set_title('MAPE per Week for Each Model')
+    ax.legend()
+    
+    # Enregistrer le graphique MAPE
+    fig.savefig('visualization/mape_per_week.png')
+    plt.close(fig)  # Fermer la figure pour libérer la mémoire
 
-    df = pd.read_excel("spreadsheet/Final_Weekly_2009_2021.xlsx") 
-
-    weeks = list(range(1, const.forecast_weeks + 1))
-
-    # Initialize subplots
-    fig, axs = plt.subplots(2, 1, figsize=(12, 18))
-
-    # Directly access 'tab10' colormap colors
-    colors = plt.cm.tab10.colors
-
-    for i, (model_name, model_info) in enumerate(best_combinations.items()):
-        mape = model_info['MAPE']
-        predictions = model_info['predictions']
-
-        # Convert MAPE from list of dictionaries to list of numeric values
-        mape_values = [mape[f'week_{week}'] for week in weeks]
-
-        # Plot MAPE over time
-        axs[0].plot(weeks, mape_values, marker='o', linestyle='-', color=colors[i], label=f'{model_name} - MAPE')
-
-        # Set logarithmic scale for MAPE plot
-        axs[0].set_yscale('log')
-
-        # Convert predictions from list of dictionaries to list of numeric values
-        prediction_values = [predictions[f'week_{week}'] for week in weeks]
-
-        # Plot Predictions over time
-        axs[1].plot(weeks, prediction_values, marker='o', linestyle='-', color=colors[i], label=f'{model_name} - Predictions')
-
-        # Load the actual values from the original data
-        actual_col = df.iloc[-52:][const.target_column]
+def plot_predictions(json_file,df):
+    """
+    Crée un graphique pour les prédictions et l'enregistre en tant qu'image.
+    
+    Args:
+        json_file (str): Chemin vers le fichier JSON contenant les données.
+    """
+    # Lire le fichier JSON
+    with open(json_file, 'r') as file:
+        data = json.load(file)
+    
+    # Créer la figure pour les prédictions
+    fig, ax = plt.subplots(figsize=(16, 8))
+    
+    # Prétraiter les données pour le graphique des prédictions
+    for model_name, model_data in data.items():
+        model_name = 'BayesianRidge'
+        model_data = data['BayesianRidge']
+        if model_name == "ARIMA":
+            continue
+        
+        # Convertir les semaines en un format numérique pour l'axe x
+        weeks = list(model_data.get("Predictions", {}).keys())
+        week_numbers = [int(week.split('_')[1]) for week in weeks]
+        
+        # Tracer les prédictions si elles existent
+        prediction_values = list(model_data.get("Predictions", {}).values())
+        if prediction_values:
+            ax.plot(week_numbers, prediction_values, label=f'{model_name}')
 
 
-    #axs[1].plot(weeks, actual_col, marker='x', linestyle='-', color='black', label='Actual')
+    actual_values = list(df[const.TARGET_COLUMN].iloc[-const.FORECAST_WEEKS:].values)
+    ax.plot(week_numbers, actual_values, label='Actual', color='#000000')
+
+    prediction_values = list(data['KNeighborsRegressor'].get("Predictions", {}).values())
+    print(len(prediction_values))
+    print(len(actual_values))
 
 
-    # Set common labels and title for all subplots
-    for ax in axs:
-        ax.set_xlabel('Week')
-        ax.grid(True)
-        ax.legend()
 
-    axs[0].set_ylabel('MAPE (log scale)')
-    axs[0].set_title('MAPE over Time')
 
-    axs[1].set_ylabel('Values')
-    axs[1].set_title('Predictions vs Actuals over Time')
+    # Ajouter des labels et un titre au graphique des prédictions
+    ax.set_xlabel('Weeks')
+    ax.set_ylabel('Predictions')
+    ax.set_title('Predictions per Week for Each Model')
+    ax.legend()
+    
+    # Enregistrer le graphique des prédictions
+    fig.savefig('visualization/predictions_per_week.png')
+    plt.close(fig)  
 
-    # Save the figure
-    plt.tight_layout()
-    plt.savefig(f'visualization/all_models_performance.png')
+
 
 
 def plot_darts_model_performance(results, df):
@@ -186,52 +308,3 @@ def plot_prophet_model_performance(results, df):
     plt.legend()
     plt.show()
 
-
-
-
-find_best_model_configs()
-
-best_combinations = {}
-result_dir = 'result/by_model/'
-results_list = []
-best_combinations = {}
-
-if not os.path.exists(result_dir):
-    print(f"Directory {result_dir} does not exist.")
-else:
-    json_files = [f for f in os.listdir(result_dir) if f.endswith(f'_{const.forecast_weeks}week.json')]
-    for file_name in json_files:
-        find_best_model_configs(result_dir, file_name, best_combinations, results_list)
-
-
-
-    # Plot the performance of Darts models
-    plot_darts_model_performance(results, df)
-    plot_prophet_model_performance(results, df)
-
-    
-"""
-
-    # Load the data from the JSON file with utf-8 encoding
-    with open(f'result/best_combinations_{const.forecast_weeks}week.json', 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
-
-    df = pd.read_excel('spreadsheet/Final_Weekly_2009_2021.xlsx')
-    
-    plt.figure(figsize=(12, 6))
-    
-    # Plot the predictions
-    plt.plot(df['Date'], df['litres'][:52], marker='o', linestyle='-', color='black', label= 'Actual')
-
-    plt.xlabel('Date')
-    plt.ylabel('Litres')
-    plt.title('ARIMA Model Predictions')
-    plt.legend()
-    plt.show()
-
-    # Plot Predictions over time
-
-
-
-    plot_model_performance(f'result/best_combinations_{const.forecast_weeks}week.json', const)
-"""
