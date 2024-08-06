@@ -197,6 +197,8 @@ def train_model(df, w):
 
             print(f'Scaler: {scaler_name}, Scoring: {scoring_name}, MAPE: {result[scaler_name]["MAPE"]:.2f}')
 
+
+
     return result
 
 
@@ -212,7 +214,9 @@ if __name__ == "__main__":
     model = RandomForestRegressor()
 
     results = train_model(preprocess_df, 4)
-    print('Results:', results)
+    with open(f'result/test0608.json', 'w') as f:
+        json.dump(results, f, indent=4)
+
 
     #train_models(preprocess_df, model_name, model, 4)
 
