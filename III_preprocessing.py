@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
@@ -8,59 +9,213 @@ from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScal
 from sklearn.impute import SimpleImputer
 from sklearn.feature_selection import SelectKBest, f_regression, mutual_info_regression
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.impute import SimpleImputer
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+from sklearn.ensemble import RandomForestRegressor
 
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import acf, pacf
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
-from II_Data_visualization import plot_after_smoothing, plot_decomposed_components
+from II_Data_visualization import plot_after_smoothing, plot_comparison, plot_decomposed_components
 import Constants as const
+from scipy.signal import savgol_filter
 
 
-def load_and_preprocess_data(k, full_df):
+def load_and_preprocess_data(window, df):
     """
     Load and preprocess data: clean, impute missing values, and create lagged features.
     
     Args:
     - k (int): Number of past periods to create lag features.
-    - full_df (DataFrame): Raw DataFrame with the initial data.
+    - df (DataFrame): Raw DataFrame with the initial data.
     
     Returns:
     - df (DataFrame): Preprocessed DataFrame ready for model training.
     """
-    
-    # Clean your data
-    columns_to_drop = ['year_week', 'Week', 'EU_milk_price_without UK', 'feed_ex_port', 'Malta_milk_price', 'Croatia_milk_price', 'Malta_Milk_Price']
-    full_df = full_df.drop(columns=columns_to_drop)
 
-    # Define columns to impute
-    columns_to_impute = ['yield_per_supplier']
+    print('Preprocessing ... ...')
+    print(f'Size of the initial dataset : {df.shape}')
 
-    # Impute missing values
-    imputer = SimpleImputer(strategy='mean')
-    full_df[columns_to_impute] = imputer.fit_transform(full_df[columns_to_impute])
+    print('     - Imputing')
+    impute_missing_values(df)
 
-    # Drop columns with any remaining NaNs
-    columns_with_nan = full_df.columns[full_df.isna().any()].tolist()
-    full_df = full_df.drop(columns=columns_with_nan)
 
-    # Create lagged features
-    df = full_df.copy()
-    for i in range(1, const.FORECAST_WEEKS + 1):
-        df[f'{const.TARGET_COLUMN}_next_{i}weeks'] = df[const.TARGET_COLUMN].shift(-i)
+    print('     - Smoothing')
+    if const.ACTION["time_series_smoothing"]:
+        df = time_series_smoothing(window, df)
 
-    df = df.dropna()
+    print('     - New feature creation')
+    df = new_features_creation(df)
 
-    past_time = k
 
-    if 'Date' in df.columns:
-        df = df.set_index('Date')
+    print('     - Shifting')
+    if const.ACTION["shifting"]:
+        df = create_lag_features(df, const.LAG)
 
-    df = time_series_analysis(past_time, df, const.TARGET_COLUMN)
-    df = df.reset_index()
 
-    df.to_excel('spreadsheet/lagged_results.xlsx', index=False)
+    print('     - Multi-step Forecasting Features')
+    if const.ACTION["Multi-step"]:
+        df = create_multi_step_features(df, const.TARGET_COLUMN, const.FORECAST_WEEKS)
+
+    print(f'Size of the dataset after preprocessing : {df.shape}')
+    df.to_excel('spreadsheet/preproc_data.xlsx', index=False)
+
+
     return df
+
+def new_features_creation(df):
+
+    df['yield_per_supplier'] = df['litres'] / df['num_suppliers']
+    df['cos_week'] = np.cos(df['Week'] * (2 * np.pi / 52))
+    df['past_liter_price'] = df['litres'].expanding().mean()
+
+    return df
+
+def impute_missing_values(df):
+    # Separate columns with missing values
+    columns_with_nan = df.columns[df.isna().any()].tolist()
+    
+    if not columns_with_nan:
+        print("No missing values found in the DataFrame.")
+        return df
+
+    # Handle remaining missing values with IterativeImputer
+    iterative_imputer = IterativeImputer(estimator=RandomForestRegressor(), max_iter=100, random_state=42, tol=1e-3)
+    df[columns_with_nan] = iterative_imputer.fit_transform(df[columns_with_nan])
+
+    return df
+
+def time_series_smoothing(window, data):
+    """
+    Perform time series analysis: handle missing values, decompose series, and create features.
+    
+    Args:
+    - window (int): Number of periods for moving average and lag features.
+    - data (DataFrame): DataFrame with time series data.
+    - colonne_cible (str): Target column name.
+    
+    Returns:
+    - data_final (DataFrame): DataFrame with time series features.
+    """
+    prep_data = pd.DataFrame(data)
+    prep_data = prep_data.copy()
+
+    exclude_cols = ['Date', 'Week', 'Grass_growth', 'litres', 'num_suppliers']
+    impute_cols = prep_data.columns.difference(exclude_cols)
+
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    prep_data[impute_cols] = imputer.fit_transform(prep_data[impute_cols])
+
+    feature_cols = data.columns.difference(exclude_cols)
+
+    if const.ACTION["compare lifting methods"]:
+
+        data_MA = create_MA(data[feature_cols], past_time=window)
+        data_WMA = create_WMA(data[feature_cols], window_size=20)
+        data_EW = create_exponential_smoothing(data[feature_cols], span=window)
+    
+    data_SG = create_savgol_smoothing(data[feature_cols], window_length=window, polyorder=2)
+    data_SG = pd.concat([prep_data[exclude_cols], data_SG], axis=1)
+
+    if const.ACTION["compare lifting methods"]:
+        plot_comparison(data, data_MA, data_WMA, data_EW, data_SG, "Ireland_Milk_price" )
+
+    return data_SG
+
+def create_MA(data, past_time):
+    new_data = data.copy() 
+    
+    ma_cols = []
+    for col in new_data.columns:
+        ma_col = new_data[col].rolling(window=past_time, min_periods=1).mean()
+        ma_col.name = f'{col}_MA'
+        ma_cols.append(ma_col)
+    
+    ma_data = pd.concat(ma_cols, axis=1)
+    
+    return ma_data
+
+def create_savgol_smoothing(data, window_length, polyorder):
+    new_data = data.copy()
+    sg_cols = []
+
+    for col in new_data.columns:
+        smoothed_col = savgol_filter(new_data[col].fillna(method='bfill'), window_length=window_length, polyorder=polyorder, mode='interp')
+        smoothed_col = pd.Series(smoothed_col, index=new_data.index, name=f'{col}_SG')
+        sg_cols.append(smoothed_col)
+    
+    sg_data = pd.concat(sg_cols, axis=1)
+    
+    return sg_data
+
+def create_WMA(data, window_size):
+    """
+    Create Weighted Moving Average (WMA) features.
+    
+    Args:
+    - data (DataFrame): DataFrame with time series data.
+    - window_size (int): The size of the moving window.
+    
+    Returns:
+    - new_data (DataFrame): DataFrame with WMA columns added.
+    """
+    new_data = data.copy()
+    wma_cols = []
+    
+    for col in new_data.columns:
+        weights = np.arange(1, window_size + 1)
+        wma_col = new_data[col].rolling(window=window_size).apply(lambda x: np.dot(x, weights)/weights.sum(), raw=True)
+        wma_col.name = f'{col}_WMA'
+        wma_cols.append(wma_col)
+    
+    # Concatenate WMA columns with the original data
+    wma_data = pd.concat(wma_cols, axis=1)
+    new_data = wma_data.dropna()
+    
+    return new_data
+
+def create_exponential_smoothing(data, span):
+    """
+    Create Exponential Smoothing features.
+    
+    Args:
+    - data (DataFrame): DataFrame with time series data.
+    - span (int): The span for the exponential smoothing.
+    
+    Returns:
+    - new_data (DataFrame): DataFrame with exponential smoothing columns added.
+    """
+    new_data = data.copy()
+    ewm_cols = []
+    
+    for col in new_data.columns:
+        ewm_col = new_data[col].ewm(span=span).mean()
+        ewm_col.name = f'{col}_EW'
+        ewm_cols.append(ewm_col)
+    
+    # Concatenate EWM columns with the original data
+    ewm_data = pd.concat(ewm_cols, axis=1)
+    
+    return ewm_data
+
+def create_lag_features(data, lag):
+
+    lagged_cols = []
+    for col in data.columns:
+        if col != "Date" and col != "Week" and col != const.TARGET_COLUMN:
+            for i in range(1, lag + 1):
+                lagged_col = data[col].shift(i)
+                lagged_col.name = f'{col}-{i}'
+                lagged_cols.append(lagged_col)
+
+    lagged_data = pd.concat(lagged_cols, axis=1)
+    data = pd.concat([data, lagged_data], axis=1)
+
+    new_data = data.iloc[lag:]
+
+    return new_data
 
 def preprocess_arima_data(df, forecast_weeks):
     # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
@@ -75,9 +230,7 @@ def preprocess_arima_data(df, forecast_weeks):
 
     return exog_train, exog_future
 
-
-
-def determine_lags(df, target_column, max_lag=40):
+def determine_optimum_lags(df, target_column, max_lag=40):
     """
     Determine the number of lags based on the autocorrelation function (ACF) and partial autocorrelation function (PACF).
     
@@ -114,105 +267,20 @@ def determine_lags(df, target_column, max_lag=40):
     print(f"Optimal number of lags: {optimal_lag}")
     return optimal_lag
 
-
-
-def create_lag_features(data, lag):
-    new_data = data.copy()  
-
-    lagged_cols = []
-    for col in data.columns:
-        # Create lagged columns for each original column
-        for i in range(1, lag + 1):
-            lagged_col = data[col].shift(i)
-            lagged_col.name = f'{col}-{i}'
-            lagged_cols.append(lagged_col)
-
-    lagged_data = pd.concat(lagged_cols, axis=1)
-    data = pd.concat([data, lagged_data], axis=1)
-
-    data = data.iloc[lag:]
-
-    return data
-
-
-def create_MA(data, past_time):
-    new_data = data.copy() 
-    
-    ma_cols = []
-    for col in new_data.columns:
-        # Create a moving average column for each original column
-        ma_col = new_data[col].rolling(window=past_time).mean()
-        ma_col.name = f'{col}_MA_{past_time}'
-        ma_cols.append(ma_col)
-    
-    # Concatenate MA columns with the original data
-    ma_data = pd.concat(ma_cols, axis=1)
-    new_data = pd.concat([new_data, ma_data], axis=1)
-
-    # Drop the first 'past_time' rows to avoid NaN values
-    new_data = new_data.iloc[past_time:]
-    
-    return new_data
-
-def time_series_analysis(past_time, data, colonne_cible):
+def create_multi_step_features(df, target_column, n_steps):
     """
-    Perform time series analysis: handle missing values, decompose series, and create features.
+    Create features for multi-step forecasting.
     
     Args:
-    - past_time (int): Number of periods for moving average and lag features.
-    - data (DataFrame): DataFrame with time series data.
-    - colonne_cible (str): Target column name.
+    - df (DataFrame): The DataFrame containing the data.
+    - target_column (str): The name of the target column.
+    - n_steps (int): The number of steps to forecast into the future.
     
     Returns:
-    - data_final (DataFrame): DataFrame with time series features.
+    - df (DataFrame): The DataFrame with new features for multi-step forecasting.
     """
+    for step in range(1, n_steps + 1):
+        df[f'{target_column}_step_{step}'] = df[target_column].shift(-step)
     
-    # Ensure a copy of the data to avoid SettingWithCopyWarning
-    data = data.copy()
-
-    # Identify date and non-date columns
-    date_col = data.select_dtypes(include=[np.datetime64]).columns
-    other_cols = data.columns.difference(date_col)
-
-    # Impute missing values
-    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
-    data[other_cols] = imputer.fit_transform(data[other_cols])
-
-    # Keep the date column and the imputed data
-    data = pd.concat([data[date_col], data[other_cols]], axis=1)
-
-    # Create time series for the target column
-    data_ireland = data[[colonne_cible]].copy()
-
-    # Create a complete date range
-    all_periods = pd.date_range(start=data_ireland.index.min(), end=data_ireland.index.max(), freq='MS')
-    data_all_periods = pd.DataFrame(index=all_periods)
-
-    # Merge to ensure all periods are included
-    data_ireland = data_ireland.merge(data_all_periods, how='outer', left_index=True, right_index=True).fillna(0)
-    
-    # Decompose the time series
-    decomposition = seasonal_decompose(data_ireland[colonne_cible], model='additive', period=12)
-
-    # Plot the decomposition
-    fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(15, 12), sharex=True)
-
-    decomposition.observed.plot(ax=ax1, title='Original Time Series: Milk Price in Ireland')
-    decomposition.trend.plot(ax=ax2, title='Trend: Milk Price in Ireland')
-    decomposition.seasonal.plot(ax=ax3, title='Seasonality: Milk Price in Ireland')
-    decomposition.resid.plot(ax=ax4, title='Residual: Milk Price in Ireland')
-    plt.xlabel('Date')
-    plt.tight_layout()
-    plt.savefig(f'visualization/time_series_analysis_{colonne_cible}.png')
-    plt.close(fig)
-
-    # Create moving averages and lag features
-    data_MA = create_MA(data, past_time)
-    data_lagged = create_lag_features(data, past_time)
-
-    # Concatenate the data
-    data_final = pd.concat([data_lagged, data_MA], axis=1)
-    data_final = data_final.loc[:, ~data_final.columns.duplicated()]
-    data_final = data_final.reindex(sorted(data_final.columns), axis=1)
-
-    return data_final
+    df.dropna(inplace=True)
+    return df
