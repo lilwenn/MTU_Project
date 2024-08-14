@@ -171,9 +171,10 @@ def save_results_to_excel(output_excel_file, week, targ_dir):
 
         results.append({
             'Model Name': model_name,
-            'MAPE': mape_data[f'week_{week}'],
-            'MAE' : model_data[model_name]['MAE Score'],
             'MAPE Score' : model_data[model_name]["MAPE_Score"],
+            'MAPE 52': mape_data[f'week_{week}'],
+            'MAPE 1': mape_data[f'week_1'],
+            'MAE' : model_data[model_name]['MAE Score'],
             'Execution Time': model_data[model_name]['Execution Time'],
             'Scaler': model_data[model_name]['Scaler'],
             'Scoring': model_data[model_name]['Scoring'],
@@ -183,7 +184,7 @@ def save_results_to_excel(output_excel_file, week, targ_dir):
     # Sauvegarder les résultats dans un fichier Excel et un fichier JSON si des résultats sont disponibles
     if results:
         df_results = pd.DataFrame(results)
-        df_results = df_results.sort_values(by='MAPE', ascending=True)
+        df_results = df_results.sort_values(by='MAPE Score', ascending=True)
         df_results.to_excel(output_excel_file, index=False)
 
         print(df_results)

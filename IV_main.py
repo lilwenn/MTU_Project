@@ -130,8 +130,8 @@ def train_model(X_train, y_train, X_test, y_true, model_name, model, lag):
                 clf = RandomizedSearchCV(
                     estimator=pipeline,
                     param_distributions=const.HYPERPARAMETERS[model_name],
-                    n_iter=5, 
-                    cv=tscv,  # Utiliser TimeSeriesSplit
+                    n_iter=30, 
+                    cv=tscv,
                     verbose=1,
                     n_jobs=-1,
                     error_score='raise'
