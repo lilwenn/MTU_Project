@@ -25,7 +25,7 @@ warnings.filterwarnings("ignore", category=ConvergenceWarning)
 def price_data_creation():
 
     # Read milk prices data
-    price_data = pd.read_excel('initial_datas/Ire_EU_Milk_Prices.xlsx', sheet_name=0, skiprows=6, index_col=0)
+    price_data = pd.read_excel('initial_datas/milk_prices.xlsx', sheet_name=0, skiprows=6, index_col=0)
 
     # Clean data
     columns_to_delete = [col for col in price_data.columns if 'Unnamed' in str(col)]
@@ -95,6 +95,7 @@ def price_data_creation():
 def grass_data_creation():
 
     file_path = 'initial_datas/4 Data Grass Growth Yearly & Monthly 2013-2024.xlsx'
+    
     grass_data = pd.read_excel(file_path)
 
     grass_data = grass_data.iloc[:-17]
@@ -173,6 +174,49 @@ def yield_data_creation():
     df_yield.to_excel("spreadsheet/Yield_data_weekly_2009_2021.xlsx", index=False)
 
 
+
+
+def meteo_data_creation():
+    # Lire le fichier CSV
+    df_meteo = pd.read_csv('initial_datas/daily_all_stations.csv')
+
+    # Afficher la forme du DataFrame (nombre de lignes et de colonnes)
+    print("Shape of the DataFrame before processing:", df_meteo.shape)
+    
+    # Afficher les premières lignes du DataFrame
+    print(df_meteo.head())
+    
+    # Afficher les noms des colonnes
+    print(df_meteo.columns)
+    
+    # Supprimer les lignes contenant des valeurs NaN
+    df_meteo_clean = df_meteo.dropna()
+
+    # Afficher la forme du DataFrame après suppression des lignes avec des NaN
+    print("Shape of the DataFrame after removing NaN rows:", df_meteo_clean.shape)
+    
+    # Afficher les premières lignes du DataFrame sans NaN
+    print(df_meteo_clean.head())
+
+    # Renommer la première colonne en 'Date'
+    df_meteo_clean.rename(columns={df_meteo_clean.columns[0]: 'Date'}, inplace=True)
+    df_meteo_clean['Date'] = pd.to_datetime(df_meteo_clean['Date'])
+    
+    # Filtrer le DataFrame pour ne conserver que les lignes entre les dates spécifiées
+    df_meteo_clean = df_meteo_clean[(df_meteo_clean['Date'] >= '2009-01-01') & (df_meteo_clean['Date'] <= '2021-12-31')]
+
+    # Afficher la forme du DataFrame après filtrage par date
+    print("Shape of the DataFrame after filtering by date:", df_meteo_clean.shape)
+    
+    # Sauvegarder le DataFrame filtré et nettoyé dans un fichier Excel
+    df_meteo_clean.to_excel("spreadsheet/meteo_data.xlsx", index=False)
+
+# Appeler la fonction
+meteo_data_creation()
+
+
+
+
 def delete_columns(df):
     # Columns to drop by name
     columns_to_drop = [
@@ -220,9 +264,10 @@ def final_data_creation():
 
     final_data.to_excel("spreadsheet/Final_Weekly_2009_2021.xlsx", index=False)
 
-#price_data_creation()
+price_data_creation()
 #grass_data_creation()
 #yield_data_creation()
+#meteo_data_creation()
 final_data_creation()
 
 

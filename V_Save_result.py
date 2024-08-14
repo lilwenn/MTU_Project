@@ -4,104 +4,135 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
+import math
+
+from sklearn.metrics import (
+    accuracy_score,
+    matthews_corrcoef,
+    mean_absolute_error,
+    mean_absolute_percentage_error,
+    median_absolute_error,
+    mean_squared_error,
+    precision_recall_fscore_support,
+    r2_score,
+)
 
 import Constants as const
 
 
-def find_best_model_configs(model_name, window_list, Non_ml):
+def mape(y_true, y_pred):
+    mask = y_true != 0
+    return np.mean(np.abs((y_true[mask] - y_pred[mask]) / y_true[mask])) * 100
+
+def calculate_weekly_mape(model_name, targ_dir, y_true: np.ndarray, y_pred: np.ndarray, forecast_weeks: int) -> dict:
+    weekly_errors = {}
+    for week in range(1, forecast_weeks + 1):
+        actual_value = y_true[week - 1]
+        predicted_value = y_pred[week - 1]
+        
+        percentage_error = abs((actual_value - predicted_value) / actual_value) * 100
+        weekly_errors[f'week_{week}'] = percentage_error
+
+
+    # Print weekly MAPE
+    for week, mape_value in weekly_errors.items():
+        print(f'{model_name}  -  {week}: MAPE = {mape_value:.2f}%')
+
+    # Optionally, save weekly MAPE to a file
+    with open(f'result/{targ_dir}/weekly_mape/{model_name}weekly_mape.json', 'w') as f:
+        json.dump(weekly_errors, f, indent=4)
+
+
+    return weekly_errors
+
+
+def calculate_weekly_percentage_errors(model_name, targ_dir, y_true: np.ndarray, y_pred: np.ndarray, forecast_weeks: int) -> dict:
     """
-    Analyzes JSON result files to find the best model configurations for each model based on the best MAPE across all iterations.
+    Calculate the percentage error for each week individually.
+    
+    Args:
+    - model_name (str): Name of the model being evaluated.
+    - targ_dir (str): Target directory to save the results.
+    - y_true (np.ndarray): True values for each week.
+    - y_pred (np.ndarray): Predicted values for each week.
+    - forecast_weeks (int): Number of weeks in the forecast period.
+    
+    Returns:
+    - weekly_errors (dict): Dictionary of percentage errors for each week.
     """
-    best_mape = float('inf')
-    best_combination = None
-    best_iteration = None
-
-
-
-    if model_name not in Non_ml :
-        for w in window_list: 
-            file_path = os.path.join(f'result/by_model/{model_name}_{w}_model_{const.FORECAST_WEEKS}.json')
-
-            if not os.path.exists(file_path):
-                print(f"Result file for iteration {w} does not exist: {file_path}")
-                continue
-
-            with open(file_path, 'r') as f:
-                data = json.load(f)
+    weekly_errors = {}
+    
+    for week in range(1, forecast_weeks + 1):
+        actual_value = y_true[week - 1]
+        predicted_value = y_pred[week - 1]
+        
+        if actual_value != 0:
+            percentage_error = abs((actual_value - predicted_value) / actual_value) * 100
+        else:
+            percentage_error = np.nan  # Handle division by zero by setting to NaN
             
-        for scaler_name, scaler_data in data.items():
-            for scoring_name, metrics in scaler_data.items():
-                weeks = list(metrics['MAPE'].keys())
-                last_week = max(weeks, key=lambda x: int(x.split('_')[1]))
-                mape = metrics['mean_MAPE']
-                predictions = metrics['Predictions']
+        weekly_errors[f'week_{week}'] = percentage_error
 
-                if mape < best_mape and 1 < mape :
-                    best_mape = mape
-                    best_iteration = w
-                    best_combination = {
-                        'MAPE': metrics['MAPE'],
-                        'MAE': metrics['MAE'],
-                        'MAE2': metrics['MAE2'],
-                        'ME': metrics['ME'],
-                        'MSE': metrics['MAE2'], 
-                        'RMSE': metrics['RMSE'],
-                        'Execution Time': metrics['Execution Time'],
-                        'Scaler': scaler_name,
-                        'Scoring': scoring_name,
-                        'Predictions': predictions,
-                        'Iteration': w
-                    }
+    # Print percentage errors for each week
+    for week, error_value in weekly_errors.items():
+        print(f'{model_name}  -  {week}: Percentage Error = {error_value:.2f}%')
+
+    # Optionally, save the weekly errors to a file
+    with open(f'result/{targ_dir}/weekly_errors/{model_name}_weekly_errors.json', 'w') as f:
+        json.dump(weekly_errors, f, indent=4)
+
+    return weekly_errors
 
 
-                        
-    else:
-        w = 0
-        file_path = os.path.join(f'result/by_model/{model_name}_{w}_model_{const.FORECAST_WEEKS}.json')
+def calc_scores(y_true, targ_dir) -> dict:
 
-        if not os.path.exists(file_path):
-            print(f"Result file for iteration {w} does not exist: {file_path}")
-            
-        with open(file_path, 'r') as f:
-            data = json.load(f)    
+    for model_name, model in const.MODELS.items():
+        with open(f'result/{targ_dir}/global_results.json', 'r') as f:
+            data = json.load(f)
+        
+        with open(f'result/{targ_dir}/weekly_mape/{model_name}weekly_mape.json', 'r') as f:
+            mape_dict = json.load(f)
 
-        weeks = list(data['MAPE'].keys())
-        last_week = max(weeks, key=lambda x: int(x.split('_')[1]))
-        mape = data['MAPE'][last_week]
-        if mape < best_mape:
-            best_mape = mape
-            best_iteration = w
-            best_combination = {
-                'MAPE': data ['MAPE'],
-                'MAE': data ['MAE'],
-                'MAE2':data ['MAE2'],
-                'ME':data ['ME'],
-                'MSE': data ['MAE2'],
-                'RMSE': data ['RMSE'],
-                'Execution Time': data['Execution Time'],
-                'Scaler': None,
-                'Scoring': None,
-                'Predictions': data['Predictions'],
-                'Iteration': w
-            }
-            
+        predicted = data[model_name]["Predictions"]
+        mae_dict = {}
+        mae2_dict = {}
+        me_dict = {}
+        mse_dict = {}
+        rmse_dict = {}
 
-    if best_combination:
-        output_file_path = f'result/by_model/{model_name}_best_model.json'
-        with open(output_file_path, 'w') as f:
-            json.dump(best_combination, f, indent=4)
+        for week in range(1,  const.FORECAST_WEEKS + 1):
+            actual_week = y_true[week - 1:week]
+            predicted_week = predicted[week - 1:week]
 
-        print(f"Best combination for {model_name} across all iterations saved (Iteration {best_iteration})")
+            # Calculate metrics with safety checks
+            mae_dict[f'week_{week}'] = mean_absolute_error(actual_week, predicted_week)
+            mae2_dict[f'week_{week}'] = median_absolute_error(actual_week, predicted_week)
+            mse = mean_squared_error(actual_week, predicted_week)
+            mse_dict[f'week_{week}'] = mse
+            rmse_dict[f'week_{week}'] = math.sqrt(mse)
+            me_dict[f'week_{week}'] = np.mean(actual_week - predicted_week)
 
-    return best_combination
+        data[model_name]['MAPE'] = mape_dict
+        data[model_name]['MAE'] = mae_dict
+        data[model_name]['MAE2'] =  mae2_dict
+        data[model_name]['ME'] =  me_dict
+        data[model_name]['MSE'] =  mse_dict
+        data[model_name]['RMSE'] =  rmse_dict
+ 
 
-def update_global_results(model_name):
+    with open(f'result/{targ_dir}/global_results.json', 'w') as f:
+        json.dump(data, f, indent=4)
+
+    return data
+
+def update_global_results(model_name, targ_dir):
     """
     Updates a global JSON file with the best results of a specific model.
     """
     # Define the path for the best model results file
-    best_model_result_file = f'result/by_model/{model_name}_best_model.json'
-    global_results_file = 'result/global_results.json'
+    best_model_result_file = f'result/{targ_dir}/train_by_model/{model_name}_best_model.json'
+    global_results_file = f'result/{targ_dir}/global_results.json'
 
     if not os.path.exists(best_model_result_file):
         print(f"Best model result file {best_model_result_file} does not exist.")
@@ -123,25 +154,30 @@ def update_global_results(model_name):
 
     print(f"Global JSON results updated")
 
-def save_results_to_excel(output_excel_file, week):
+def save_results_to_excel(output_excel_file, week, targ_dir):
     """
     Sauvegarde les meilleurs résultats du fichier JSON global dans un fichier Excel,
     triés par le MAPE le plus bas, et les enregistre également dans un fichier JSON.
     """
 
     results = []  # Initialiser la liste pour stocker les résultats pour Excel
-    with open('result/global_results.json', 'r') as f:
+    with open(f'result/{targ_dir}/global_results.json', 'r') as f:
         model_data = json.load(f)
 
     # Extraire les informations nécessaires
     for model_name in model_data.keys():
+        with open(f'result/{targ_dir}/weekly_mape/{model_name}weekly_mape.json', 'r') as f:
+            mape_data = json.load(f)
+
         results.append({
             'Model Name': model_name,
-            'MAPE': model_data[model_name]['MAPE'][f'week_{week}'],
-            'MAE': model_data[model_name]['MAE'][f'week_{week}'],
+            'MAPE': mape_data[f'week_{week}'],
+            'MAE' : model_data[model_name]['MAE Score'],
+            'MAPE Score' : model_data[model_name]["MAPE_Score"],
             'Execution Time': model_data[model_name]['Execution Time'],
             'Scaler': model_data[model_name]['Scaler'],
-            'Scoring': model_data[model_name]['Scoring']
+            'Scoring': model_data[model_name]['Scoring'],
+            'Lag': model_data[model_name]["Best lag"]
         })
 
     # Sauvegarder les résultats dans un fichier Excel et un fichier JSON si des résultats sont disponibles
@@ -157,97 +193,106 @@ def save_results_to_excel(output_excel_file, week):
     else:
         print("No results to save.")
 
-def plot_mape(json_file):
-    """
-    Crée un graphique pour les MAPE et l'enregistre en tant qu'image.
-    
-    Args:
-        json_file (str): Chemin vers le fichier JSON contenant les données.
-    """
-    # Lire le fichier JSON
-    with open(json_file, 'r') as file:
-        data = json.load(file)
-    
-    # Créer la figure pour les MAPE
-    fig, ax = plt.subplots(figsize=(12, 8))
-    
-    # Prétraiter les données pour le graphique MAPE
-    for model_name, model_data in data.items():
-        if model_name == "ARIMA":
-            continue
+def plot_all_models_predictions(dates, y_true, targ_dir):
+
+    plt.figure(figsize=(12, 6))
+    palette = sns.color_palette("husl", len(const.MODELS))
+
+    # Plotting actual values
+    plt.plot(dates, y_true, label='Actual', color='black')
+    i = 0
+    for model_name in const.MODELS.keys():
+        with open(f'result/{targ_dir}/train_by_model/{model_name}_best_model.json', 'r') as file:
+            results = json.load(file)
         
-        # Convertir les semaines en un format numérique pour l'axe x
-        weeks = list(model_data.get("MAPE", {}).keys())
-        week_numbers = [int(week.split('_')[1]) for week in weeks]
-        
-        # Tracer les MAPE si elles existent
-        mape_values = list(model_data.get("MAPE", {}).values())
-        if mape_values:
-            ax.plot(week_numbers, mape_values, label=f'{model_name} MAPE')
+        y_pred = results['Predictions']
+        min_length = min(len(dates), len(y_true), len(y_pred))
+        dates = dates[:min_length]
+        y_true = y_true[:min_length]
+        y_pred = y_pred[:min_length]
+
+        # Tracer les valeurs prédites pour chaque modèle avec une couleur différente
+        plt.plot(dates, y_pred, label=model_name, color=palette[i])
+
+        i+=1
+
+    plt.title('Actual vs Predicted Values for All Models')
+    plt.xlabel('Date')
+    plt.ylabel(targ_dir)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'result/{targ_dir}/plot_predictions/predictions_all_models.png')
+    plt.close()
+
+def plot_predictions_by_model(y_pred, dates, y_true, model_name, targ_dir):
+    # Convert dates to list if not already
+    if not isinstance(dates, (list, np.ndarray)):
+        dates = list(dates)
+
+    min_length = min(len(dates), len(y_true), len(y_pred))
+    dates = dates[:min_length]
+    y_true = y_true[:min_length]
+    y_pred = y_pred[:min_length]
+
+    plt.figure(figsize=(12, 6))
+
+    # Plotting actual values
+    plt.plot(dates, y_true, label='Actual', color='blue')
+
+    # Plotting predicted values
+    plt.plot(dates, y_pred, label='Predicted', color='red')
+
+    plt.title(f'Actual vs Predicted Values - {model_name}')
+    plt.xlabel('Date')
+    plt.ylabel(targ_dir)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'result/{targ_dir}/plot_predictions/predictions_{model_name}.png')
+    plt.close()
+
+def plot_all_models_mape(dates, targ_dir):
+
+    plt.figure(figsize=(12, 6))
+    palette = sns.color_palette("husl", len(const.MODELS))
+
+    i=0
+    for model_name in const.MODELS.keys():
+        with open(f'result/{targ_dir}/weekly_mape/{model_name}weekly_mape.json', 'r') as file:
+            weekly_mape = json.load(file)
+
+        mape_values = list(weekly_mape.values())
+
+        # Ensure dates are the same length as mape_values
+        min_length = min(len(dates), len(mape_values))
+        dates = dates[:min_length]
+        mape_values = mape_values[:min_length]
+
+        # Plotting MAPE values for each model
+        plt.plot(dates, mape_values, label=model_name, color=palette[i])
+        i+=1
+
+    plt.title('Weekly MAPE for All Models')
+    plt.xlabel('Week')
+    plt.ylabel('MAPE (%)')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'result/{targ_dir}/plot_mape/mape_all_models.png')
+    plt.close()
+
+def plot_weekly_mape(dates, weekly_mape: dict,  model_name, targ_dir):
+    mape_values = list(weekly_mape.values())
     
-    # Ajouter des labels et un titre au graphique MAPE
-    ax.set_xlabel('Weeks')
-    ax.set_ylabel('MAPE')
-    ax.set_title('MAPE per Week for Each Model')
-    ax.legend()
-    
-    # Enregistrer le graphique MAPE
-    fig.savefig('visualization/mape_per_week.png')
-    plt.close(fig)  # Fermer la figure pour libérer la mémoire
-
-def plot_predictions(json_file,df):
-    """
-    Crée un graphique pour les prédictions et l'enregistre en tant qu'image.
-    
-    Args:
-        json_file (str): Chemin vers le fichier JSON contenant les données.
-    """
-    # Lire le fichier JSON
-    with open(json_file, 'r') as file:
-        data = json.load(file)
-    
-    # Créer la figure pour les prédictions
-    fig, ax = plt.subplots(figsize=(16, 8))
-    
-    # Prétraiter les données pour le graphique des prédictions
-    for model_name, model_data in data.items():
-        model_name = 'BayesianRidge'
-        model_data = data['BayesianRidge']
-        if model_name == "ARIMA":
-            continue
-        
-        # Convertir les semaines en un format numérique pour l'axe x
-        weeks = list(model_data.get("Predictions", {}).keys())
-        week_numbers = [int(week.split('_')[1]) for week in weeks]
-        
-        # Tracer les prédictions si elles existent
-        prediction_values = list(model_data.get("Predictions", {}).values())
-        if prediction_values:
-            ax.plot(week_numbers, prediction_values, label=f'{model_name}')
-
-
-    actual_values = list(df[const.TARGET_COLUMN].iloc[-const.FORECAST_WEEKS:].values)
-    ax.plot(week_numbers, actual_values, label='Actual', color='#000000')
-
-    prediction_values = list(data['KNeighborsRegressor'].get("Predictions", {}).values())
-    print(len(prediction_values))
-    print(len(actual_values))
-
-
-
-
-    # Ajouter des labels et un titre au graphique des prédictions
-    ax.set_xlabel('Weeks')
-    ax.set_ylabel('Predictions')
-    ax.set_title('Predictions per Week for Each Model')
-    ax.legend()
-    
-    # Enregistrer le graphique des prédictions
-    fig.savefig('visualization/predictions_per_week.png')
-    plt.close(fig)  
-
-
-
+    plt.figure(figsize=(12, 6))
+    plt.plot(dates, mape_values, linestyle='-', color='b', label='Weekly MAPE', markersize=8) 
+    plt.title('Weekly MAPE Over Time')
+    plt.xlabel('Week')
+    plt.ylabel('MAPE (%)')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f'result/{targ_dir}/plot_mape/weekly_mape_{model_name}.png')
+    plt.close()
 
 def plot_darts_model_performance(results, df):
     """
@@ -307,4 +352,3 @@ def plot_prophet_model_performance(results, df):
     plt.title('Prophet Model Predictions')
     plt.legend()
     plt.show()
-

@@ -71,10 +71,16 @@ def pearson_corr(X, y):
 
 
 
-TARGET_COLUMN = 'litres' # Ireland_Milk_price
+TARGET_COLUMN = ['litres'] #,'Ireland_Milk_Price'
+TARGET_DIR = {
+    'litres' : 'liter_results',
+    'Ireland_Milk_Price' : 'prices_results'
+}
+
 FORECAST_WEEKS = 52
-LAG = 1  
-WINDOWS_LIST = [4]
+HORIZON = 52
+LAG_LIST = [1,2,3,4,5,6,7]
+SMOOTH_WINDOW = 5
 NON_ML = ['Pmdarima', 'Darts' , 'ARIMA']
 
 
@@ -82,16 +88,18 @@ ACTION = {
     "time_series_smoothing" : True,
     "shifting": True,
     "compare lifting methods": False,
-    "Multi-step" : True
+    "Multi-step" : False,
+    "Train models": True,
+    "Save models": True
 }
 
 MODELS = {
     'BayesianRidge': BayesianRidge(),
-    #'DecisionTreeRegressor': DecisionTreeRegressor(),
-    #'ExtraTreeRegressor': ExtraTreeRegressor(),
-    #'GaussianProcessRegressor': GaussianProcessRegressor(),
-    #'KNeighborsRegressor': KNeighborsRegressor(),
-    #'Lasso': Lasso(),
+    'DecisionTreeRegressor': DecisionTreeRegressor(),
+    'ExtraTreeRegressor': ExtraTreeRegressor(),
+    'GaussianProcessRegressor': GaussianProcessRegressor(),
+    'KNeighborsRegressor': KNeighborsRegressor(),
+    'Lasso': Lasso(),
     #'LinearRegression': LinearRegression(),
     #'PassiveAggressiveRegressor': PassiveAggressiveRegressor(),
     #'RandomForestRegressor': RandomForestRegressor(),
@@ -114,11 +122,10 @@ HYPERPARAMETERS = {
     },
 
     'DecisionTreeRegressor': {
-    'model__criterion': ['mse', 'friedman_mse', 'mae', 'poisson'],
-    'model__splitter': ['best', 'random'],
-    'model__max_depth': [8, 16, 32, 64, 128, None],
-    'model__max_features': [None, 'sqrt', 'log2'] 
-},
+        'model__criterion': ['absolute_error', 'squared_error'],
+        'model__max_depth': [None, 10, 20, 30],
+        'model__min_samples_split': [2, 5, 10],
+    },
 
     'ExtraTreeRegressor': {
         'model__criterion': ['squared_error', 'absolute_error', 'poisson'],
@@ -174,15 +181,15 @@ K_VALUES = {
 
 SCORING_METHODS = {
     'F_regression': f_regression,
-    #'Mutual_info_regression': mutual_info_regression,
+    'Mutual_info_regression': mutual_info_regression,
     'Pearson Correlation': pearson_corr,
-    #'Feature Importance': feature_importance,
+    'Feature Importance': feature_importance,
     'No scoring': None
 }
 
 SCALERS = {
-    #'MinMaxScaler': MinMaxScaler(),
-    #'StandardScaler': StandardScaler(),
+    'MinMaxScaler': MinMaxScaler(),
+    'StandardScaler': StandardScaler(),
     'RobustScaler': RobustScaler(),
     'QuantileTransformer': QuantileTransformer(),
     'No scaling': None,

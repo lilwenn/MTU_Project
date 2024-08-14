@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+import os
+
 
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler, RobustScaler
 from sklearn.impute import SimpleImputer
@@ -23,7 +25,7 @@ import Constants as const
 from scipy.signal import savgol_filter
 
 
-def load_and_preprocess_data(window, df):
+def load_and_preprocess_data(lag, df, target):
     """
     Load and preprocess data: clean, impute missing values, and create lagged features.
     
@@ -34,6 +36,10 @@ def load_and_preprocess_data(window, df):
     Returns:
     - df (DataFrame): Preprocessed DataFrame ready for model training.
     """
+    output_file = f'spreadsheet/preproc_lag_{lag}.xlsx'
+    
+    if os.path.exists(output_file):
+        return pd.read_excel(output_file)
 
     print('Preprocessing ... ...')
     print(f'Size of the initial dataset : {df.shape}')
@@ -44,32 +50,36 @@ def load_and_preprocess_data(window, df):
 
     print('     - Smoothing')
     if const.ACTION["time_series_smoothing"]:
-        df = time_series_smoothing(window, df)
+        df = time_series_smoothing(const.SMOOTH_WINDOW, df)
 
     print('     - New feature creation')
-    df = new_features_creation(df)
+    df = new_features_creation(df, target)
 
 
     print('     - Shifting')
     if const.ACTION["shifting"]:
-        df = create_lag_features(df, const.LAG)
+        df = create_lag_features(df, lag, target)
 
 
     print('     - Multi-step Forecasting Features')
     if const.ACTION["Multi-step"]:
-        df = create_multi_step_features(df, const.TARGET_COLUMN, const.FORECAST_WEEKS)
+        df = create_multi_step_features(df, target, const.FORECAST_WEEKS)
 
     print(f'Size of the dataset after preprocessing : {df.shape}')
-    df.to_excel('spreadsheet/preproc_data.xlsx', index=False)
 
+    # Sauvegarde du DataFrame final
+    df.to_excel(output_file, index=False)
+    print(f"Le fichier prétraité a été sauvegardé sous {output_file}.")
 
     return df
 
-def new_features_creation(df):
+
+def new_features_creation(df,target):
 
     df['yield_per_supplier'] = df['litres'] / df['num_suppliers']
     df['cos_week'] = np.cos(df['Week'] * (2 * np.pi / 52))
-    df['past_liter_price'] = df['litres'].expanding().mean()
+    df['past_values'] = df[target].expanding().mean()
+
 
     return df
 
@@ -115,10 +125,13 @@ def time_series_smoothing(window, data):
         data_MA = create_MA(data[feature_cols], past_time=window)
         data_WMA = create_WMA(data[feature_cols], window_size=20)
         data_EW = create_exponential_smoothing(data[feature_cols], span=window)
-    
-    data_SG = create_savgol_smoothing(data[feature_cols], window_length=window, polyorder=2)
-    data_SG = pd.concat([prep_data[exclude_cols], data_SG], axis=1)
 
+    if const.ACTION["time_series_smoothing"]:
+        data_SG = create_savgol_smoothing(data[feature_cols], window_length=window, polyorder=2)
+        data_SG = pd.concat([prep_data[exclude_cols], data_SG], axis=1)
+    else:
+        data_SG = data
+    
     if const.ACTION["compare lifting methods"]:
         plot_comparison(data, data_MA, data_WMA, data_EW, data_SG, "Ireland_Milk_price" )
 
@@ -143,7 +156,7 @@ def create_savgol_smoothing(data, window_length, polyorder):
 
     for col in new_data.columns:
         smoothed_col = savgol_filter(new_data[col].fillna(method='bfill'), window_length=window_length, polyorder=polyorder, mode='interp')
-        smoothed_col = pd.Series(smoothed_col, index=new_data.index, name=f'{col}_SG')
+        smoothed_col = pd.Series(smoothed_col, index=new_data.index, name=f'{col}')
         sg_cols.append(smoothed_col)
     
     sg_data = pd.concat(sg_cols, axis=1)
@@ -200,11 +213,11 @@ def create_exponential_smoothing(data, span):
     
     return ewm_data
 
-def create_lag_features(data, lag):
 
+def create_lag_features(data, lag, target):
     lagged_cols = []
     for col in data.columns:
-        if col != "Date" and col != "Week" and col != const.TARGET_COLUMN:
+        if col != "Date" and col != "Week" and col != target:
             for i in range(1, lag + 1):
                 lagged_col = data[col].shift(i)
                 lagged_col.name = f'{col}-{i}'
@@ -213,9 +226,8 @@ def create_lag_features(data, lag):
     lagged_data = pd.concat(lagged_cols, axis=1)
     data = pd.concat([data, lagged_data], axis=1)
 
-    new_data = data.iloc[lag:]
 
-    return new_data
+    return data
 
 def preprocess_arima_data(df, forecast_weeks):
     # Create a new dataframe exog_data by dropping columns that contain the string 'litres'
