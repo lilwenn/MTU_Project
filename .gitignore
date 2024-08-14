@@ -6,6 +6,7 @@ __pycache__/
 .idea/
 #spreadsheet/*.xlsx
 visualization/*
+result/*
 .statsmodels_cache/
 pandas_cache/
 matplotlib_cache/
