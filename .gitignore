@@ -7,6 +7,9 @@ __pycache__/
 #spreadsheet/*.xlsx
 visualization/*
 result/*
+projet/*
+test/*
+spreadsheet/*
 .statsmodels_cache/
 pandas_cache/
 matplotlib_cache/
