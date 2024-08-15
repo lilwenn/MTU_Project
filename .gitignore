@@ -4,13 +4,12 @@ __pycache__/
 *.pdb
 .vscode/
 .idea/
-spreadsheet/*.xlsx
 initial_datas/*
-visualization/*
-result/*
+Objet_test/*
 projet/*
-test/*
+result/*
 spreadsheet/*
+tests/*
 .statsmodels_cache/
 pandas_cache/
 matplotlib_cache/
