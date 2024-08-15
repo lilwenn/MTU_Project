@@ -4,7 +4,8 @@ __pycache__/
 *.pdb
 .vscode/
 .idea/
-#spreadsheet/*.xlsx
+spreadsheet/*.xlsx
+initial_datas/*
 visualization/*
 result/*
 projet/*
