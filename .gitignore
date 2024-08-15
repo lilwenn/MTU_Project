@@ -14,5 +14,4 @@ spreadsheet/*
 .statsmodels_cache/
 pandas_cache/
 matplotlib_cache/
-initial_datas/daily_all_stations.csv
-initial_datas/daily_all_stations.csv
+
