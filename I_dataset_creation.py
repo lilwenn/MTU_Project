@@ -174,47 +174,51 @@ def yield_data_creation():
     df_yield.to_excel("spreadsheet/Yield_data_weekly_2009_2021.xlsx", index=False)
 
 
-
-
 def meteo_data_creation():
-    # Lire le fichier CSV
-    df_meteo = pd.read_csv('initial_datas/daily_all_stations.csv')
 
-    # Afficher la forme du DataFrame (nombre de lignes et de colonnes)
-    print("Shape of the DataFrame before processing:", df_meteo.shape)
-    
-    # Afficher les premières lignes du DataFrame
-    print(df_meteo.head())
-    
-    # Afficher les noms des colonnes
-    print(df_meteo.columns)
-    
-    # Supprimer les lignes contenant des valeurs NaN
-    df_meteo_clean = df_meteo.dropna()
+    df_meteo = pd.read_csv('daily_all_stations.csv')
 
-    # Afficher la forme du DataFrame après suppression des lignes avec des NaN
-    print("Shape of the DataFrame after removing NaN rows:", df_meteo_clean.shape)
-    
-    # Afficher les premières lignes du DataFrame sans NaN
-    print(df_meteo_clean.head())
-
-    # Renommer la première colonne en 'Date'
-    df_meteo_clean.rename(columns={df_meteo_clean.columns[0]: 'Date'}, inplace=True)
-    df_meteo_clean['Date'] = pd.to_datetime(df_meteo_clean['Date'])
+    df_meteo.rename(columns={df_meteo.columns[0]: 'Date'}, inplace=True)
+    df_meteo['Date'] = pd.to_datetime(df_meteo['Date'])
     
     # Filtrer le DataFrame pour ne conserver que les lignes entre les dates spécifiées
-    df_meteo_clean = df_meteo_clean[(df_meteo_clean['Date'] >= '2009-01-01') & (df_meteo_clean['Date'] <= '2021-12-31')]
+    df_meteo = df_meteo[(df_meteo['Date'] >= '2009-01-01') & (df_meteo['Date'] <= '2021-12-31')]
+    columns_to_keep = ['Date'] + [col for col in df_meteo.columns if col.endswith('_rain') or col.endswith('_soil') or col.endswith('_sun')]
+    df_meteo = df_meteo[columns_to_keep]
 
-    # Afficher la forme du DataFrame après filtrage par date
-    print("Shape of the DataFrame after filtering by date:", df_meteo_clean.shape)
-    
-    # Sauvegarder le DataFrame filtré et nettoyé dans un fichier Excel
-    df_meteo_clean.to_excel("spreadsheet/meteo_data.xlsx", index=False)
+    # Supprimer les colonnes qui ne contiennent que des zéros
+    df_meteo = df_meteo.loc[:, (df_meteo != 0).any(axis=0)]
+    rain_columns = [col for col in df_meteo.columns if col.endswith('_rain')]
+    df_meteo['mean_rain'] = df_meteo[rain_columns].mean(axis=1)
 
-# Appeler la fonction
-meteo_data_creation()
+    # Créer une nouvelle colonne 'mean_soil' avec la moyenne des colonnes de sol pour chaque ligne
+    soil_columns = [col for col in df_meteo.columns if col.endswith('_soil')]
+    df_meteo['mean_soil'] = df_meteo[soil_columns].mean(axis=1)
 
+    # Créer une nouvelle colonne 'mean_sun' avec la moyenne des colonnes de soleil pour chaque ligne
+    sun_columns = [col for col in df_meteo.columns if col.endswith('_sun')]
+    df_meteo['mean_sun'] = df_meteo[sun_columns].mean(axis=1)
 
+    # Extraire la semaine et l'année de la colonne 'Date'
+    df_meteo['week'] = df_meteo['Date'].dt.isocalendar().week
+    df_meteo['year'] = df_meteo['Date'].dt.year
+    df_meteo['year_week'] = df_meteo['year'].astype(str) + '_' + df_meteo['week'].astype(str)
+
+    # Grouper les données par 'year_week' et calculer la moyenne pour chaque groupe
+    df_weekly = df_meteo.groupby('year_week').mean().reset_index()
+
+    # Créer un index complet de toutes les semaines entre les années 2009 et 2021
+    full_weeks = pd.DataFrame(pd.date_range(start='2009-01-01', end='2021-12-31', freq='W-MON'))
+    full_weeks['year'] = full_weeks[0].dt.year
+    full_weeks['week'] = full_weeks[0].dt.isocalendar().week
+    full_weeks['year_week'] = full_weeks['year'].astype(str) + '_' + full_weeks['week'].astype(str)
+
+    df_weekly_full = full_weeks[['year_week']].merge(df_weekly, on='year_week', how='left')
+    df_weekly_full.fillna(0, inplace=True)
+
+    # Sélectionner uniquement les colonnes 'year_week', 'mean_rain', 'mean_soil', et 'mean_sun'
+    df_weekly_full = df_weekly_full[['year_week', 'mean_rain', 'mean_soil', 'mean_sun']]
+    df_weekly_full.to_excel("spreadsheet/meteo_data_weekly_2009_2021.xlsx", index=False)
 
 
 def delete_columns(df):
@@ -244,12 +248,15 @@ def final_data_creation():
     grass_data = pd.read_excel('spreadsheet/Grass_data_weekly_2009-2024.xlsx')
     price_data = pd.read_excel('spreadsheet/Prices_datas_weekly_2009-2021.xlsx')
     yield_data = pd.read_excel("spreadsheet/Yield_data_weekly_2009_2021.xlsx")
+    weather_data = pd.read_excel("spreadsheet/meteo_data_weekly_2009_2021.xlsx")
+
 
     grass_data = grass_data.drop(columns=['Week'])
     price_data = price_data.drop(columns=['Date'])
 
     df = pd.merge(price_data, grass_data, on='year_week')
     df = pd.merge(df, yield_data, on='year_week')
+    df = pd.merge(df, weather_data, on='year_week')
 
 
     columns = ['Date', 'year_week'] + [col for col in df.columns if col not in ['Date', 'year_week']]
@@ -264,11 +271,13 @@ def final_data_creation():
 
     final_data.to_excel("spreadsheet/Final_Weekly_2009_2021.xlsx", index=False)
 
-price_data_creation()
+
+meteo_data_creation()
+#price_data_creation()
 #grass_data_creation()
 #yield_data_creation()
 #meteo_data_creation()
-final_data_creation()
+#final_data_creation()
 
 
 
