@@ -34,6 +34,7 @@ CONFIG = {
     "SMOOTH_WINDOW": 5,
     "NON_ML": ['Pmdarima', 'Darts', 'ARIMA'],
     "ACTION": {
+        "Data creation" : True,
         "time_series_smoothing": True,
         "shifting": True,
         "compare_lifting_methods": False,
@@ -41,6 +42,7 @@ CONFIG = {
         "Train models": False,
         "Save models": True
     },
+    
     "MODELS": {
         'BayesianRidge': BayesianRidge(),
         'DecisionTreeRegressor': DecisionTreeRegressor(),

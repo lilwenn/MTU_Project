@@ -1,0 +1,30 @@
+version: '3.8'  # Version de la syntaxe Docker Compose
+
+services:
+  postgres:  # Service pour PostgreSQL
+    image: postgres:13  # Utilise l'image PostgreSQL version 13
+    container_name: postgres_container  # Nom du conteneur PostgreSQL
+    environment:  
+      POSTGRES_DB: nimbus_project  # Nom de la base de données
+      POSTGRES_USER: root  
+      POSTGRES_PASSWORD: root  
+    ports:
+      - "5432:5432"  # Expose le port 5432 (PostgreSQL) sur l'hôte
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Monte un volume pour persister les données de PostgreSQL
+ 
+  grafana:  # Service pour Grafana
+    image: grafana/grafana:latest  # Utilise l'image Grafana la plus récente
+    container_name: grafana_container  # Nom du conteneur Grafana
+    ports:
+      - "3000:3000"  # Expose le port 3000 (interface web Grafana) sur l'hôte
+    environment: 
+      - GF_SECURITY_ADMIN_PASSWORD=admin  
+    depends_on:  # Dépendance : Grafana démarre après PostgreSQL
+      - postgres
+    volumes:
+      - grafana_data:/var/lib/grafana  # Monte un volume pour persister les données de Grafana
+ 
+volumes:
+  postgres_data: 
+  grafana_data:  

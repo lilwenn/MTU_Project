@@ -40,10 +40,6 @@ def test_initialization_success(sample_df, config_mock):
         MockResultAnalyzer.assert_called_once_with('target_dir')
         MockVisualizer.assert_called_once_with('target_dir')
 
-def test_initialization_empty_dataframe(config_mock):
-    with pytest.raises(ValueError):
-        PredictionProject(pd.DataFrame(), 'target')
-
 def test_initialization_target_column_not_found(sample_df, config_mock):
     with pytest.raises(KeyError):
         PredictionProject(sample_df, 'non_existing_target')

@@ -5,10 +5,10 @@ __pycache__/
 .vscode/
 .idea/
 initial_datas/*
-Object_code/__pycache__/
-Object_code/.pytest_cache
-Object_code/result/*
-Object_code/spreadsheet/*
+__pycache__/
+.pytest_cache
+result/*
+spreadsheet/*
 
 Other_try/*
 
