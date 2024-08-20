@@ -1,0 +1,19 @@
+# Utiliser une image de base avec Python installé
+FROM python:3.9-slim
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier le fichier requirements.txt dans le répertoire de travail
+COPY requirements.txt /app/
+
+# Mettre à jour pip
+RUN pip install --upgrade pip
+
+# Installer les dépendances listées dans requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY Main.py /app/
+
+# Définir la commande à exécuter lorsque le conteneur démarre
+CMD ["python", "Main.py"]
